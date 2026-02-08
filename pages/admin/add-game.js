@@ -6,22 +6,10 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { createAdminGameService } from "../../src/admin/AdminGameService";
+import { getDefaultStore } from "../../src/admin/adminStore";
 import { PlayDuration, FirstPlayComplexity, AgeRange } from "../../src/domain/types";
 
-function createInMemoryStore() {
-  const games = [];
-  return {
-    getAllGames: async () => [...games],
-    getGameById: async (id) => games.find((g) => g.id === id) ?? null,
-    saveGame: async (game) => {
-      const i = games.findIndex((g) => g.id === game.id);
-      if (i >= 0) games[i] = game;
-      else games.push(game);
-    },
-  };
-}
-
-const store = createInMemoryStore();
+const store = getDefaultStore();
 const adminService = createAdminGameService(store);
 
 const defaultGame = {
