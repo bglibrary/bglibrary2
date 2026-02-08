@@ -3,16 +3,20 @@
   "version": "1.0.0",
   "description": "Personal board game library application.",
   "main": "index.js",
-  "directories": {
-    "test": "tests"
-  },
+  "directories": {"test": "tests"},
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "jest": "^29.7.0"
+  "devDependencies": {"jest": "^29.7.0"},
+  "dependencies": {
+    "next": "^16.1.6",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
   }
 }
