@@ -6,39 +6,61 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import GameCard from "./GameCard";
 import FilterPanel from "./FilterPanel";
+import { useMemo } from "react";
 import { mapGameToCard } from "../src/mapper/GameCardMapper";
+import { applySorting } from "../src/filtering/SortingEngine";
+import { SORT_MODE_VALUES } from "../src/filtering/sortingTypes";
 
 export default function GameLibrary({ gameRepository, applyFilters, context = "visitor" }) {
-  const [state, setState] = useState({ status: "loading", games: [], error: null, filters: {} });
+  const [state, setState] = useState({
+    status: "loading",
+    rawGames: [],
+    error: null,
+    filters: {},
+    sortMode: "",
+  });
 
   useEffect(() => {
     let cancelled = false;
     (async () => {
+      setState((s) => ({ ...s, status: "loading" }));
       try {
         const games = await gameRepository.getAllGames(context);
         if (cancelled) return;
-        const filtered = applyFilters(games, {});
-        const cards = filtered.map((g) => mapGameToCard(g));
-        setState({ status: "success", games: cards, error: null, filters: {} });
+        setState((s) => ({ ...s, status: "success", rawGames: games, error: null }));
       } catch (err) {
         if (!cancelled) {
-          setState({ status: "error", games: [], error: err, filters: {} });
+          setState((s) => ({ ...s, status: "error", rawGames: [], error: err }));
         }
       }
     })();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [gameRepository, context]);
 
-  const handleFiltersChange = async (newFilters) => {
-    setState((s) => ({ ...s, status: "loading" }));
+  const filteredAndSortedCards = useMemo(() => {
+    if (state.status !== "success") return [];
     try {
-      const games = await gameRepository.getAllGames(context);
-      const filtered = applyFilters(games, newFilters);
-      const cards = filtered.map((g) => mapGameToCard(g));
-      setState((s) => ({ ...s, status: "success", games: cards, filters: newFilters }));
+      const filtered = applyFilters(state.rawGames, state.filters);
+      const sorted = applySorting(filtered, state.sortMode);
+      return sorted.map((g) => mapGameToCard(g));
     } catch (err) {
-      setState((s) => ({ ...s, status: "error", error: err, games: [] }));
+      console.error("[GameLibrary] Filtering/Sorting error:", err);
+      return [];
     }
+  }, [state.rawGames, state.filters, state.sortMode, state.status, applyFilters]);
+
+  const handleFiltersChange = (newFilters) => {
+    setState((s) => ({ ...s, filters: newFilters }));
+  };
+
+  const handleSortChange = (newSortMode) => {
+    if (newSortMode !== "" && !SORT_MODE_VALUES.includes(newSortMode)) {
+      console.error("[GameLibrary] Invalid sort mode ignored:", newSortMode);
+      return;
+    }
+    setState((s) => ({ ...s, sortMode: newSortMode }));
   };
 
   if (state.status === "loading") {
@@ -55,12 +77,17 @@ export default function GameLibrary({ gameRepository, applyFilters, context = "v
   return (
     <main data-testid="game-library">
       <h1>Bibliothèque de jeux</h1>
-      <FilterPanel filters={state.filters} onFiltersChange={handleFiltersChange} />
-      {state.games.length === 0 ? (
+      <FilterPanel
+        filters={state.filters}
+        sortMode={state.sortMode}
+        onFiltersChange={handleFiltersChange}
+        onSortChange={handleSortChange}
+      />
+      {filteredAndSortedCards.length === 0 ? (
         <p data-testid="game-library-empty">Aucun jeu.</p>
       ) : (
         <ul style={{ listStyle: "none", padding: 0 }}>
-          {state.games.map((card) => (
+          {filteredAndSortedCards.map((card) => (
             <li key={card.id}>
               <Link href={`/game/${card.id}`} passHref legacyBehavior>
                 <a style={{ textDecoration: "none", color: "inherit" }}>

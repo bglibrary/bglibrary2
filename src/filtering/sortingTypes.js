@@ -1,0 +1,16 @@
+/**
+ * Supported sorting modes for games.
+ */
+const SORT_MODES = Object.freeze({
+  PLAY_DURATION_ASC: "PLAY_DURATION_ASC",
+  PLAY_DURATION_DESC: "PLAY_DURATION_DESC",
+  FIRST_PLAY_COMPLEXITY_ASC: "FIRST_PLAY_COMPLEXITY_ASC",
+  FIRST_PLAY_COMPLEXITY_DESC: "FIRST_PLAY_COMPLEXITY_DESC",
+});
+
+const SORT_MODE_VALUES = Object.values(SORT_MODES);
+
+module.exports = {
+  SORT_MODES,
+  SORT_MODE_VALUES,
+};
