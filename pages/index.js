@@ -1,8 +1,8 @@
 import { useState, useEffect, useMemo } from 'react';
 import Head from 'next/head';
 import { GameRepository } from '../src/repository/GameRepository';
-import { FilteringEngine } from '../src/filtering/FilteringEngine';
-import { SortingEngine } from '../src/filtering/SortingEngine';
+import * as FilteringEngine from '../src/filtering/FilteringEngine';
+import * as SortingEngine from '../src/filtering/SortingEngine';
 import { GameCardMapper } from '../src/mapper/GameCardMapper';
 import GameCard from '../components/GameCard';
 import FilterPanel from '../components/FilterPanel';
@@ -33,8 +33,8 @@ export default function Home() {
 
   const displayedGames = useMemo(() => {
     let filtered = FilteringEngine.applyFilters(rawGames, filters);
-    let sorted = SortingEngine.applySort(filtered, sortMode);
-    return sorted.map(GameCardMapper.toGameCard);
+    let sorted = SortingEngine.applySorting(filtered, sortMode);
+    return sorted.map((game) => GameCardMapper.mapGameToCard(game));
   }, [rawGames, filters, sortMode]);
 
   const handleFiltersChange = (newFilters) => {
