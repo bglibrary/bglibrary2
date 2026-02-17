@@ -64,7 +64,9 @@ function applyFilters(games, filters) {
   }
 
   if (!Array.isArray(games)) return [];
-  if (filters == null || Object.keys(filters).length === 0) return [...games];
+  if (filters == null || Object.keys(filters).length === 0) {
+    return games.filter((g) => !g.archived);
+  }
 
   return games.filter((game) => matchesAll(game, filters));
 }

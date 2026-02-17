@@ -1,41 +1,30 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import Head from 'next/head';
-import { GameRepository } from '../src/repository/GameRepository';
 import * as FilteringEngine from '../src/filtering/FilteringEngine';
 import * as SortingEngine from '../src/filtering/SortingEngine';
-import { GameCardMapper } from '../src/mapper/GameCardMapper';
+import * as GameCardMapper from '../src/mapper/GameCardMapper';
 import GameCard from '../components/GameCard';
 import FilterPanel from '../components/FilterPanel';
+import { getGames } from '../src/infrastructure/getGames';
 
-export default function Home() {
-  const [rawGames, setRawGames] = useState([]);
+export async function getStaticProps() {
+  const games = await getGames();
+  return {
+    props: {
+      initialGames: games,
+    },
+  };
+}
+
+export default function Home({ initialGames }) {
   const [filters, setFilters] = useState({});
   const [sortMode, setSortMode] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchGames = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const games = await GameRepository.getAllGames("visitor");
-        setRawGames(games);
-      } catch (err) {
-        console.error("Failed to fetch games:", err);
-        setError("Erreur : Impossible de charger les jeux.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchGames();
-  }, []);
 
   const displayedGames = useMemo(() => {
-    let filtered = FilteringEngine.applyFilters(rawGames, filters);
+    let filtered = FilteringEngine.applyFilters(initialGames, filters);
     let sorted = SortingEngine.applySorting(filtered, sortMode);
     return sorted.map((game) => GameCardMapper.mapGameToCard(game));
-  }, [rawGames, filters, sortMode]);
+  }, [initialGames, filters, sortMode]);
 
   const handleFiltersChange = (newFilters) => {
     setFilters(newFilters);
@@ -44,34 +33,6 @@ export default function Home() {
   const handleSortChange = (newSortMode) => {
     setSortMode(newSortMode);
   };
-
-  if (loading) {
-    return (
-      <div className="flex min-h-screen flex-col items-center justify-center py-2">
-        <Head>
-          <title>Board Game Library</title>
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-        <main className="flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
-          <p className="text-2xl">Chargement des jeux...</p>
-        </main>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex min-h-screen flex-col items-center justify-center py-2">
-        <Head>
-          <title>Board Game Library</title>
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-        <main className="flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
-          <p className="text-2xl text-red-600">{error}</p>
-        </main>
-      </div>
-    );
-  }
 
   return (
     <div className="flex min-h-screen flex-col items-center py-2">
@@ -86,14 +47,14 @@ export default function Home() {
         <div className="flex w-full max-w-6xl">
           <FilterPanel
             filters={filters}
-            sortMode={sortMode}
+            sortMode={sortMode || ""}
             onFiltersChange={handleFiltersChange}
             onSortChange={handleSortChange}
           />
           <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ml-8">
             {displayedGames.length > 0 ? (
               displayedGames.map((gameCard) => (
-                <GameCard key={gameCard.id} game={gameCard} />
+                <GameCard key={gameCard.id} card={gameCard} />
               ))
             ) : (
               <p className="text-xl col-span-full text-center">Aucun jeu ne correspond à vos critères.</p>
