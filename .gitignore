@@ -6,6 +6,7 @@ vendor/
 dist/
 build/
 out/
+.next/
 
 # environment
 .env
