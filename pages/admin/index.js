@@ -1,32 +1,34 @@
 import { useState, useEffect, useMemo } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { getGamesForAdmin } from '../../src/infrastructure/getGames';
 import ConfirmationDialog from '../../components/admin/ConfirmationDialog';
+import { getGamesForAdmin } from '../../src/infrastructure/getGames';
 
-export default function AdminGameListPage() {
-  const [games, setGames] = useState([]);
-  const [loading, setLoading] = useState(true);
+export async function getStaticProps() {
+  const allGames = await getGamesForAdmin();
+  return {
+    props: {
+      initialGames: allGames,
+    },
+  };
+}
+
+export default function AdminGameListPage({ initialGames }) {
+  const [games, setGames] = useState(initialGames);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [dialogConfig, setDialogConfig] = useState({ isOpen: false, type: null, gameId: null });
 
+  // In a static export scenario, we can't easily "refetch" from the client 
+  // without a real API. For now, since it's a static site, modifications 
+  // will likely require a rebuild or we'd need to change the architecture.
+  // However, we'll keep the UI structure.
   const fetchGames = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const allGames = await getGamesForAdmin();
-      setGames(allGames);
-    } catch (err) {
-      console.error("Failed to fetch games:", err);
-      setError("Erreur : Impossible de charger la liste des jeux.");
-    } finally {
-      setLoading(false);
-    }
+    // For static export, this might not work as expected if API routes are disabled.
+    // If the user is running in dev mode, it might still work if they are not using output: export.
+    // But since output: export is set, we rely on getStaticProps.
+    console.warn("Dynamic refetch is not fully supported with 'output: export' without functional API routes.");
   };
-
-  useEffect(() => {
-    fetchGames();
-  }, []);
 
   const openDialog = (type, gameId) => {
     setDialogConfig({ isOpen: true, type, gameId });
@@ -51,15 +53,18 @@ export default function AdminGameListPage() {
         throw new Error(data.error || `Failed to ${type} game`);
       }
 
-      await fetchGames();
+      // After a successful action, we'd ideally refresh the list.
+      // In static export, this is tricky.
+      alert(`${type === 'archive' ? 'Archivé' : 'Restauré'} avec succès. Note: les changements nécessitent un rebuild pour être définitifs en production.`);
+      
+      // Local state update as a fallback
+      setGames(games.map(g => g.id === gameId ? { ...g, archived: type === 'archive' } : g));
     } catch (err) {
       alert(`Erreur : ${err.message}`);
     } finally {
       closeDialog();
     }
   };
-
-  if (loading) return <div className="p-8 text-center text-xl text-gray-600">Chargement de l'espace admin...</div>;
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">

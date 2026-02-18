@@ -1,47 +1,19 @@
-import path from 'path';
-import { createGameRepository } from "../repository/GameRepository";
-
-// We need a simple data loading function that GameRepository can use.
-// This function will directly read from the filesystem.
-async function loadGamesFromFileSystem() {
-  const gamesDir = path.join(process.cwd(), 'data/games');
-  try {
-    const { readdir, readFile } = await import('fs/promises');
-    const files = await readdir(gamesDir);
-    const jsonFiles = files.filter(f => f.endsWith('.json'));
-    
-    const games = await Promise.all(
-      jsonFiles.map(async file => {
-        const content = await readFile(path.join(gamesDir, file), 'utf8');
-        return JSON.parse(content);
-      })
-    );
-    return games;
-  } catch (error) {
-    console.error('Error loading games from filesystem:', error);
-    return [];
-  }
-}
-
-// Create a singleton instance of the GameRepository using the file system loader.
-// This ensures that all parts of the application use the same repository instance
-// and its enforced visibility rules.
-const gameRepository = createGameRepository({ loadGames: loadGamesFromFileSystem });
-
 /**
- * Public function to get games for the visitor context.
- * This function should be used by client-side pages (e.g., pages/index.js).
- * @returns {Promise<import("../domain/Game").Game[]>}
+ * This file acts as a bridge for game data access.
+ * 
+ * IMPORTANT: To avoid "Module not found: Can't resolve 'fs'" errors in Next.js client-side bundles,
+ * the actual implementation that uses Node.js 'fs' is located in 'getGames.server.js'.
+ * 
+ * Functions here should only be called from server-side contexts like getStaticProps, 
+ * getServerSideProps, or API routes.
  */
+
 export async function getGamesForVisitor() {
-  return gameRepository.getAllGames("visitor");
+  const { getGamesForVisitor: getGames } = await import('./getGames.server');
+  return getGames();
 }
 
-/**
- * Public function to get games for the admin context.
- * This function should be used by admin-side pages or API routes.
- * @returns {Promise<import("../domain/Game").Game[]>}
- */
 export async function getGamesForAdmin() {
-  return gameRepository.getAllGames("admin");
+  const { getGamesForAdmin: getGames } = await import('./getGames.server');
+  return getGames();
 }
