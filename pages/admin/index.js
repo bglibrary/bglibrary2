@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import * as GameRepository from '../../src/repository/GameRepository';
+import { getGamesForAdmin } from '../../src/infrastructure/getGames';
 import ConfirmationDialog from '../../components/admin/ConfirmationDialog';
 
 export default function AdminGameListPage() {
@@ -14,7 +14,7 @@ export default function AdminGameListPage() {
     try {
       setLoading(true);
       setError(null);
-      const allGames = await GameRepository.getAllGames("admin");
+      const allGames = await getGamesForAdmin();
       setGames(allGames);
     } catch (err) {
       console.error("Failed to fetch games:", err);

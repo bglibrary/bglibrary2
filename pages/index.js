@@ -5,10 +5,10 @@ import * as SortingEngine from '../src/filtering/SortingEngine';
 import * as GameCardMapper from '../src/mapper/GameCardMapper';
 import GameCard from '../components/GameCard';
 import FilterPanel from '../components/FilterPanel';
-import { getGames } from '../src/infrastructure/getGames';
+import { getGamesForVisitor } from '../src/infrastructure/getGames';
 
 export async function getStaticProps() {
-  const games = await getGames();
+  const games = await getGamesForVisitor();
   return {
     props: {
       initialGames: games,
