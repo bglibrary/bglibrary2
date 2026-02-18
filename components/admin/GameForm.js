@@ -1,25 +1,25 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { PlayDuration, FirstPlayComplexity, AgeRange, Categories, Mechanics, AwardNames } from '../../src/domain/types';
-import { ImageAssetManager } from '../../src/images/ImageAssetManager';
+import * as DomainTypes from "../../src/domain/types";
+import { ImageAssetManager } from "../../src/images/ImageAssetManager";
 
 export default function GameForm({ initialData, onSubmit, isEdit = false }) {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    id: '',
-    title: '',
-    description: '',
+    id: "",
+    title: "",
+    description: "",
     minPlayers: 1,
     maxPlayers: 4,
-    playDuration: PlayDuration.MEDIUM,
-    ageRecommendation: AgeRange[0] || '8+',
-    firstPlayComplexity: FirstPlayComplexity.MEDIUM,
+    playDuration: DomainTypes.PLAY_DURATION.MEDIUM,
+    ageRecommendation: DomainTypes.AGE_RANGE[0] || "8+",
+    firstPlayComplexity: DomainTypes.FIRST_PLAY_COMPLEXITY.MEDIUM,
     categories: [],
     mechanics: [],
     awards: [],
     favorite: false,
     archived: false,
-    images: [{ id: '', source: 'user', attribution: '' }]
+    images: [{ id: "", source: "user", attribution: "" }],
   });
 
   const [imageFile, setImageFile] = useState(null);
@@ -79,9 +79,12 @@ export default function GameForm({ initialData, onSubmit, isEdit = false }) {
   };
 
   const addAward = () => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      awards: [...prev.awards, { name: AwardNames[0], year: new Date().getFullYear() }]
+      awards: [
+        ...prev.awards,
+        { name: DomainTypes.AWARD_NAMES[0], year: new Date().getFullYear() },
+      ],
     }));
   };
 
@@ -189,13 +192,33 @@ export default function GameForm({ initialData, onSubmit, isEdit = false }) {
 
         {/* Duration & Complexity */}
         <div className="space-y-2">
-          <label className="block text-sm font-semibold text-gray-700">Durée & Complexité</label>
+          <label className="block text-sm font-semibold text-gray-700">
+            Durée & Complexité
+          </label>
           <div className="flex gap-4">
-            <select name="playDuration" value={formData.playDuration} onChange={handleChange} className="flex-1 p-2 border border-gray-300 rounded-md">
-              {Object.values(PlayDuration).map(d => <option key={d} value={d}>{d}</option>)}
+            <select
+              name="playDuration"
+              value={formData.playDuration}
+              onChange={handleChange}
+              className="flex-1 p-2 border border-gray-300 rounded-md"
+            >
+              {Object.values(DomainTypes.PLAY_DURATION).map((d) => (
+                <option key={d} value={d}>
+                  {d}
+                </option>
+              ))}
             </select>
-            <select name="firstPlayComplexity" value={formData.firstPlayComplexity} onChange={handleChange} className="flex-1 p-2 border border-gray-300 rounded-md">
-              {Object.values(FirstPlayComplexity).map(c => <option key={c} value={c}>{c}</option>)}
+            <select
+              name="firstPlayComplexity"
+              value={formData.firstPlayComplexity}
+              onChange={handleChange}
+              className="flex-1 p-2 border border-gray-300 rounded-md"
+            >
+              {Object.values(DomainTypes.FIRST_PLAY_COMPLEXITY).map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
             </select>
           </div>
         </div>
@@ -203,14 +226,20 @@ export default function GameForm({ initialData, onSubmit, isEdit = false }) {
         {/* Categories & Mechanics */}
         <div className="col-span-full grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <label className="block text-sm font-semibold text-gray-700">Catégories</label>
+            <label className="block text-sm font-semibold text-gray-700">
+              Catégories
+            </label>
             <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto p-2 border border-gray-300 rounded-md">
-              {Categories.map(cat => (
+              {DomainTypes.CATEGORIES.map((cat) => (
                 <button
                   key={cat}
                   type="button"
-                  onClick={() => handleMultiSelect('categories', cat)}
-                  className={`px-3 py-1 rounded-full text-xs transition-colors ${formData.categories.includes(cat) ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                  onClick={() => handleMultiSelect("categories", cat)}
+                  className={`px-3 py-1 rounded-full text-xs transition-colors ${
+                    formData.categories.includes(cat)
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
                 >
                   {cat}
                 </button>
@@ -218,14 +247,20 @@ export default function GameForm({ initialData, onSubmit, isEdit = false }) {
             </div>
           </div>
           <div className="space-y-2">
-            <label className="block text-sm font-semibold text-gray-700">Mécaniques</label>
+            <label className="block text-sm font-semibold text-gray-700">
+              Mécaniques
+            </label>
             <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto p-2 border border-gray-300 rounded-md">
-              {Mechanics.map(mech => (
+              {DomainTypes.MECHANICS.map((mech) => (
                 <button
                   key={mech}
                   type="button"
-                  onClick={() => handleMultiSelect('mechanics', mech)}
-                  className={`px-3 py-1 rounded-full text-xs transition-colors ${formData.mechanics.includes(mech) ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                  onClick={() => handleMultiSelect("mechanics", mech)}
+                  className={`px-3 py-1 rounded-full text-xs transition-colors ${
+                    formData.mechanics.includes(mech)
+                      ? "bg-green-600 text-white"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
                 >
                   {mech}
                 </button>
@@ -273,8 +308,18 @@ export default function GameForm({ initialData, onSubmit, isEdit = false }) {
               <div key={index} className="flex gap-4 items-end bg-gray-50 p-3 rounded-md">
                 <div className="flex-1 space-y-1">
                   <label className="text-xs text-gray-500">Nom du prix</label>
-                  <select value={award.name} onChange={(e) => handleAwardChange(index, 'name', e.target.value)} className="w-full p-2 border border-gray-300 rounded-md bg-white">
-                    {AwardNames.map(a => <option key={a} value={a}>{a}</option>)}
+                  <select
+                    value={award.name}
+                    onChange={(e) =>
+                      handleAwardChange(index, "name", e.target.value)
+                    }
+                    className="w-full p-2 border border-gray-300 rounded-md bg-white"
+                  >
+                    {DomainTypes.AWARD_NAMES.map((a) => (
+                      <option key={a} value={a}>
+                        {a}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div className="w-32 space-y-1">

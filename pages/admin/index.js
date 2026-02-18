@@ -1,9 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { GameRepository } from '../../src/repository/GameRepository';
-import { AdminGameService } from '../../src/admin/AdminGameService';
-import { FileGitService } from '../../src/infrastructure/FileGitService';
+import * as GameRepository from '../../src/repository/GameRepository';
 import ConfirmationDialog from '../../components/admin/ConfirmationDialog';
 
 export default function AdminGameListPage() {
@@ -11,9 +9,6 @@ export default function AdminGameListPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [dialogConfig, setDialogConfig] = useState({ isOpen: false, type: null, gameId: null });
-
-  // Initialize AdminGameService (Mocking GitService for now)
-  const adminService = useMemo(() => new AdminGameService(new FileGitService()), []);
 
   const fetchGames = async () => {
     try {
@@ -44,11 +39,18 @@ export default function AdminGameListPage() {
   const handleConfirm = async () => {
     const { type, gameId } = dialogConfig;
     try {
-      if (type === 'archive') {
-        await adminService.archiveGame(gameId);
-      } else if (type === 'restore') {
-        await adminService.restoreGame(gameId);
+      const endpoint = type === 'archive' ? '/api/admin/archive-game' : '/api/admin/restore-game';
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: gameId }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || `Failed to ${type} game`);
       }
+
       await fetchGames();
     } catch (err) {
       alert(`Erreur : ${err.message}`);

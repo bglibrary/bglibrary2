@@ -1,20 +1,30 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useMemo } from 'react';
 import GameForm from '../../components/admin/GameForm';
-import { AdminGameService } from '../../src/admin/AdminGameService';
-import { FileGitService } from '../../src/infrastructure/FileGitService';
 
 export default function AddGamePage() {
   const router = useRouter();
-  const adminService = useMemo(() => new AdminGameService(new FileGitService()), []);
 
   const handleSubmit = async (formData, imageFile) => {
-    // In a real app, we'd upload the imageFile to a storage service first
-    // and then add the game data. For now, we simulate success with FileGitService.
-    console.log("Submitting new game:", formData, imageFile);
-    await adminService.addGame(formData);
-    router.push('/admin');
+    try {
+      // In a real app, we'd upload the imageFile to a storage service first
+      console.log("Submitting new game:", formData, imageFile);
+      
+      const response = await fetch('/api/admin/add-game', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ gameData: formData }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || 'Failed to add game');
+      }
+
+      router.push('/admin');
+    } catch (err) {
+      alert(`Erreur : ${err.message}`);
+    }
   };
 
   return (

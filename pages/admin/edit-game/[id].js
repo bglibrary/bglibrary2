@@ -1,9 +1,7 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import GameForm from '../../../components/admin/GameForm';
-import { AdminGameService } from '../../../src/admin/AdminGameService';
-import { FileGitService } from '../../../src/infrastructure/FileGitService';
 import { GameRepository } from '../../../src/repository/GameRepository';
 
 export default function EditGamePage() {
@@ -12,8 +10,6 @@ export default function EditGamePage() {
   const [game, setGame] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  const adminService = useMemo(() => new AdminGameService(new FileGitService()), []);
 
   useEffect(() => {
     if (!id) return;
@@ -36,11 +32,25 @@ export default function EditGamePage() {
   }, [id]);
 
   const handleSubmit = async (formData, imageFile) => {
-    // In a real app, we'd handle the image upload if a new one is provided.
-    // For now, we simulate the update using AdminGameService.
-    console.log("Updating game:", formData, imageFile);
-    await adminService.updateGame(id, formData);
-    router.push('/admin');
+    try {
+      // In a real app, we'd handle the image upload if a new one is provided.
+      console.log("Updating game:", formData, imageFile);
+      
+      const response = await fetch('/api/admin/update-game', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, gameData: formData }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || 'Failed to update game');
+      }
+
+      router.push('/admin');
+    } catch (err) {
+      alert(`Erreur : ${err.message}`);
+    }
   };
 
   if (loading) return <div className="p-8 text-center">Chargement...</div>;
