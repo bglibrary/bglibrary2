@@ -1,12 +1,12 @@
-import { validateGame } from '../domain/Game';
-import { ArchiveManager } from './ArchiveManager';
-import { adminServiceErrors } from './adminServiceErrors';
-import { GameRepository } from '../repository/GameRepository';
+const { validateGame } = require('../domain/Game');
+const { ArchiveManager } = require('./ArchiveManager');
+const { adminServiceErrors } = require('./adminServiceErrors');
+const { gameRepository: GameRepository } = require('../infrastructure/getGames.server');
 
 /**
  * AdminGameService orchestrates administrative operations on games.
  */
-export class AdminGameService {
+ class AdminGameService {
   constructor(gitService) {
     this.gitService = gitService;
   }
@@ -102,3 +102,5 @@ export class AdminGameService {
     }
   }
 }
+
+module.exports = { AdminGameService };

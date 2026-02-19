@@ -1,6 +1,6 @@
-import path from 'path';
-import { promises as fs } from 'fs';
-import { createGameRepository } from "../repository/GameRepository";
+const path = require('path');
+const { promises: fs } = require('fs');
+const { createGameRepository } = require("../repository/GameRepository");
 
 // We need a simple data loading function that GameRepository can use.
 // This function will directly read from the filesystem.
@@ -33,7 +33,7 @@ const gameRepository = createGameRepository({ loadGames: loadGamesFromFileSystem
  * This function should be used by client-side pages (e.g., pages/index.js) via getStaticProps.
  * @returns {Promise<import("../domain/Game").Game[]>}
  */
-export async function getGamesForVisitor() {
+async function getGamesForVisitor() {
   return gameRepository.getAllGames("visitor");
 }
 
@@ -42,6 +42,12 @@ export async function getGamesForVisitor() {
  * This function should be used by admin-side pages or API routes.
  * @returns {Promise<import("../domain/Game").Game[]>}
  */
-export async function getGamesForAdmin() {
+async function getGamesForAdmin() {
   return gameRepository.getAllGames("admin");
 }
+
+module.exports = {
+  gameRepository,
+  getGamesForVisitor,
+  getGamesForAdmin
+};

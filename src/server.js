@@ -70,7 +70,7 @@ app.post('/api/admin/games/:id/restore', async (req, res) => {
 });
 
 // Health check
-app.get('/health', (res) => {
+app.get('/health', (req, res) => {
   res.status(200).send('OK');
 });
 

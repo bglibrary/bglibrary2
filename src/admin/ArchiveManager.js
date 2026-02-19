@@ -1,10 +1,10 @@
-import { archiveErrors } from './archiveErrors';
+const { archiveErrors } = require('./archiveErrors');
 
 /**
  * ArchiveManager handles archive and restore logic for games.
  * It is a pure, stateless function.
  */
-export const ArchiveManager = {
+const ArchiveManager = {
   /**
    * Archives a game.
    * 
@@ -45,3 +45,5 @@ export const ArchiveManager = {
     });
   }
 };
+
+module.exports = { ArchiveManager };
