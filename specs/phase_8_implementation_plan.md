@@ -1,18 +1,40 @@
-# Phase 8 — Comprehensive Implementation Plan (Detailed for Developer Handover)
+# Phase 8 — Comprehensive Implementation Plan (Session-Based Admin)
 
 ## Purpose
-This document defines an extremely detailed, step-by-step implementation plan for the MVP, ensuring strict adherence to all specifications. Each step is designed to be a logical milestone composed of atomic, testable commits. This plan aims to be prescriptive enough for any developer to follow without extensive prior context, covering all user functionalities and initial data setup.
+This document defines an extremely detailed, step-by-step implementation plan for the MVP, ensuring strict adherence to the simplified session-based admin model. This approach eliminates the need for a backend by historizing changes within the browser session and providing a Python script for bulk updates and Git commits.
 
 ---
 
 ## Global Implementation Rules
-- **Atomic Commits**: Each commit must address a single, isolated concern. Minimal diff, minimal files.
-- **Test-Driven Development**: Write tests *before* or concurrently with the feature implementation. Tests must be part of the same commit.
-- **Specification-First**: Every implemented feature, component, or data contract must have a corresponding, up-to-date specification in the `specs/` directory.
-- **Clear Separation of Concerns**: Isolate domain logic, UI components, and infrastructure code (persistence, API calls) into their respective modules/layers. Avoid mixing concerns within files or components.
-- **No Speculative Implementation**: Only implement features explicitly required by the current step and the MVP scope.
-- **Error Handling**: Implement explicit, typed error handling at all layers, as per `phase_5_6_git_service_errors.md` and `phase_6_1_edge_cases.md`.
-- **Documentation**: Inline comments and JSDoc should be used for all public interfaces, complex logic, and critical decisions.
+- **Atomic Commits**: Each commit must address a single, isolated concern.
+- **Test-Driven Development**: Write tests concurrently with feature implementation.
+- **Simplified Admin**: No backend required. Admin actions are saved in a local session history.
+- **Python-Based Persistence**: A generated Python script handles data/games modifications and Git operations.
+- **Responsive Visitor, Desktop/Tablet Admin**: The admin interface is optimized for tablet/desktop usage only (no mobile phone support required).
+
+---
+
+## Session-Based Admin Architecture
+
+### Core Concept
+The admin interface operates entirely in-memory during a browser session. All changes are tracked in a `SessionHistory` object that can be:
+- **Reviewed**: Display a chronological list of all pending changes
+- **Edited**: Modify form-based changes before finalization
+- **Deleted**: Revert individual changes by removing them from history
+- **Exported**: Generate a Python script to apply all changes to the repository
+
+### Session Lifecycle
+1. **Session Start**: Admin opens the admin interface
+2. **Session Active**: Admin performs add/update/archive/restore operations
+3. **Session Review**: Admin reviews the history, edits or deletes entries as needed
+4. **Session Export**: Admin downloads the generated Python script
+5. **Session End**: Admin closes the browser tab (session data is lost if not exported)
+6. **Script Execution**: Admin runs the Python script locally at repo root
+
+### Persistence Strategy
+- **localStorage**: Optional persistence for session recovery across page reloads
+- **No Backend**: All data remains in the browser until script export
+- **No Authentication**: Admin access is not protected (static site assumption)
 
 ---
 
@@ -20,336 +42,403 @@ This document defines an extremely detailed, step-by-step implementation plan fo
 **Goal**: Provide a minimal dataset for immediate UI testing and feature validation.
 
 ### Step 0.1 — Create Dummy Game Data
-- **Action**: Create two JSON files in a new directory `data/games/`.
-  - `data/games/catan.json`:
-    ```json
-    {
-      "id": "catan",
-      "title": "Catan",
-      "description": "Un jeu de développement et de commerce de colonies.",
-      "minPlayers": 3,
-      "maxPlayers": 4,
-      "playDuration": "MEDIUM",
-      "ageRecommendation": "10+",
-      "firstPlayComplexity": "MEDIUM",
-      "categories": ["Stratégie", "Négociation"],
-      "mechanics": ["Jet de dés", "Collecte de ressources", "Construction de routes"],
-      "awards": [
-        { "name": "Spiel des Jahres", "year": 1995 }
-      ],
-      "favorite": true,
-      "archived": false,
-      "images": [
-        { "id": "catan-main", "source": "publisher", "attribution": "Klaus Teuber" }
-      ]
-    }
-    ```
-  - `data/games/azul.json`:
-    ```json
-    {
-      "id": "azul",
-      "title": "Azul",
-      "description": "Les artisans des carreaux d\u0027Azulejo embellissent les murs du Palais Royal de Evora.",
-      "minPlayers": 2,
-      "maxPlayers": 4,
-      "playDuration": "MEDIUM",
-      "ageRecommendation": "8+",
-      "firstPlayComplexity": "LOW",
-      "categories": ["Abstrait", "Famille"],
-      "mechanics": ["Draft", "Pattern Building"],
-      "awards": [
-        { "name": "Spiel des Jahres", "year": 2018 }
-      ],
-      "favorite": false,
-      "archived": false,
-      "images": [
-        { "id": "azul-main", "source": "publisher", "attribution": "Michael Kiesling" }
-      ]
-    }
-    ```
-- **Rationale**: These files will serve as the initial in-memory dataset for `GameRepository`, allowing immediate testing of UI and logic without needing a full GitHub integration. They ensure the recipe testing at the end of implementation has a concrete base.
-- **Acceptance**: Files `data/games/catan.json` and `data/games/azul.json` exist and are valid JSON.
+- **Action**: Create two JSON files in `data/games/`.
+  - `data/games/catan.json`
+  - `data/games/azul.json`
+- **Acceptance**: Files exist and are valid JSON.
 
 ---
 
 ## Step 1 — Project Foundation & Tooling
 **Goal**: Environment ready for development with enforced standards.
 
-### 1.1 — Initialize Next.js Project and Styling
-- **Action**: Create a new Next.js project. Install and configure Tailwind CSS. Ensure `next.config.js` is set for static export (`output: \\\\u0027export\\\\u0027`).
-- **Files to Modify/Create**: `package.json`, `next.config.js`, `tailwind.config.js`, `postcss.config.js`, `globals.css` (for Tailwind directives).
-- **Rationale**: Establishes the core frontend framework and styling utility, adhering to `phase2_1_tech_stack.md`.
-- **Acceptance**: Run `npm run dev` and confirm a basic Next.js page renders with Tailwind styles applied.
+### 1.1 — Initialize Next.js Project (Static Mode)
+- **Action**: Configure `next.config.js` for `output: 'export'`.
+- **Rationale**: Ensures the site remains fully static.
 
-### 1.2 — Configure Test Frameworks
-- **Action**: Install and configure Jest for unit and integration testing. Set up basic test scripts in `package.json`.
-- **Files to Modify/Create**: `package.json`, `jest.config.js`.
-- **Rationale**: Enables test-driven development as per global rules.
-- **Acceptance**: `npm test` runs without errors, even if no tests exist yet.
-
-### 1.3 — Linting and Code Formatting
-- **Action**: Install and configure ESLint and Prettier. Define strict rules for code quality and consistency (e.g., Airbnb style guide).
-- **Files to Modify/Create**: `.eslintrc.json`, `.prettierrc.json`, `.prettierignore`.
-- **Rationale**: Enforces code quality and maintainability, aligning with `phase1_2_constraints.md`.
-- **Acceptance**: Running `npm run lint` and `npm run format` (or equivalent) finds no issues and formats files correctly.
-
-### 1.4 — Global CSS and Layout
-- **Action**: Define base typography, colors, and responsive breakpoints using Tailwind CSS utilities. Create a basic `_app.js` and `_document.js` for global layout.
-- **Files to Modify/Create**: `pages/_app.js`, `pages/_document.js`, `globals.css`.
-- **Rationale**: Establishes a consistent and responsive UI foundation for the entire application, prioritizing mobile-first design as per `phase0_project_brief.md`.
-- **Acceptance**: Global styles are applied, and the base layout is consistent across different screen sizes.
+### 1.2 — Configure Test Frameworks (Jest)
+- **Action**: Set up Jest for unit and integration testing.
 
 ---
 
 ## Step 2 — Core Domain & Validation Layer
 **Goal**: Stable and validated data structures for games, awards, and images.
 
-### 2.1 — Define Domain Types (Enums and Constants)
-- **Action**: Implement all controlled vocabularies and enumerations.
-  - `PlayDuration` (SHORT, MEDIUM, LONG)
-  - `FirstPlayComplexity` (LOW, MEDIUM, HIGH)
-  - `AgeRange` (e.g., "8+", "10+", "12+")
-  - `AwardNames` (e.g., "Spiel des Jahres", "Golden Geek")
-  - `Categories` (e.g., "Stratégie", "Famille", "Abstrait")
-  - `Mechanics` (e.g., "Jet de dés", "Draft", "Placement d\\\\u0027ouvriers")
-- **Files to Modify/Create**: `src/domain/types.js`.
-- **Rationale**: Centralizes all domain-specific constants and enums, ensuring consistency across the application as per `phase_5_2_game_domain_model.md`.
-- **Acceptance**: `src/domain/types.js` exports all required enumerations.
-
-### 2.2 — Implement Domain Validation Errors
-- **Action**: Create a module for explicit, typed validation errors that can be thrown by domain objects.
-- **Files to Modify/Create**: `src/domain/validationErrors.js` (e.g., `missingMandatoryField`, `invalidEnumValue`, `invalidPlayerRange`).
-- **Rationale**: Adheres to the principle of explicit error handling from `phase_5_2_game_domain_model.md` and `phase_6_1_edge_cases.md`.
-- **Acceptance**: `src/domain/validationErrors.js` exports functions to create distinct error objects.
-
-### 2.3 — Implement Game Domain Entity & Factory
-- **Action**: Implement the `Game` domain entity, including a factory function (`createGame`) and a validation function (`validateGame`). This function must enforce all invariants defined in `phase_5_2_game_domain_model.md` (e.g., `minPlayers <= maxPlayers`, `images.length >= 1`). It should use the types and errors defined in steps 2.1 and 2.2.
-- **Files to Modify/Create**: `src/domain/Game.js`.
-- **Rationale**: Establishes the core data model and its integrity rules.
-- **Acceptance**: Unit tests for `src/domain/Game.js` cover all validation scenarios (valid game, missing title, invalid player range, empty images, etc.), achieving 100% coverage on validation logic.
+### 2.1 — Implement Game Domain Entity & Factory
+- **Action**: Implement `src/domain/Game.js` with factory and validation.
+- **Acceptance**: Unit tests cover all validation scenarios.
 
 ---
 
-## Step 3 — Infrastructure: Persistence Contract (GitService)
-**Goal**: Abstract the data persistence layer using a Git-based approach.
+## Step 3 — Infrastructure: Session-Based Admin Service
+**Goal**: Implement the admin logic that tracks changes within a session.
 
-### 3.1 — Define GitService Interface Contract
-- **Action**: Define the `GitService` interface as described in `phase_4_7_git_service_contract.md`. This interface will include `addGame`, `updateGame`, `archiveGame`, `restoreGame` methods.
-- **Files to Modify/Create**: `src/infrastructure/GitServiceContract.js`.
-- **Rationale**: Ensures modularity and allows for swapping out the underlying persistence mechanism without affecting higher layers, adhering to `phase2_2_architecture.md`.
-- **Acceptance**: `src/infrastructure/GitServiceContract.js` clearly defines the async methods and their expected parameters.
+### 3.1 — Define SessionHistory Interface
+- **Action**: Create `src/admin/SessionHistory.js`.
+- **Interface**:
+  ```javascript
+  class SessionHistory {
+    constructor()
+    
+    // Get all actions in chronological order
+    getActions(): Action[]
+    
+    // Add a new action to the history
+    addAction(type: ActionType, payload: object): number // returns index
+    
+    // Remove an action by index (revert)
+    removeAction(index: number): void
+    
+    // Edit an existing action's payload
+    editAction(index: number, newPayload: object): void
+    
+    // Clear all actions
+    clearAll(): void
+    
+    // Get action count
+    getCount(): number
+    
+    // Check if session has any changes
+    hasChanges(): boolean
+    
+    // Persist to localStorage (optional)
+    saveToStorage(): void
+    
+    // Restore from localStorage (optional)
+    loadFromStorage(): void
+    
+    // Generate Python script
+    generatePythonScript(): string
+  }
+  ```
 
-### 3.2 — Implement Persistence Error Contracts
-- **Action**: Create explicit error types for persistence operations (e.g., `AuthenticationError`, `WriteConflict`, `RepositoryUnavailable`, `InvalidPath`). These should be distinct from domain errors.
-- **Files to Modify/Create**: `src/infrastructure/persistenceErrors.js`.
-- **Rationale**: Provides clear and traceable error messages from the infrastructure layer, as required by `phase_5_6_git_service_errors.md`.
-- **Acceptance**: `src/infrastructure/persistenceErrors.js` exports all required error factory functions.
+### 3.2 — Define Action Types
+- **Action Types**:
+  - `ADD_GAME`: Add a new game
+  - `UPDATE_GAME`: Update an existing game
+  - `ARCHIVE_GAME`: Archive a game
+  - `RESTORE_GAME`: Restore an archived game
+  - `DELETE_GAME`: Permanently delete a game (optional, use with caution)
 
-### 3.3 — Implement Mock GitService (Local File System)
-- **Action**: Create an initial mock implementation of `GitService` that simulates file operations on the local file system. `addGame` would create a new JSON file, `updateGame` would overwrite, and `archiveGame` would modify the `archived` flag in the JSON. This mock *will not* interact with GitHub.
-- **Files to Modify/Create**: `src/infrastructure/FileGitService.js`.
-- **Rationale**: Allows for rapid iteration and testing of `AdminGameService` and `GameRepository` without requiring a live GitHub connection, as discussed in the project brief.
-- **Acceptance**: Unit tests for `src/infrastructure/FileGitService.js` (or similar mock) confirm atomic commit simulation (e.g., file creation, update, deletion, ensuring no partial writes).
+### 3.3 — Action Structure
+```javascript
+{
+  id: string,           // unique action identifier
+  type: ActionType,     // type of action
+  timestamp: string,    // ISO 8601 timestamp
+  gameId: string,       // target game ID
+  payload: object,      // action-specific data
+  summary: string       // human-readable summary for UI display
+}
+```
+
+### 3.4 — Implement Action History Tracking
+- **Action**: The service must store a chronological list of all modifications made during the session.
+- **Rationale**: Allows the admin to follow, edit, and delete changes before finalization.
+- **UI Integration**: The history panel displays each action with:
+  - Timestamp
+  - Action type (translated to French)
+  - Game ID and title
+  - Summary of changes
+  - Edit button (for form-based actions)
+  - Delete button (to revert the action)
 
 ---
 
 ## Step 4 — Game Repository (Read Layer)
-**Goal**: Provide a consistent and secure read interface for game data.
+**Goal**: Provide a consistent read interface for game data.
 
 ### 4.1 — Implement GameRepository Read Methods
-- **Action**: Implement the `GameRepository` class/module. Its core methods are `getAllGames(context)` and `getGameById(id, context)`. 
-  - `getAllGames(\"visitor\")` must *exclude* games where `archived: true`.
-  - `getAllGames(\"admin\")` must return *all* games (active and archived).
-  - `getGameById(id, \"visitor\")` must throw an error if the game is found but `archived: true`.
-  - `getGameById(id, \"admin\")` must return the game regardless of archive status.
-- **Dependency**: Uses the local file system to load game JSONs from `data/games/` (or a similar mock).
-- **Files to Modify/Create**: `src/repository/GameRepository.js`.
-- **Rationale**: Centralizes all read access and enforces critical visibility rules as per `phase_3_2_ref_spec_game_repository.md`.
-- **Acceptance**: Unit tests for `src/repository/GameRepository.js` cover all visibility rules and error cases (game not found, archived game for visitor).
-
-### 4.2 — Implement Repository Specific Errors
-- **Action**: Create explicit, typed error types for repository operations (e.g., `GameNotFound`, `GameArchivedNotVisible`, `DataLoadFailure`).
-- **Files to Modify/Create**: `src/repository/repositoryErrors.js`.
-- **Rationale**: Ensures clear communication of data access issues to higher layers.
-- **Acceptance**: `src/repository/repositoryErrors.js` exports all required error factory functions.
+- **Action**: Implement `src/repository/GameRepository.js`.
+- **Note**: In a static site, this loads from the static JSON files served by the site.
+- **Methods**:
+  - `getAllGames(includeArchived = false)`
+  - `getGameById(id)`
+  - `gameExists(id)`
 
 ---
 
 ## Step 5 — Logic Engines: Filtering & Sorting
 **Goal**: Provide robust and deterministic logic for game discovery.
 
-### 5.1 — Implement FilteringEngine
-- **Action**: Implement `FilteringEngine` as a pure, stateless function. It must apply logical AND across different filter types (e.g., `playerCount` AND `categories`) and logical OR within multi-value filters (e.g., `category1` OR `category2`). Handle numeric ranges (player count), categorical (play duration, complexity, categories, mechanics), and boolean (favorite, has awards) filters.
-- **Files to Modify/Create**: `src/filtering/FilteringEngine.js`, `src/filtering/filterTypes.js` (for `FilterSet` contract), `src/filtering/filteringErrors.js`.
-- **Rationale**: Implements core discovery logic as specified in `phase_4_1_filtering_engine.md` and `phase1_3_filtering_and_taxonomy_rules.md`.
-- **Acceptance**: Unit tests for `src/filtering/FilteringEngine.js` cover all filter combinations, empty filter sets, zero results, and invalid filter values.
-
-### 5.2 — Implement SortingEngine
-- **Action**: Implement `SortingEngine` as a pure, stateless function. It must apply a single, explicit sort mode (`PLAY_DURATION_ASC`, `PLAY_DURATION_DESC`, `FIRST_PLAY_COMPLEXITY_ASC`, `FIRST_PLAY_COMPLEXITY_DESC`). Sorting must be stable, and games with `null` or `undefined` values for the sort criterion must always be ordered last.
-- **Files to Modify/Create**: `src/filtering/SortingEngine.js`, `src/filtering/sortingTypes.js` (for `SortMode` enum), `src/filtering/sortingErrors.js`.
-- **Rationale**: Provides deterministic ordering, as detailed in `phase_4_2_sorting_engine.md`.
-- **Acceptance**: Unit tests for `src/filtering/SortingEngine.js` verify ascending/descending sorts, stability, and correct handling of null values.
-
-### 5.3 — Implement GameCardMapper
-- **Action**: Implement `GameCardMapper` to transform `Game` domain objects into lightweight `GameCard` view models. This mapping must include `id`, `title`, `playerCount` (formatted as string, e.g., "2-4 joueurs"), `playDuration`, `hasAwards` (boolean), and `isFavorite` (boolean). It must explicitly exclude `description`, `firstPlayComplexity`, `categories`, `mechanics`, and other admin-only metadata, as per `phase_5_3_game_card_model.md`.
-- **Files to Modify/Create**: `src/mapper/GameCardMapper.js`.
-- **Rationale**: Creates a strict boundary between the domain model and the UI, ensuring only necessary data is exposed to the presentation layer.
-- **Acceptance**: Unit tests for `src/mapper/GameCardMapper.js` confirm correct mapping and exclusion of forbidden fields.
+### 5.1 — Implement FilteringEngine & SortingEngine
+- **Action**: Implement pure, stateless engines as previously specified.
 
 ---
 
 ## Step 6 — Visitor UI: Discovery Flow
-**Goal**: Deliver a responsive and intuitive browsing experience for visitors. All user-facing functionalities from `phase1_1_functional_scope.md` should be present and tested.
+**Goal**: Deliver a responsive and intuitive browsing experience for visitors.
 
-### 6.1 — Implement Responsive GameCard Component
-- **Action**: Create the `GameCard` React component (`components/GameCard.js`). It should display: 
-  - `title` (game title).
-  - Formatted `playerCount` (e.g., "2-4 joueurs").
-  - `playDuration` (e.g., "MEDIUM").
-  - Visual indicators for `hasAwards` (e.g., a small icon) and `isFavorite` (e.g., a heart icon). 
-- **Styling**: Implement responsive styling using Tailwind CSS to adapt layout and font sizes for mobile (portrait and landscape), tablet, and desktop views.
-- **Files to Modify/Create**: `components/GameCard.js`.
-- **Rationale**: Provides a consistent and visually appealing summary for each game, adhering to `phase_7_2_ui_visitor_game_library.md` and `phase1_3_filtering_and_taxonomy_rules.md` (Game Summary Rules).
-- **Acceptance**: Visual inspection on various device emulators confirms responsiveness and correct display of game summary data.
-
-### 6.2 — Implement FilterPanel Component
-- **Action**: Create the `FilterPanel` React component (`components/FilterPanel.js`). It must include interactive UI controls for all filtering criteria specified in `phase1_1_functional_scope.md` and `phase1_3_filtering_and_taxonomy_rules.md`:
-  - **Player Count**: Dropdown/sliders using predefined buckets (e.g., 1, 2, 3-4, 5, 6+).
-  - **Play Duration**: Checkboxes/radio buttons for SHORT, MEDIUM, LONG.
-  - **First Play Complexity**: Checkboxes/radio buttons for LOW, MEDIUM, HIGH.
-  - **Categories/Mechanics**: Multi-select dropdowns/checkboxes based on `src/domain/types.js`.
-  - **Has Awards**: Checkbox.
-  - **Favorite Only**: Checkbox.
-  - **Sort Mode**: Dropdown with options for play duration and complexity (ASC/DESC).
-- **Functionality**: Implement logic to emit `onFiltersChange(newFilters)` and `onSortChange(newSortMode)` events to its parent component (`GameLibrary`) with the updated state. Include a "Clear Filters" button.
-- **Files to Modify/Create**: `components/FilterPanel.js`.
-- **Rationale**: Provides the interactive filtering and sorting interface as required by `phase1_3_filtering_and_taxonomy_rules.md` and `phase_7_2_ui_visitor_game_library.md`.
-- **Acceptance**: Manual testing confirms all filter/sort controls are present and emit correct values. UI styling is responsive, and "Clear Filters" resets the panel.
-
-### 6.3 — Implement Game Library Page (`pages/index.js`)
-- **Action**: Implement the main `GameLibrary` page. This page will: 
-  - Fetch `rawGames` from `GameRepository` (using `useEffect` for initial load and `context: "visitor"`).
-  - Manage local `filters` and `sortMode` state using `useState`.
-  - Use `useMemo` to efficiently apply `FilteringEngine` and `SortingEngine` to `rawGames`, then map results using `GameCardMapper`. This memoized output will be the `displayedGames`.
-  - Pass `filters`, `sortMode`, `onFiltersChange` (for filters reset) and `onSortChange` to `FilterPanel`.
-  - Render a list of `GameCard` components (`components/GameCard.js`).
-  - Implement loading, empty results (`Aucun jeu.`), and error states (`Erreur : ...`) gracefully, adhering to `phase_7_2_ui_visitor_game_library.md`.
-- **Files to Modify/Create**: `pages/index.js`, `components/GameLibrary.js` (main component, if it encapsulates the logic).
-- **Rationale**: Orchestrates the entire visitor discovery experience, ensuring performance, responsiveness, and clear state feedback as per `phase_7_2_ui_visitor_game_library.md`.
-- **Acceptance**: 
-  - Access `http://localhost:3000` (or deployed URL). Both "Catan" and "Azul" should be visible initially.
-  - Apply filters (e.g., "3-4 joueurs") and observe only "Catan" remaining. Clear filters should return both.
-  - Apply sorting (e.g., "Durée croissante" or "Complexité croissante") and observe correct ordering.
-  - Verify loading messages appear briefly, and empty result messages are displayed correctly when filters yield no games.
-
-### 6.4 — Implement Game Detail Page (`pages/game/[id].js`)
-- **Action**: Implement the `GameDetail` page (`pages/game/[id].js`). This page will:
-  - Use Next.js dynamic routing to fetch a single game by `id` from `GameRepository` (using `context: "visitor"`). Handle cases where the game is not found or is archived (redirect or error message).
-  - Display: `title`, `main image` (using a simple `<img>` tag for now; advanced image handling comes later), `player count range`, `play duration`, `first play complexity`, `categories` (as a list), `mechanics` (as a list), `description`, and `awards` (list of `name` and `year`).
-  - Implement responsive layout (`components/GameDetail.js` if componentized) for mobile, tablet, and desktop views.
-  - Include a "Retour à la bibliothèque" link/button.
-  - Handle loading and error states (e.g., "Jeu non trouvé" or "Accès refusé").
-- **Files to Modify/Create**: `pages/game/[id].js` (and potentially `components/GameDetail.js`).
-- **Rationale**: Provides detailed information for a specific game, as required by `phase_7_3_ui_visitor_game_detail.md`.
-- **Acceptance**: 
-  - Navigate to `http://localhost:3000/game/catan` and `http://localhost:3000/game/azul`. Verify all details are displayed correctly.
-  - Attempt to navigate to a non-existent game (`/game/unknown`) or an archived game (once archiving is implemented in Admin UI). Verify appropriate error messages or redirects.
+### 6.1 — Implement Responsive GameCard & FilterPanel
+- **Action**: Build visitor-facing components with mobile-first Tailwind styling.
+- **Note**: Visitor UI must remain fully responsive (mobile, tablet, desktop).
 
 ---
 
-## Step 7 — Admin Infrastructure: Image Asset Management
-**Goal**: Secure and validated handling of image files and their metadata.
+## Step 7 — Admin UI: Simplified Session Management
+**Goal**: Provide a desktop/tablet compatible interface for session-based management.
 
-### 7.1 — Implement Image Asset Validation Logic
-- **Action**: Implement `ImageAssetManager` with validation rules:
-  - Supported formats (`image/jpeg`, `image/png`, `image/webp`).
-  - Maximum size (e.g., 5MB, configurable via `MAX_SIZE_BYTES`).
-  - Mandatory `attribution` metadata (configurable via `REQUIRE_ATTRIBUTION`).
-  - Generation of stable `id` for images from filename.
-- **Files to Modify/Create**: `src/images/ImageAssetManager.js`.
-- **Rationale**: Enforces image-related constraints independently from UI or persistence, as per `phase_4_8_image_asset_manager.md`.
-- **Acceptance**: Unit tests for `src/images/ImageAssetManager.js` confirm valid images are accepted, and invalid formats/sizes/metadata are rejected with specific errors.
+### 7.1 — Admin Layout Requirements
+- **Device Support**: Desktop and tablet only (minimum width: 768px)
+- **Not Responsive for Mobile**: No mobile phone optimization required
+- **Layout**: Two-column layout on desktop, single column on tablet
 
-### 7.2 — Implement Image Asset Errors
-- **Action**: Create explicit, typed error types for image validation failures (e.g., `UnsupportedImageFormat`, `ImageTooLarge`, `MissingAttributionMetadata`, `CorruptedImage`).
-- **Files to Modify/Create**: `src/images/imageAssetErrors.js`.
-- **Rationale**: Provides clear error reporting for image-related issues.
-- **Acceptance**: `src/images/imageAssetErrors.js` exports all required error factory functions.
+### 7.2 — Implement Admin Session Dashboard
+- **Action**: Create `pages/admin/index.js`.
+- **Components**:
+  - **Game List Panel**: Display all games (active and archived)
+  - **Session History Panel**: Display pending changes with edit/delete options
+  - **Action Buttons**: 
+    - "Add Game" button
+    - "Download Update Script" button (disabled if no changes)
+    - "Clear Session" button (with confirmation)
 
----
+### 7.3 — Implement Session History Panel
+- **Action**: Create `components/admin/SessionHistoryPanel.js`.
+- **Features**:
+  - Chronological list of all pending actions
+  - Each entry shows:
+    - Icon indicating action type
+    - Timestamp (relative or absolute)
+    - Game title and ID
+    - Summary of changes
+    - Edit button (opens pre-filled form for UPDATE actions)
+    - Delete button (removes action from history)
+  - Empty state message when no changes
+  - Total change count indicator
 
-## Step 8 — Admin Core Services
-**Goal**: Orchestrate game lifecycle management (add, update, archive, restore).
+### 7.4 — Implement Admin Game Editor
+- **Action**: Create forms for adding/editing games.
+- **Behavior**: Submitting the form adds an entry to the `SessionHistory` instead of calling an API.
+- **Forms**:
+  - `pages/admin/add-game.js`: Add new game form
+  - `pages/admin/edit-game/[id].js`: Edit existing game form
 
-### 8.1 — Implement ArchiveManager
-- **Action**: Implement `ArchiveManager` as a pure, stateless function. It should provide `archiveGame(game)` and `restoreGame(game)` functions that deterministically modify the `archived` flag of a `Game` object. It must enforce rules like preventing re-archiving an already archived game or restoring an active game, throwing appropriate typed errors.
-- **Files to Modify/Create**: `src/admin/ArchiveManager.js`, `src/admin/archiveErrors.js`.
-- **Rationale**: Centralizes archive logic, ensuring data integrity and consistency as per `phase_4_6_archive_manager.md`.
-- **Acceptance**: Unit tests for `src/admin/ArchiveManager.js` cover all valid and invalid state transitions.
-
-### 8.2 — Implement AdminGameService
-- **Action**: Implement `AdminGameService` which orchestrates `add`, `update`, `archive`, and `restore` operations. It will: 
-  - Use `createGame` and `validateGame` from `src/domain/Game.js` for input validation.
-  - Interact with `GameRepository` (for existence checks) and `ArchiveManager` (for archive/restore logic).
-  - Delegate actual persistence (file writes, image uploads, commit creation) to `GitService`.
-  - Map all underlying errors (domain, repository, infrastructure) to appropriate `AdminServiceError` types.
-- **Files to Modify/Create**: `src/admin/AdminGameService.js`, `src/admin/adminServiceErrors.js`.
-- **Rationale**: Provides a consistent and secure API for all administrative game operations, adhering to `phase_4_5_admin_game_service.md`.
-- **Acceptance**: Unit and integration tests for `src/admin/AdminGameService.js` confirm successful end-to-end admin operations and correct error handling, even with mocked `GitService`.
-
----
-
-## Step 9 — Admin UI: Library Management
-**Goal**: Provide a frictionless interface for the owner to manage the game library.
-
-### 9.1 — Implement Admin Game List Page (`pages/admin/index.js`)
-- **Action**: Create the `AdminGameListPage` (`pages/admin/index.js`). This page will: 
-  - Fetch all games (including archived) from `GameRepository` (using `context: "admin"`).
-  - Display a table or list of games with columns for `title`, `minPlayers`, `maxPlayers`, `playDuration`, `firstPlayComplexity`, `favorite` status, `archived` status.
-  - Include buttons/links to: "Add New Game", "Edit Game" (`/admin/edit-game/[id]`), "Archive Game" (for active games), "Restore Game" (for archived games).
-  - Integrate `ConfirmationDialog` for "Archive" and "Restore" actions.
-  - Implement loading and error states.
-- **Files to Modify/Create**: `pages/admin/index.js` (and potentially `components/admin/GameAdminList.js`).
-- **Rationale**: Provides the core interface for the owner to view and initiate management actions, as per `phase_7_4_ui_admin_game_list.md` and `phase_7_6_ui_admin_archive_management.md`.
-- **Acceptance**: 
-  - Navigate to `http://localhost:3000/admin`. Both "Catan" (favorite, active) and "Azul" (not favorite, active) should be visible.
-  - Click "Archive Game" for "Azul", confirm, and observe its status change to archived (and it disappears from visitor view).
-  - Click "Restore Game" for "Azul", confirm, and observe its status change back to active.
-
-### 9.2 — Implement Confirmation Dialog Component
-- **Action**: Create a generic, accessible `ConfirmationDialog` React component (`components/admin/ConfirmationDialog.js`). It should accept `title`, `message`, `onConfirm`, `onCancel`, and `isOpen` props. Use it to wrap destructive actions (archive, restore).
-- **Files to Modify/Create**: `components/admin/ConfirmationDialog.js`.
-- **Rationale**: Ensures that critical administrative actions require explicit user confirmation, preventing accidental data changes, as per `phase_7_6_ui_admin_archive_management.md`.
-- **Acceptance**: Confirming or canceling the dialog correctly triggers `onConfirm` or `onCancel` respectively.
+### 7.5 — Implement Archive/Restore Actions
+- **Action**: Add archive and restore buttons to game list.
+- **Behavior**: Clicking archive/restore adds an action to the session history.
+- **Confirmation**: Show confirmation dialog before adding to history.
 
 ---
 
-## Step 10 — Admin UI: Game Editor & Persistence
-**Goal**: Enable the owner to add and update game information and persist changes.
+## Step 8 — Python Script Generation (Persistence Layer)
+**Goal**: Provide a tool to bridge the gap between the static UI and the Git repository.
 
-### 10.1 — Implement Admin Game Editor Form
-- **Action**: Create the `AdminGameEditor` page (`pages/admin/add-game.js` and `pages/admin/edit-game/[id].js`). This will be a single React form component (or two pages using a shared component). The form must include inputs for *all* `Game` domain fields:
-  - `id` (read-only for edit, generated/input for add)
-  - `title`, `description` (text inputs)
-  - `minPlayers`, `maxPlayers` (number inputs, with validation `min <= max`)
-  - `playDuration`, `ageRecommendation`, `firstPlayComplexity` (dropdowns using `src/domain/types.js`)
-  - `categories`, `mechanics` (multi-select inputs using `src/domain/types.js`)
-  - `awards` (dynamic list, each with `name` and optional `year`)
-  - `favorite` (checkbox)
-  - **Image Upload**: A file input for images. When a file is selected, pass it to `ImageAssetManager` for client-side validation and display a preview. Include inputs for `source` and `attribution` metadata for each image.
-- **Functionality**: Implement client-side validation that mirrors `src/domain/Game.js` validation rules. Display error messages next to relevant fields. On submission, call `AdminGameService.addGame` or `AdminGameService.updateGame`.
-- **Files to Modify/Create**: `pages/admin/add-game.js`, `pages/admin/edit-game/[id].js`, `components/admin/GameForm.js` (if a shared component is used).
-- **Rationale**: Provides the full CRUD interface for games, adhering to `phase_7_5_ui_admin_game_editor.md`.
-- **Acceptance**: 
-  - Navigate to `/admin/add-game`. Fill out a new game form, including image upload and attribution. Submit and verify the game appears in the admin list and is visible to visitors.
-  - Navigate to `/admin/edit-game/catan`. Modify a field (e.g., description), save, and verify the change in the detail view.
-  - Test client-side validation: submit with missing mandatory fields or invalid player ranges. Verify error messages are displayed.
+### 8.1 — Script Template Structure
+- **Action**: Create a Python script template that:
+  - Validates execution context (must run at repo root)
+  - Checks for `data/games/` directory existence
+  - Applies each action in order
+  - Handles errors gracefully
+  - Creates atomic Git commits
 
-### 10.2 — Integrate Real GitService (GitHub API)
-- **Action**: Replace the mock `FileGitService` with a real implementation that interacts with the GitHub API (e.g., using `octokit/rest.js` or `@octokit/graphql`). This implementation will:
-  - Create/update JSON files in the repository.
-  - Upload images as separate assets.
-  - Create structured Git commits for each admin action.
-  - Handle GitHub authentication (e.g., via environment variables for a Personal Access Token).
-- **Files to Modify/Create**: `src/infrastructure/GitHubGitService.js`, `pages/api/admin/*.js` (Next.js API routes to wrap GitHub calls).
-- **Rationale**: Fulfills the 
+### 8.2 — Script Template
+```python
+#!/usr/bin/env python3
+"""
+Board Game Library Update Script
+Generated: {timestamp}
+Total Actions: {actionCount}
+
+This script applies pending changes to the game library.
+Run this script at the root of the repository.
+
+Usage:
+    python3 update_library.py [--dry-run] [--no-commit]
+"""
+
+import json
+import os
+import subprocess
+import sys
+from datetime import datetime
+from pathlib import Path
+
+# Configuration
+GAMES_DIR = Path("data/games")
+IMAGES_DIR = Path("public/images")
+
+def validate_context():
+    """Ensure script is run at repo root."""
+    if not GAMES_DIR.exists():
+        print("ERROR: Must be run at repository root (data/games/ not found)")
+        sys.exit(1)
+
+def load_game(game_id):
+    """Load a game JSON file."""
+    path = GAMES_DIR / f"{game_id}.json"
+    if path.exists():
+        with open(path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    return None
+
+def save_game(game_id, data):
+    """Save a game JSON file."""
+    path = GAMES_DIR / f"{game_id}.json"
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
+
+def delete_game(game_id):
+    """Delete a game JSON file."""
+    path = GAMES_DIR / f"{game_id}.json"
+    if path.exists():
+        path.unlink()
+
+def git_add_commit(message):
+    """Stage and commit changes."""
+    subprocess.run(['git', 'add', '.'], check=True)
+    subprocess.run(['git', 'commit', '-m', message], check=True)
+
+def apply_actions(dry_run=False, no_commit=False):
+    """Apply all pending actions."""
+    validate_context()
+    
+    actions = [
+        # {ACTIONS_ARRAY} - Generated dynamically
+    ]
+    
+    print(f"Applying {len(actions)} action(s)...")
+    
+    for i, action in enumerate(actions, 1):
+        print(f"\n[{i}/{len(actions)}] {action['type']}: {action['gameId']}")
+        
+        if action['type'] == 'ADD_GAME':
+            save_game(action['gameId'], action['payload'])
+            print(f"  Created: {action['gameId']}.json")
+            
+        elif action['type'] == 'UPDATE_GAME':
+            save_game(action['gameId'], action['payload'])
+            print(f"  Updated: {action['gameId']}.json")
+            
+        elif action['type'] == 'ARCHIVE_GAME':
+            game = load_game(action['gameId'])
+            if game:
+                game['archived'] = True
+                save_game(action['gameId'], game)
+                print(f"  Archived: {action['gameId']}")
+            else:
+                print(f"  ERROR: Game not found: {action['gameId']}")
+                
+        elif action['type'] == 'RESTORE_GAME':
+            game = load_game(action['gameId'])
+            if game:
+                game['archived'] = False
+                save_game(action['gameId'], game)
+                print(f"  Restored: {action['gameId']}")
+            else:
+                print(f"  ERROR: Game not found: {action['gameId']}")
+                
+        elif action['type'] == 'DELETE_GAME':
+            delete_game(action['gameId'])
+            print(f"  Deleted: {action['gameId']}.json")
+    
+    if not dry_run and not no_commit:
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
+        git_add_commit(f"Admin session update ({timestamp})")
+        print("\nChanges committed to Git.")
+        
+        # Ask before pushing
+        response = input("\nPush to remote? (y/N): ")
+        if response.lower() == 'y':
+            subprocess.run(['git', 'push'], check=True)
+            print("Pushed to remote.")
+    else:
+        print("\nDry run complete. No changes made.")
+
+if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser(description='Apply library updates')
+    parser.add_argument('--dry-run', action='store_true', help='Preview changes without applying')
+    parser.add_argument('--no-commit', action='store_true', help='Apply changes without committing')
+    args = parser.parse_args()
+    
+    apply_actions(dry_run=args.dry_run, no_commit=args.no_commit)
+```
+
+### 8.3 — Script Generation Logic
+- **Action**: Implement `generatePythonScript()` in `SessionHistory.js`.
+- **Process**:
+  1. Collect all actions from history
+  2. Generate actions array as Python list
+  3. Inject into template
+  4. Return complete script as string
+
+### 8.4 — Script Execution Workflow
+- **Action**: Document how the admin downloads and runs the script:
+  1. Complete session in Admin UI
+  2. Review all pending changes in Session History panel
+  3. Click "Download Update Script" button
+  4. Save `update_library.py` to repository root
+  5. Run `python3 update_library.py --dry-run` to preview
+  6. Run `python3 update_library.py` to apply changes
+  7. Confirm Git push when prompted
+
+---
+
+## Step 9 — Admin UI Components Detail
+
+### 9.1 — Session History Panel Component
+- **File**: `components/admin/SessionHistoryPanel.js`
+- **Props**:
+  - `actions`: Array of action objects
+  - `onEditAction(index)`: Callback for editing
+  - `onDeleteAction(index)`: Callback for deletion
+  - `onClearAll()`: Callback for clearing all
+
+### 9.2 — Action Summary Display
+- **ADD_GAME**: "Ajouter: {title}"
+- **UPDATE_GAME**: "Modifier: {title}"
+- **ARCHIVE_GAME**: "Archiver: {title}"
+- **RESTORE_GAME**: "Restaurer: {title}"
+- **DELETE_GAME**: "Supprimer: {title}"
+
+### 9.3 — Edit Action Flow
+- **For UPDATE_GAME actions**:
+  - Clicking "Edit" opens the edit form pre-filled with the payload
+  - Saving updates the action in place (does not add new action)
+- **For other actions**:
+  - Edit button is disabled or hidden
+
+### 9.4 — Delete Action Flow
+- **Action**: Clicking "Delete" removes the action from history
+- **Confirmation**: Show confirmation dialog
+- **Result**: Action is removed, no changes are applied
+
+---
+
+## Step 10 — Deployment
+**Goal**: Fast build and deployment on static hosting.
+
+### 10.1 — Configure Static Deployment (Render/GitHub Pages)
+- **Action**: Deploy the `out` directory produced by `next export`.
+- **Rationale**: No backend to manage, resulting in maximum deployment speed.
+
+### 10.2 — Build Process
+- **Command**: `npm run build` (produces static files in `out/`)
+- **No Server**: All files are static HTML, CSS, and JS
+- **Fast Deployment**: Direct upload to static hosting
+
+---
+
+## Summary: Key Changes from Previous Architecture
+
+| Aspect | Previous | New (Session-Based) |
+|--------|----------|---------------------|
+| Backend | Next.js API routes | None (static only) |
+| Persistence | GitHub API calls | Python script |
+| Admin Auth | Token-based | None (static site) |
+| Admin Responsive | Full responsive | Desktop/tablet only |
+| Change Tracking | None | Session history |
+| Undo/Revert | Not supported | Delete from history |
+| Edit Pending Changes | Not supported | Edit in history |
+
+---
+
+## Benefits of Session-Based Approach
+
+1. **Zero Backend**: No server to maintain, no Render Web Service needed
+2. **Speed**: Build/Deploy is just a static export
+3. **Safety**: Admin reviews all changes before any Git operation occurs
+4. **Simplicity**: No complex conflict resolution; the script runs in the admin's local clone
+5. **Transparency**: Full history of pending changes visible before export
+6. **Flexibility**: Edit or revert individual changes before finalization

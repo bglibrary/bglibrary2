@@ -1,9 +1,9 @@
-# Phase 4 — Component Spec: AdminGameService
+# Phase 4 — Component Spec: AdminGameService (Session-Based)
 
 ## Role
-The AdminGameService orchestrates all administrative operations on games.
+The AdminGameService orchestrates all administrative operations on games within a browser session.
 
-It acts as the single application-level entry point for creating, updating, archiving, and restoring games, while delegating persistence to infrastructure services.
+It acts as the single application-level entry point for creating, updating, archiving, and restoring games, storing all changes in the SessionHistory.
 
 ---
 
@@ -11,17 +11,26 @@ It acts as the single application-level entry point for creating, updating, arch
 
 - Validate admin-provided game data
 - Orchestrate add, update, archive, and restore workflows
-- Coordinate with ArchiveManager and GitService
-- Guarantee consistency of admin operations
+- Coordinate with SessionHistory for change tracking
+- Guarantee consistency of admin operations within session
 
 ---
 
 ## Non-Responsibilities
 
 - UI form handling
-- Direct GitHub or storage interactions
+- Direct file system or Git interactions
 - Rendering or routing concerns
 - Read-only access for visitors
+- Persistence to repository (handled by Python script)
+
+---
+
+## Dependencies
+
+- **SessionHistory**: Stores all pending actions
+- **GameRepository**: Reads existing games for validation
+- **ImageAssetManager**: Validates image assets
 
 ---
 
@@ -38,6 +47,7 @@ It acts as the single application-level entry point for creating, updating, arch
 
 - Operation result (success or explicit error)
 - No game data is returned to the caller
+- Action is added to SessionHistory on success
 
 ---
 
@@ -46,25 +56,50 @@ It acts as the single application-level entry point for creating, updating, arch
 ### Add Game
 
 - Validate mandatory fields
-- Ensure game ID uniqueness
-- Persist game as active
+- Ensure game ID uniqueness (check existing games + pending ADD actions)
+- Add ADD_GAME action to SessionHistory
+- Return success
 
 ### Update Game
 
 - Validate mandatory fields
-- Ensure target game exists
-- Update game data atomically
+- Ensure target game exists (in repository or pending ADD action)
+- Add UPDATE_GAME action to SessionHistory
+- Return success
 
 ### Archive Game
 
 - Ensure target game exists
-- Mark game as archived
-- Preserve all game data
+- Add ARCHIVE_GAME action to SessionHistory
+- Return success
 
 ### Restore Game
 
 - Ensure target game exists and is archived
-- Restore game to active state
+- Add RESTORE_GAME action to SessionHistory
+- Return success
+
+---
+
+## Session History Actions
+
+### Action Structure
+```javascript
+{
+  id: string,           // unique action identifier (UUID)
+  type: ActionType,     // ADD_GAME | UPDATE_GAME | ARCHIVE_GAME | RESTORE_GAME
+  timestamp: string,    // ISO 8601 timestamp
+  gameId: string,       // target game ID
+  payload: object | null, // action-specific data (null for archive/restore)
+  summary: string       // human-readable summary for UI display
+}
+```
+
+### Action Types
+- `ADD_GAME`: Full game object in payload
+- `UPDATE_GAME`: Full game object in payload
+- `ARCHIVE_GAME`: No payload (just gameId)
+- `RESTORE_GAME`: No payload (just gameId)
 
 ---
 
@@ -74,14 +109,16 @@ It acts as the single application-level entry point for creating, updating, arch
 - Controlled vocabularies must be respected
 - Images must be validated via ImageAssetManager
 - Partial updates are forbidden
+- Game ID must be unique (for ADD operations)
 
 ---
 
 ## Invariants
 
-- Admin operations must be atomic
-- No operation may leave the system in an inconsistent state
-- Archived data must never be overwritten or deleted
+- Admin operations are atomic within session
+- No operation may leave the session in an inconsistent state
+- All operations are reversible by deleting from SessionHistory
+- No direct persistence to repository
 
 ---
 
@@ -90,6 +127,7 @@ It acts as the single application-level entry point for creating, updating, arch
 - Git-specific concepts (commits, branches, tokens) must not leak into this component
 - UI-specific validation (field-level UX) must not be implemented here
 - Persistence format (JSON vs Markdown) must remain opaque
+- Python script details must not leak into this component
 
 ---
 
@@ -98,7 +136,7 @@ It acts as the single application-level entry point for creating, updating, arch
 - Invalid input data
 - Game not found
 - Duplicate game ID
-- Persistence failure
+- Validation failure
 
 All errors must be explicit and typed.
 
@@ -110,19 +148,33 @@ All errors must be explicit and typed.
 
 - Add valid game
 - Reject invalid game data
+- Reject duplicate game ID
 - Update existing game
 - Reject update of non-existing game
 - Archive and restore workflows
+- Session history integration
 
 ### Invariant Tests
 
-- No partial persistence on failure
-- Archived game data preservation
+- No direct persistence
+- All operations add to session history
+- Operations are reversible
 
 ### Negative Tests
 
 - Duplicate IDs
 - Invalid controlled vocabulary values
+- Missing mandatory fields
 
-All tests must be executable without UI or real GitHub dependencies.
+All tests must be executable without UI, file system, or Git dependencies.
 
+---
+
+## Key Changes from Previous Architecture
+
+| Aspect | Previous | New (Session-Based) |
+|--------|----------|---------------------|
+| Persistence | Immediate (Git) | Deferred (SessionHistory) |
+| Atomicity | Per-operation | Per-session |
+| Reversibility | Not supported | Delete from history |
+| Backend | Required | None |
