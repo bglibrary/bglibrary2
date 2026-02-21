@@ -1,66 +1,76 @@
 /**
  * AdminGameGrid Component
  * 
- * Grid of game cards with admin actions.
- * Uses the shared GameCard component.
+ * Grid of compact game cards with admin actions in overlay band.
+ * Uses the shared AdminGameCard component.
  * As specified in specs/phase_7_4_ui_admin_game_list.md
  */
 
-import GameCard from '@/components/common/GameCard';
+import { AdminGameCard } from '@/components/common/GameCard';
 
-function AdminGameCard({ game, onToggleFavorite, onArchive, onRestore }) {
+// Icon button for action band overlay
+function ActionButton({ icon, title, onClick, href, className = '' }) {
+  const baseClasses = 'p-1 rounded hover:bg-white/20 transition-colors text-white text-sm';
+  
+  if (href) {
+    return (
+      <a
+        href={href}
+        className={`${baseClasses} ${className}`}
+        title={title}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {icon}
+      </a>
+    );
+  }
+  
   return (
-    <GameCard 
-      game={game} 
-      className={game.isArchived ? 'opacity-60' : ''}
+    <button
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick && onClick();
+      }}
+      className={`${baseClasses} ${className}`}
+      title={title}
     >
-      {/* Archived indicator */}
-      {game.isArchived && (
-        <span className="text-meta text-text-muted ml-2">(archivé)</span>
+      {icon}
+    </button>
+  );
+}
+
+function AdminGameCardWithActions({ game, onToggleFavorite, onArchive, onRestore }) {
+  return (
+    <AdminGameCard game={game}>
+      {/* Edit */}
+      <ActionButton
+        icon="✏️"
+        title="Modifier"
+        href={`/admin/edit-game/${game.id}`}
+      />
+
+      {/* Archive/Restore */}
+      {game.isArchived ? (
+        <ActionButton
+          icon="📤"
+          title="Restaurer"
+          onClick={() => onRestore(game.id)}
+        />
+      ) : (
+        <ActionButton
+          icon="📦"
+          title="Archiver"
+          onClick={() => onArchive(game.id)}
+        />
       )}
 
-      {/* Action buttons - icon only */}
-      <div className="flex items-center justify-end gap-2 pt-3 mt-3 border-t border-border">
-        {/* Edit */}
-        <a
-          href={`/admin/edit-game/${game.id}`}
-          className="p-2 rounded-button hover:bg-cream transition-colors text-action"
-          title="Modifier"
-        >
-          ✏️
-        </a>
-
-        {/* Archive/Restore */}
-        {game.isArchived ? (
-          <button
-            onClick={() => onRestore(game.id)}
-            className="p-2 rounded-button hover:bg-cream transition-colors text-secondary"
-            title="Restaurer"
-          >
-            📤
-          </button>
-        ) : (
-          <button
-            onClick={() => onArchive(game.id)}
-            className="p-2 rounded-button hover:bg-cream transition-colors text-action"
-            title="Archiver"
-          >
-            📦
-          </button>
-        )}
-
-        {/* Favorite toggle */}
-        <button
-          onClick={() => onToggleFavorite(game.id)}
-          className={`p-2 rounded-button hover:bg-cream transition-colors ${
-            game.isFavorite ? 'text-favorite' : 'text-action'
-          }`}
-          title={game.isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'}
-        >
-          {game.isFavorite ? '❤️' : '🤍'}
-        </button>
-      </div>
-    </GameCard>
+      {/* Favorite toggle */}
+      <ActionButton
+        icon={game.isFavorite ? '❤️' : '🤍'}
+        title={game.isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'}
+        onClick={() => onToggleFavorite(game.id)}
+      />
+    </AdminGameCard>
   );
 }
 
@@ -76,9 +86,9 @@ export default function AdminGameGrid({ games, onToggleFavorite, onArchive, onRe
   }
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-grid-gap">
+    <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
       {games.map(game => (
-        <AdminGameCard
+        <AdminGameCardWithActions
           key={game.id}
           game={game}
           onToggleFavorite={onToggleFavorite}

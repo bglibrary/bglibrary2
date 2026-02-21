@@ -164,18 +164,17 @@ Grid must be primary visual focus.
 
 ---
 
-## 5.2 Game Card
+## 5.2 Game Card (Visitor)
 
-Contains:
+**Compact card with overlay info band:**
 
 - **Square image** (aspect-ratio 1:1)
   - Uses `object-contain` to preserve image proportions without cropping
-  - Suitable for both landscape and portrait game box images
-- Title
-- Player count
-- Duration (1–3 hourglass fill levels)
-- Award badge (if exists)
-- Favorite heart (if true)
+  - No title displayed on card (shown only in detail view)
+- **Info band overlay** at bottom of image:
+  - Semi-transparent black background with blur
+  - Left side: Player count + Duration hourglasses (⏳⏳⏳)
+  - Right side: Award trophy (🏆) and/or favorite heart (❤️) if applicable
 
 Card hover:
 - Slight elevation
@@ -183,7 +182,12 @@ Card hover:
 
 Clicking a card opens a modal.
 
-**Shared Component**: The GameCard component is shared between visitor and admin views (`src/components/common/GameCard.js`).
+**Grid Layout**: 4-6 columns on desktop for compact display.
+
+**Shared Component**: `src/components/common/GameCard.js` exports:
+- `VisitorGameCard`: Compact card with info overlay
+- `AdminGameCard`: Compact card with action buttons overlay
+- `GameImage`: Reusable image component
 
 ---
 
@@ -267,22 +271,21 @@ Export generates:
 Structure:
 
 Header:
-- “Notre Ludothèque”
+- "Notre Ludothèque"
 - Search bar
 - + Add Game button
 
 Grid:
-- Same visual structure as visitor
-- Cards include:
-  - Image
-  - Title
-  - Player count
-  - Duration
-  - Award badge
-  - Icon-only action buttons at bottom:
+- **Compact cards** with action buttons overlay
+- **Square image** (aspect-ratio 1:1) with `object-contain`
+- **Action band overlay** at bottom of image:
+  - Semi-transparent black background with blur
+  - Icon-only action buttons (white):
     - Pencil (edit)
-    - Archive
-    - Heart toggle
+    - Archive/Restore
+    - Heart toggle (favorite)
+- **Grid Layout**: 6 columns on desktop for compact display
+- No title or info displayed on card (image only)
 
 No text labels on actions.
 
