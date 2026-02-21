@@ -10,7 +10,7 @@ Instead of real-time API calls, the interface records a "Session History" and ge
 ## 2. Session Flow
 
 1. **Admin Login**: Purely local or basic auth if needed (since it's a static site).
-2. **Management**: Admin adds, edits, or archives games. Each action is recorded in the `SessionHistory`.
+2. **Management**: Admin adds, edits, archives, restores, or toggles favorites on games. Each action is recorded in the `SessionHistory`.
 3. **Review**: Admin reviews the history, edits entries, or removes mistakes.
 4. **Export**: Admin clicks "Download Update Script".
 5. **Execution**: Admin runs the script at the root of the repository.
@@ -46,6 +46,14 @@ The history is stored in memory (or `localStorage` for persistence across reload
     "gameId": "old-game",
     "payload": null,
     "summary": "Archiver: Old Game"
+  },
+  {
+    "id": "action-004",
+    "type": "TOGGLE_FAVORITE",
+    "timestamp": "2026-02-20T21:55:00Z",
+    "gameId": "catan",
+    "payload": { "favorite": true },
+    "summary": "Favori: Catan"
   }
 ]
 ```
@@ -60,6 +68,7 @@ The history is stored in memory (or `localStorage` for persistence across reload
 | `UPDATE_GAME` | Update an existing game | Full game object |
 | `ARCHIVE_GAME` | Mark a game as archived | null |
 | `RESTORE_GAME` | Restore an archived game | null |
+| `TOGGLE_FAVORITE` | Toggle favorite status | `{ favorite: boolean }` |
 | `DELETE_GAME` | Permanently delete a game | null (optional, use with caution) |
 
 ---
@@ -151,6 +160,16 @@ def apply_actions(dry_run=False, no_commit=False):
             save_game(action['gameId'], action['payload'])
             print(f"  Updated: {action['gameId']}.json")
             
+        elif action['type'] == 'TOGGLE_FAVORITE':
+            game = load_game(action['gameId'])
+            if game:
+                game['favorite'] = action['payload']['favorite']
+                save_game(action['gameId'], game)
+                status = "favori" if game['favorite'] else "non favori"
+                print(f"  Toggled favorite: {action['gameId']} -> {status}")
+            else:
+                print(f"  ERROR: Game not found: {action['gameId']}")
+                
         elif action['type'] == 'ARCHIVE_GAME':
             game = load_game(action['gameId'])
             if game:
@@ -213,15 +232,16 @@ if __name__ == "__main__":
 
 - **Device Support**: Tablet and Desktop only (minimum width: 768px).
 - **Responsiveness**: Not required for mobile phones.
-- **History View**: A side panel or dedicated tab showing the list of actions with "Edit" and "Delete" buttons.
+- **History View**: Side panel (hidden by default, toggled via header button).
 - **Session Persistence**: Optional localStorage for recovery across page reloads.
+- **Search**: Local text filtering for games (no backend).
 
 ---
 
 ## 8. Session History Management
 
 ### 8.1 — Adding Actions
-- Each admin operation (add, update, archive, restore) adds an entry to the session history.
+- Each admin operation (add, update, archive, restore, toggle favorite) adds an entry to the session history.
 - The history is displayed in real-time in the Session History Panel.
 
 ### 8.2 — Editing Actions

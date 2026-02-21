@@ -25,7 +25,7 @@ The admin interface operates entirely in-memory during a browser session. All ch
 
 ### Session Lifecycle
 1. **Session Start**: Admin opens the admin interface
-2. **Session Active**: Admin performs add/update/archive/restore operations
+2. **Session Active**: Admin performs add/update/archive/restore/toggle favorite operations
 3. **Session Review**: Admin reviews the history, edits or deletes entries as needed
 4. **Session Export**: Admin downloads the generated Python script
 5. **Session End**: Admin closes the browser tab (session data is lost if not exported)
@@ -115,9 +115,10 @@ The admin interface operates entirely in-memory during a browser session. All ch
 ### 3.2 — Define Action Types
 - **Action Types**:
   - `ADD_GAME`: Add a new game
-  - `UPDATE_GAME`: Update an existing game
+  - `UPDATE_GAME`: Update an existing game (full replacement)
   - `ARCHIVE_GAME`: Archive a game
   - `RESTORE_GAME`: Restore an archived game
+  - `TOGGLE_FAVORITE`: Quick toggle of favorite status (shortcut for partial update)
   - `DELETE_GAME`: Permanently delete a game (optional, use with caution)
 
 ### 3.3 — Action Structure
@@ -183,18 +184,48 @@ The admin interface operates entirely in-memory during a browser session. All ch
 - **Not Responsive for Mobile**: No mobile phone optimization required
 - **Layout**: Two-column layout on desktop, single column on tablet
 
-### 7.2 — Implement Admin Session Dashboard
+### 7.2 — Admin Header
+- **Components**:
+  - Title "Notre Ludothèque"
+  - **Search bar**: Text input to filter games by name (local filtering, no backend)
+  - **+ Add Game button**: Primary action to add new game
+  - **History toggle button**: Icon button to show/hide Session History Panel
+
+### 7.3 — Admin Dashboard Layout
+```
++--------------------------------------------------+
+| Header: Title | Search | + Add | History toggle |
++--------------------------------------------------+
+|                                    |              |
+|   Game Grid                        |  Session     |
+|   (filtered by search)             |  History     |
+|                                    |  Panel       |
+|   Cards with icon-only actions:    |  (hidden     |
+|   - Pencil (edit)                  |   by         |
+|   - Archive/Restore                |   default)   |
+|   - Heart (toggle favorite)        |              |
+|                                    |              |
++--------------------------------------------------+
+```
+
+### 7.4 — Implement Admin Session Dashboard
 - **Action**: Create `pages/admin/index.js`.
 - **Components**:
-  - **Game List Panel**: Display all games (active and archived)
-  - **Session History Panel**: Display pending changes with edit/delete options
-  - **Action Buttons**: 
-    - "Add Game" button
-    - "Download Update Script" button (disabled if no changes)
-    - "Clear Session" button (with confirmation)
+  - **Header**: Search bar, Add Game button, History toggle
+  - **Game Grid**: Display all games (active and archived) filtered by search
+  - **Session History Panel**: Collapsible side panel (hidden by default)
 
-### 7.3 — Implement Session History Panel
+### 7.5 — Game Card Actions (Admin)
+Each game card in admin has **icon-only action buttons** at the bottom:
+- **Pencil icon**: Edit game (opens edit form)
+- **Archive/Restore icon**: Archive or restore game
+- **Heart icon**: Toggle favorite status (quick action)
+
+All icons must be understandable without tooltips.
+
+### 7.6 — Implement Session History Panel
 - **Action**: Create `components/admin/SessionHistoryPanel.js`.
+- **Visibility**: Hidden by default, toggled via header button
 - **Features**:
   - Chronological list of all pending actions
   - Each entry shows:
@@ -202,22 +233,24 @@ The admin interface operates entirely in-memory during a browser session. All ch
     - Timestamp (relative or absolute)
     - Game title and ID
     - Summary of changes
-    - Edit button (opens pre-filled form for UPDATE actions)
+    - Edit button (opens pre-filled form for ADD/UPDATE actions)
     - Delete button (removes action from history)
   - Empty state message when no changes
-  - Total change count indicator
+  - Total change count badge
+  - "Download Update Script" button (disabled if no changes)
+  - "Clear Session" button (with confirmation, disabled if no changes)
 
-### 7.4 — Implement Admin Game Editor
+### 7.7 — Implement Admin Game Editor
 - **Action**: Create forms for adding/editing games.
 - **Behavior**: Submitting the form adds an entry to the `SessionHistory` instead of calling an API.
 - **Forms**:
   - `pages/admin/add-game.js`: Add new game form
   - `pages/admin/edit-game/[id].js`: Edit existing game form
 
-### 7.5 — Implement Archive/Restore Actions
-- **Action**: Add archive and restore buttons to game list.
-- **Behavior**: Clicking archive/restore adds an action to the session history.
-- **Confirmation**: Show confirmation dialog before adding to history.
+### 7.8 — Implement Quick Actions
+- **Toggle Favorite**: Clicking heart icon adds TOGGLE_FAVORITE action to session history
+- **Archive/Restore**: Clicking archive/restore icon adds respective action to session history
+- **Confirmation**: Show confirmation dialog before adding to history
 
 ---
 
@@ -310,6 +343,16 @@ def apply_actions(dry_run=False, no_commit=False):
             save_game(action['gameId'], action['payload'])
             print(f"  Updated: {action['gameId']}.json")
             
+        elif action['type'] == 'TOGGLE_FAVORITE':
+            game = load_game(action['gameId'])
+            if game:
+                game['favorite'] = action['payload']['favorite']
+                save_game(action['gameId'], game)
+                status = "favori" if game['favorite'] else "non favori"
+                print(f"  Toggled favorite: {action['gameId']} -> {status}")
+            else:
+                print(f"  ERROR: Game not found: {action['gameId']}")
+                
         elif action['type'] == 'ARCHIVE_GAME':
             game = load_game(action['gameId'])
             if game:
@@ -379,21 +422,24 @@ if __name__ == "__main__":
 
 ### 9.1 — Session History Panel Component
 - **File**: `components/admin/SessionHistoryPanel.js`
+- **Visibility**: Hidden by default, toggled via header button
 - **Props**:
   - `actions`: Array of action objects
   - `onEditAction(index)`: Callback for editing
   - `onDeleteAction(index)`: Callback for deletion
   - `onClearAll()`: Callback for clearing all
+  - `onExport()`: Callback for downloading script
 
 ### 9.2 — Action Summary Display
 - **ADD_GAME**: "Ajouter: {title}"
 - **UPDATE_GAME**: "Modifier: {title}"
 - **ARCHIVE_GAME**: "Archiver: {title}"
 - **RESTORE_GAME**: "Restaurer: {title}"
+- **TOGGLE_FAVORITE**: "Favori: {title}" or "Non favori: {title}"
 - **DELETE_GAME**: "Supprimer: {title}"
 
 ### 9.3 — Edit Action Flow
-- **For UPDATE_GAME actions**:
+- **For ADD_GAME and UPDATE_GAME actions**:
   - Clicking "Edit" opens the edit form pre-filled with the payload
   - Saving updates the action in place (does not add new action)
 - **For other actions**:
@@ -403,6 +449,11 @@ if __name__ == "__main__":
 - **Action**: Clicking "Delete" removes the action from history
 - **Confirmation**: Show confirmation dialog
 - **Result**: Action is removed, no changes are applied
+
+### 9.5 — Search Bar
+- **Purpose**: Filter games by name in admin dashboard
+- **Behavior**: Local text filtering (no backend)
+- **Debounce**: 300ms delay before filtering
 
 ---
 
@@ -431,6 +482,8 @@ if __name__ == "__main__":
 | Change Tracking | None | Session history |
 | Undo/Revert | Not supported | Delete from history |
 | Edit Pending Changes | Not supported | Edit in history |
+| Admin Search | Not supported | Local text filtering |
+| Quick Favorite Toggle | Not supported | Heart icon on cards |
 
 ---
 
@@ -442,3 +495,4 @@ if __name__ == "__main__":
 4. **Simplicity**: No complex conflict resolution; the script runs in the admin's local clone
 5. **Transparency**: Full history of pending changes visible before export
 6. **Flexibility**: Edit or revert individual changes before finalization
+7. **Quick Actions**: Toggle favorite directly from game cards

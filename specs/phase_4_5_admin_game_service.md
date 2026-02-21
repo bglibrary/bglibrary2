@@ -3,14 +3,14 @@
 ## Role
 The AdminGameService orchestrates all administrative operations on games within a browser session.
 
-It acts as the single application-level entry point for creating, updating, archiving, and restoring games, storing all changes in the SessionHistory.
+It acts as the single application-level entry point for creating, updating, archiving, restoring, and toggling favorites on games, storing all changes in the SessionHistory.
 
 ---
 
 ## Responsibilities
 
 - Validate admin-provided game data
-- Orchestrate add, update, archive, and restore workflows
+- Orchestrate add, update, archive, restore, and toggle favorite workflows
 - Coordinate with SessionHistory for change tracking
 - Guarantee consistency of admin operations within session
 
@@ -39,7 +39,7 @@ It acts as the single application-level entry point for creating, updating, arch
 - `GameData`
   - Full game definition as provided by the admin UI
 - `AdminAction`
-  - One of: add, update, archive, restore
+  - One of: add, update, archive, restore, toggleFavorite
 
 ---
 
@@ -79,6 +79,14 @@ It acts as the single application-level entry point for creating, updating, arch
 - Add RESTORE_GAME action to SessionHistory
 - Return success
 
+### Toggle Favorite
+
+- Ensure target game exists
+- Determine new favorite state (toggle current state)
+- Add TOGGLE_FAVORITE action to SessionHistory
+- Return success
+- **Note**: This is a quick action shortcut for partial updates
+
 ---
 
 ## Session History Actions
@@ -87,10 +95,10 @@ It acts as the single application-level entry point for creating, updating, arch
 ```javascript
 {
   id: string,           // unique action identifier (UUID)
-  type: ActionType,     // ADD_GAME | UPDATE_GAME | ARCHIVE_GAME | RESTORE_GAME
+  type: ActionType,     // ADD_GAME | UPDATE_GAME | ARCHIVE_GAME | RESTORE_GAME | TOGGLE_FAVORITE
   timestamp: string,    // ISO 8601 timestamp
   gameId: string,       // target game ID
-  payload: object | null, // action-specific data (null for archive/restore)
+  payload: object | null, // action-specific data
   summary: string       // human-readable summary for UI display
 }
 ```
@@ -100,6 +108,7 @@ It acts as the single application-level entry point for creating, updating, arch
 - `UPDATE_GAME`: Full game object in payload
 - `ARCHIVE_GAME`: No payload (just gameId)
 - `RESTORE_GAME`: No payload (just gameId)
+- `TOGGLE_FAVORITE`: `{ favorite: boolean }` in payload
 
 ---
 
@@ -108,7 +117,7 @@ It acts as the single application-level entry point for creating, updating, arch
 - Mandatory fields must be present
 - Controlled vocabularies must be respected
 - Images must be validated via ImageAssetManager
-- Partial updates are forbidden
+- Partial updates are forbidden (except via TOGGLE_FAVORITE)
 - Game ID must be unique (for ADD operations)
 
 ---
@@ -152,6 +161,7 @@ All errors must be explicit and typed.
 - Update existing game
 - Reject update of non-existing game
 - Archive and restore workflows
+- Toggle favorite workflow
 - Session history integration
 
 ### Invariant Tests
@@ -178,3 +188,4 @@ All tests must be executable without UI, file system, or Git dependencies.
 | Atomicity | Per-operation | Per-session |
 | Reversibility | Not supported | Delete from history |
 | Backend | Required | None |
+| Quick Actions | Not supported | TOGGLE_FAVORITE |
