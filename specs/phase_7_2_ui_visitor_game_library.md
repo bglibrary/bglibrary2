@@ -36,8 +36,16 @@ All data must conform strictly to Phase 5 contracts.
 
 ### Filter Panel
 
-- Filter controls mapped 1:1 to filter contracts
-- All filters are optional
+- **Compact horizontal layout** on a single line
+- **Filter chips with dropdown menus**:
+  - Each chip shows filter label and selected value(s)
+  - Clicking opens a dropdown menu to select values
+  - Multi-select support for duration and complexity filters
+  - Single-select for player count
+- **Boolean toggle chips** for awards and favorites
+- **Sort dropdown** integrated in the filter line
+- **Clear all** button appears when filters are active
+- Active filters highlighted with primary color
 
 ---
 
