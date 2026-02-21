@@ -2,75 +2,25 @@
  * AdminGameGrid Component
  * 
  * Grid of game cards with admin actions.
+ * Uses the shared GameCard component.
  * As specified in specs/phase_7_4_ui_admin_game_list.md
  */
 
-import { PlayDuration } from '@/domain/Game';
-
-// Duration icon fill levels
-const DurationIcon = ({ duration }) => {
-  const fillCount = {
-    [PlayDuration.SHORT]: 1,
-    [PlayDuration.MEDIUM]: 2,
-    [PlayDuration.LONG]: 3,
-  }[duration] || 1;
-
-  return (
-    <span className="inline-flex items-center" title={duration}>
-      {[1, 2, 3].map(i => (
-        <span
-          key={i}
-          className={`inline-block w-2 h-3 mx-0.5 rounded-sm ${
-            i <= fillCount ? 'bg-text-secondary' : 'bg-border'
-          }`}
-        />
-      ))}
-    </span>
-  );
-};
+import GameCard from '@/components/common/GameCard';
 
 function AdminGameCard({ game, onToggleFavorite, onArchive, onRestore }) {
   return (
-    <article className={`card ${game.isArchived ? 'opacity-60' : ''}`}>
-      {/* Image placeholder */}
-      <div className="aspect-video bg-border rounded-lg mb-3 flex items-center justify-center">
-        {game.primaryImage ? (
-          <span className="text-text-muted text-meta">Image</span>
-        ) : (
-          <span className="text-text-muted text-meta">Pas d'image</span>
-        )}
-      </div>
-
-      {/* Title */}
-      <h3 className="text-card-title text-text-primary mb-2 line-clamp-1">
-        {game.title}
-        {game.isArchived && (
-          <span className="text-meta text-text-muted ml-2">(archivé)</span>
-        )}
-      </h3>
-
-      {/* Meta info */}
-      <div className="flex items-center gap-3 text-meta text-text-secondary mb-3">
-        <span>{game.playerCount}</span>
-        <DurationIcon duration={game.playDuration} />
-      </div>
-
-      {/* Indicators */}
-      <div className="flex items-center gap-2 mb-3">
-        {game.hasAwards && (
-          <span className="text-award" title="Primé">
-            🏆
-          </span>
-        )}
-        {game.isFavorite && (
-          <span className="text-favorite" title="Favori">
-            ❤️
-          </span>
-        )}
-      </div>
+    <GameCard 
+      game={game} 
+      className={game.isArchived ? 'opacity-60' : ''}
+    >
+      {/* Archived indicator */}
+      {game.isArchived && (
+        <span className="text-meta text-text-muted ml-2">(archivé)</span>
+      )}
 
       {/* Action buttons - icon only */}
-      <div className="flex items-center justify-end gap-2 pt-3 border-t border-border">
+      <div className="flex items-center justify-end gap-2 pt-3 mt-3 border-t border-border">
         {/* Edit */}
         <a
           href={`/admin/edit-game/${game.id}`}
@@ -110,7 +60,7 @@ function AdminGameCard({ game, onToggleFavorite, onArchive, onRestore }) {
           {game.isFavorite ? '❤️' : '🤍'}
         </button>
       </div>
-    </article>
+    </GameCard>
   );
 }
 

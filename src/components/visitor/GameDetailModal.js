@@ -7,6 +7,7 @@
 
 import { useEffect, useCallback } from 'react';
 import { PlayDuration, FirstPlayComplexity } from '@/domain/Game';
+import { GameImage } from '@/components/common/GameCard';
 
 const DURATION_LABELS = {
   [PlayDuration.SHORT]: 'Court (< 30 min)',
@@ -66,9 +67,13 @@ export default function GameDetailModal({ game, onClose }) {
             ✕
           </button>
 
-          {/* Image */}
-          <div className="aspect-video bg-border rounded-t-modal flex items-center justify-center">
-            <span className="text-text-muted">Image du jeu</span>
+          {/* Image - square format with object-contain */}
+          <div className="p-4 bg-border rounded-t-modal">
+            <GameImage 
+              imageId={game.images && game.images.length > 0 ? game.images[0].id : null}
+              title={game.title}
+              className="max-w-md mx-auto"
+            />
           </div>
 
           {/* Favorite badge */}
