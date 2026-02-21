@@ -1,0 +1,20 @@
+{
+  "id": "azul",
+  "title": "Azul",
+  "description": "Les artisans des carreaux d\u0027Azulejo embellissent les murs du Palais Royal de Evora.",
+  "minPlayers": 2,
+  "maxPlayers": 4,
+  "playDuration": "MEDIUM",
+  "ageRecommendation": "8+",
+  "firstPlayComplexity": "LOW",
+  "categories": ["Abstrait", "Famille"],
+  "mechanics": ["Draft", "Pattern Building"],
+  "awards": [
+    { "name": "Spiel des Jahres", "year": 2018 }
+  ],
+  "favorite": false,
+  "archived": false,
+  "images": [
+    { "id": "azul-main", "source": "publisher", "attribution": "Michael Kiesling" }
+  ]
+}

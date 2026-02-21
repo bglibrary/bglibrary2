@@ -1,0 +1,20 @@
+{
+  "id": "catan",
+  "title": "Catan",
+  "description": "Un jeu de développement et de commerce de colonies.",
+  "minPlayers": 3,
+  "maxPlayers": 4,
+  "playDuration": "MEDIUM",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "MEDIUM",
+  "categories": ["Stratégie", "Négociation"],
+  "mechanics": ["Jet de dés", "Collecte de ressources", "Construction de routes"],
+  "awards": [
+    { "name": "Spiel des Jahres", "year": 1995 }
+  ],
+  "favorite": true,
+  "archived": false,
+  "images": [
+    { "id": "catan-main", "source": "publisher", "attribution": "Klaus Teuber" }
+  ]
+}
