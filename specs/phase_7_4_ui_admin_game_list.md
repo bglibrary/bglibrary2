@@ -72,8 +72,11 @@ This screen allows administrators to view all games and manage pending changes.
 ### Game Grid
 - Grid of game cards (3-4 columns on desktop, 2 on tablet)
 - Filtered by search text (game title)
+- **Shared Component**: Uses `GameCard` from `src/components/common/GameCard.js`
 - Cards include:
-  - Large image
+  - **Square image** (aspect-ratio 1:1)
+    - Uses `object-contain` to preserve image proportions without cropping
+    - Suitable for both landscape and portrait game box images
   - Title
   - Player count
   - Duration

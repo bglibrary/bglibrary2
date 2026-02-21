@@ -168,7 +168,9 @@ Grid must be primary visual focus.
 
 Contains:
 
-- Large image
+- **Square image** (aspect-ratio 1:1)
+  - Uses `object-contain` to preserve image proportions without cropping
+  - Suitable for both landscape and portrait game box images
 - Title
 - Player count
 - Duration (1–3 hourglass fill levels)
@@ -180,6 +182,8 @@ Card hover:
 - Cursor pointer
 
 Clicking a card opens a modal.
+
+**Shared Component**: The GameCard component is shared between visitor and admin views (`src/components/common/GameCard.js`).
 
 ---
 
@@ -201,13 +205,18 @@ No page navigation change.
 ## 6.2 Modal Layout
 
 Top section:
-- Large image (or image carousel if multiple)
+- **Square image** (aspect-ratio 1:1)
+  - Uses `object-contain` to preserve image proportions without cropping
+  - Centered within the modal header
+  - Maximum width constraint to avoid excessive size
 - Title
 - Player count
 - Duration
 - Complexity indicator
 - Award list
 - Favorite badge if applicable
+
+**Shared Component**: Uses `GameImage` component from `src/components/common/GameCard.js`.
 
 Body:
 - Short description

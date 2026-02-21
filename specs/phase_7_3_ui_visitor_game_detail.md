@@ -17,7 +17,10 @@ This screen displays detailed information for a single game.
 ## Displayed Elements
 
 - Game title
-- Main image
+- **Main image** (square format, aspect-ratio 1:1)
+  - Uses `object-contain` to preserve image proportions without cropping
+  - Centered within the modal header
+  - **Shared Component**: Uses `GameImage` from `src/components/common/GameCard.js`
 - Player count range
 - Play duration
 - First play complexity

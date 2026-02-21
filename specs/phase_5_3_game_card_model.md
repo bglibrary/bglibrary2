@@ -25,6 +25,26 @@ It is a projection of the Game domain model with strictly limited scope.
 
 ---
 
+### Image Reference
+
+- `primaryImage: ImageDescriptor | null`
+  - Reference to the primary image for display
+  - Contains `id` field for constructing image path: `/images/{id}.jpg`
+  - Used by shared `GameCard` component
+
+---
+
+## Image Display Rules
+
+- **Format**: Square (aspect-ratio 1:1)
+- **Fit**: `object-contain` to preserve proportions without cropping
+- **Fallback**: Display "Pas d'image" placeholder when `primaryImage` is null
+- **Shared Component**: `src/components/common/GameCard.js` exports:
+  - `GameCard`: Base card component
+  - `GameImage`: Reusable image component with square format
+
+---
+
 ## Explicit Exclusions
 
 The GameCard must not include:

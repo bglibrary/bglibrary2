@@ -25,6 +25,14 @@ All data must conform strictly to Phase 5 contracts.
 - List of GameCard items
 - Only non-archived games are displayed
 - Stable order (as provided by backend)
+- **Shared Component**: Uses `GameCard` from `src/components/common/GameCard.js`
+
+### Game Card Image
+
+- **Square format** (aspect-ratio 1:1)
+- Uses `object-contain` to preserve image proportions without cropping
+- Suitable for both landscape and portrait game box images
+- No image cropping or distortion
 
 ### Filter Panel
 
