@@ -1,0 +1,469 @@
+/**
+ * SessionHistory
+ * 
+ * Tracks all admin changes within a browser session.
+ * As specified in specs/phase_8_implementation_plan.md
+ */
+
+/**
+ * Generate a simple unique ID
+ * @returns {string}
+ */
+function generateId() {
+  return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+}
+
+/**
+ * Action types for session history
+ */
+export const ActionType = {
+  ADD_GAME: 'ADD_GAME',
+  UPDATE_GAME: 'UPDATE_GAME',
+  ARCHIVE_GAME: 'ARCHIVE_GAME',
+  RESTORE_GAME: 'RESTORE_GAME',
+  TOGGLE_FAVORITE: 'TOGGLE_FAVORITE',
+  DELETE_GAME: 'DELETE_GAME',
+};
+
+/**
+ * French labels for action types
+ */
+const ActionTypeLabels = {
+  [ActionType.ADD_GAME]: 'Ajouter',
+  [ActionType.UPDATE_GAME]: 'Modifier',
+  [ActionType.ARCHIVE_GAME]: 'Archiver',
+  [ActionType.RESTORE_GAME]: 'Restaurer',
+  [ActionType.TOGGLE_FAVORITE]: 'Favori',
+  [ActionType.DELETE_GAME]: 'Supprimer',
+};
+
+/**
+ * Generates a human-readable summary for an action
+ * @param {string} type - Action type
+ * @param {string} gameTitle - Game title
+ * @param {object} payload - Action payload
+ * @returns {string}
+ */
+function generateSummary(type, gameTitle, payload) {
+  switch (type) {
+    case ActionType.ADD_GAME:
+      return `Ajouter: ${gameTitle}`;
+    case ActionType.UPDATE_GAME:
+      return `Modifier: ${gameTitle}`;
+    case ActionType.ARCHIVE_GAME:
+      return `Archiver: ${gameTitle}`;
+    case ActionType.RESTORE_GAME:
+      return `Restaurer: ${gameTitle}`;
+    case ActionType.TOGGLE_FAVORITE:
+      return payload?.favorite ? `Favori: ${gameTitle}` : `Non favori: ${gameTitle}`;
+    case ActionType.DELETE_GAME:
+      return `Supprimer: ${gameTitle}`;
+    default:
+      return `${ActionTypeLabels[type] || type}: ${gameTitle}`;
+  }
+}
+
+/**
+ * SessionHistory class
+ * Manages the history of admin actions within a session
+ */
+export class SessionHistory {
+  constructor() {
+    this.actions = [];
+    this.storageKey = 'notre-ludotheque-session';
+    console.log('[SessionHistory]', 'constructor', { initialized: true });
+  }
+
+  /**
+   * Get all actions in chronological order
+   * @returns {object[]}
+   */
+  getActions() {
+    return [...this.actions];
+  }
+
+  /**
+   * Get an action by index
+   * @param {number} index 
+   * @returns {object|null}
+   */
+  getAction(index) {
+    if (index < 0 || index >= this.actions.length) {
+      return null;
+    }
+    return { ...this.actions[index] };
+  }
+
+  /**
+   * Add a new action to the history
+   * @param {string} type - Action type from ActionType
+   * @param {string} gameId - Target game ID
+   * @param {string} gameTitle - Game title for display
+   * @param {object|null} payload - Action-specific data
+   * @returns {number} Index of the added action
+   */
+  addAction(type, gameId, gameTitle, payload = null) {
+    const action = {
+      id: generateId(),
+      type,
+      timestamp: new Date().toISOString(),
+      gameId,
+      gameTitle,
+      payload: payload ? JSON.parse(JSON.stringify(payload)) : null,
+      summary: generateSummary(type, gameTitle, payload),
+    };
+
+    this.actions.push(action);
+    
+    console.log('[SessionHistory]', 'addAction', { 
+      type, 
+      gameId, 
+      timestamp: action.timestamp,
+      totalActions: this.actions.length 
+    });
+
+    // Auto-save to localStorage
+    this.saveToStorage();
+
+    return this.actions.length - 1;
+  }
+
+  /**
+   * Remove an action by index (revert)
+   * @param {number} index 
+   * @returns {boolean} Success
+   */
+  removeAction(index) {
+    if (index < 0 || index >= this.actions.length) {
+      console.warn('[SessionHistory]', 'removeAction', { index, error: 'Invalid index' });
+      return false;
+    }
+
+    const removed = this.actions.splice(index, 1)[0];
+    console.log('[SessionHistory]', 'removeAction', { 
+      index, 
+      gameId: removed.gameId,
+      type: removed.type,
+      remainingActions: this.actions.length 
+    });
+
+    // Auto-save to localStorage
+    this.saveToStorage();
+
+    return true;
+  }
+
+  /**
+   * Edit an existing action's payload
+   * @param {number} index 
+   * @param {object} newPayload 
+   * @returns {boolean} Success
+   */
+  editAction(index, newPayload) {
+    if (index < 0 || index >= this.actions.length) {
+      console.warn('[SessionHistory]', 'editAction', { index, error: 'Invalid index' });
+      return false;
+    }
+
+    const action = this.actions[index];
+    
+    // Only ADD_GAME and UPDATE_GAME can be edited
+    if (action.type !== ActionType.ADD_GAME && action.type !== ActionType.UPDATE_GAME) {
+      console.warn('[SessionHistory]', 'editAction', { index, error: 'Action type not editable' });
+      return false;
+    }
+
+    action.payload = JSON.parse(JSON.stringify(newPayload));
+    action.summary = generateSummary(action.type, action.gameTitle, action.payload);
+    
+    console.log('[SessionHistory]', 'editAction', { 
+      index, 
+      gameId: action.gameId,
+      type: action.type 
+    });
+
+    // Auto-save to localStorage
+    this.saveToStorage();
+
+    return true;
+  }
+
+  /**
+   * Clear all actions
+   */
+  clearAll() {
+    const count = this.actions.length;
+    this.actions = [];
+    console.log('[SessionHistory]', 'clearAll', { clearedCount: count });
+    
+    // Clear localStorage
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.removeItem(this.storageKey);
+    }
+  }
+
+  /**
+   * Get action count
+   * @returns {number}
+   */
+  getCount() {
+    return this.actions.length;
+  }
+
+  /**
+   * Check if session has any changes
+   * @returns {boolean}
+   */
+  hasChanges() {
+    return this.actions.length > 0;
+  }
+
+  /**
+   * Get actions for a specific game
+   * @param {string} gameId 
+   * @returns {object[]}
+   */
+  getActionsForGame(gameId) {
+    return this.actions.filter(a => a.gameId === gameId);
+  }
+
+  /**
+   * Check if a game has pending changes
+   * @param {string} gameId 
+   * @returns {boolean}
+   */
+  hasPendingChanges(gameId) {
+    return this.actions.some(a => a.gameId === gameId);
+  }
+
+  /**
+   * Persist to localStorage
+   */
+  saveToStorage() {
+    if (typeof window === 'undefined' || !window.localStorage) {
+      return;
+    }
+
+    try {
+      const data = JSON.stringify({
+        version: 1,
+        timestamp: new Date().toISOString(),
+        actions: this.actions,
+      });
+      localStorage.setItem(this.storageKey, data);
+      console.log('[SessionHistory]', 'saveToStorage', { actionCount: this.actions.length });
+    } catch (error) {
+      console.error('[SessionHistory]', 'saveToStorage', { error: error.message });
+    }
+  }
+
+  /**
+   * Restore from localStorage
+   * @returns {boolean} Success
+   */
+  loadFromStorage() {
+    if (typeof window === 'undefined' || !window.localStorage) {
+      return false;
+    }
+
+    try {
+      const data = localStorage.getItem(this.storageKey);
+      if (!data) {
+        console.log('[SessionHistory]', 'loadFromStorage', { status: 'No saved session' });
+        return false;
+      }
+
+      const parsed = JSON.parse(data);
+      
+      // Validate version
+      if (parsed.version !== 1) {
+        console.warn('[SessionHistory]', 'loadFromStorage', { error: 'Unsupported version' });
+        return false;
+      }
+
+      this.actions = parsed.actions || [];
+      console.log('[SessionHistory]', 'loadFromStorage', { 
+        actionCount: this.actions.length,
+        savedAt: parsed.timestamp 
+      });
+      
+      return true;
+    } catch (error) {
+      console.error('[SessionHistory]', 'loadFromStorage', { error: error.message });
+      return false;
+    }
+  }
+
+  /**
+   * Generate Python script for applying changes
+   * @returns {string}
+   */
+  generatePythonScript() {
+    console.log('[SessionHistory]', 'generatePythonScript', { actionCount: this.actions.length });
+
+    const timestamp = new Date().toISOString();
+    const actionsArray = this.actions.map(a => {
+      return `    ${JSON.stringify({
+        type: a.type,
+        gameId: a.gameId,
+        payload: a.payload,
+      })},`;
+    }).join('\n');
+
+    return `#!/usr/bin/env python3
+"""
+Board Game Library Update Script
+Generated: ${timestamp}
+Total Actions: ${this.actions.length}
+
+This script applies pending changes to the game library.
+Run this script at the root of the repository.
+
+Usage:
+    python3 update_library.py [--dry-run] [--no-commit]
+"""
+
+import json
+import os
+import subprocess
+import sys
+from datetime import datetime
+from pathlib import Path
+
+# Configuration
+GAMES_DIR = Path("data/games")
+IMAGES_DIR = Path("public/images")
+
+def validate_context():
+    """Ensure script is run at repo root."""
+    if not GAMES_DIR.exists():
+        print("ERROR: Must be run at repository root (data/games/ not found)")
+        sys.exit(1)
+
+def load_game(game_id):
+    """Load a game JSON file."""
+    path = GAMES_DIR / f"{game_id}.json"
+    if path.exists():
+        with open(path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    return None
+
+def save_game(game_id, data):
+    """Save a game JSON file."""
+    path = GAMES_DIR / f"{game_id}.json"
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
+
+def delete_game(game_id):
+    """Delete a game JSON file."""
+    path = GAMES_DIR / f"{game_id}.json"
+    if path.exists():
+        path.unlink()
+
+def git_add_commit(message):
+    """Stage and commit changes."""
+    subprocess.run(['git', 'add', '.'], check=True)
+    subprocess.run(['git', 'commit', '-m', message], check=True)
+
+def apply_actions(dry_run=False, no_commit=False):
+    """Apply all pending actions."""
+    validate_context()
+    
+    actions = [
+${actionsArray}
+    ]
+    
+    print(f"Applying {len(actions)} action(s)...")
+    
+    for i, action in enumerate(actions, 1):
+        print(f"\\n[{i}/{len(actions)}] {action['type']}: {action['gameId']}")
+        
+        if action['type'] == 'ADD_GAME':
+            save_game(action['gameId'], action['payload'])
+            print(f"  Created: {action['gameId']}.json")
+            
+        elif action['type'] == 'UPDATE_GAME':
+            save_game(action['gameId'], action['payload'])
+            print(f"  Updated: {action['gameId']}.json")
+            
+        elif action['type'] == 'TOGGLE_FAVORITE':
+            game = load_game(action['gameId'])
+            if game:
+                game['favorite'] = action['payload']['favorite']
+                save_game(action['gameId'], game)
+                status = "favori" if game['favorite'] else "non favori"
+                print(f"  Toggled favorite: {action['gameId']} -> {status}")
+            else:
+                print(f"  ERROR: Game not found: {action['gameId']}")
+                
+        elif action['type'] == 'ARCHIVE_GAME':
+            game = load_game(action['gameId'])
+            if game:
+                game['archived'] = True
+                save_game(action['gameId'], game)
+                print(f"  Archived: {action['gameId']}")
+            else:
+                print(f"  ERROR: Game not found: {action['gameId']}")
+                
+        elif action['type'] == 'RESTORE_GAME':
+            game = load_game(action['gameId'])
+            if game:
+                game['archived'] = False
+                save_game(action['gameId'], game)
+                print(f"  Restored: {action['gameId']}")
+            else:
+                print(f"  ERROR: Game not found: {action['gameId']}")
+                
+        elif action['type'] == 'DELETE_GAME':
+            delete_game(action['gameId'])
+            print(f"  Deleted: {action['gameId']}.json")
+    
+    if not dry_run and not no_commit:
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
+        git_add_commit(f"Admin session update ({timestamp})")
+        print("\\nChanges committed to Git.")
+        
+        # Ask before pushing
+        response = input("\\nPush to remote? (y/N): ")
+        if response.lower() == 'y':
+            subprocess.run(['git', 'push'], check=True)
+            print("Pushed to remote.")
+    else:
+        print("\\nDry run complete. No changes made.")
+
+if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser(description='Apply library updates')
+    parser.add_argument('--dry-run', action='store_true', help='Preview changes without applying')
+    parser.add_argument('--no-commit', action='store_true', help='Apply changes without committing')
+    args = parser.parse_args()
+    
+    apply_actions(dry_run=args.dry_run, no_commit=args.no_commit)
+`;
+  }
+}
+
+// Singleton instance
+let sessionHistoryInstance = null;
+
+/**
+ * Get the singleton SessionHistory instance
+ * @returns {SessionHistory}
+ */
+export function getSessionHistory() {
+  if (!sessionHistoryInstance) {
+    sessionHistoryInstance = new SessionHistory();
+  }
+  return sessionHistoryInstance;
+}
+
+/**
+ * Reset the singleton (useful for testing)
+ */
+export function resetSessionHistory() {
+  if (sessionHistoryInstance) {
+    sessionHistoryInstance.clearAll();
+  }
+  sessionHistoryInstance = null;
+  console.log('[SessionHistory]', 'resetSessionHistory');
+}
