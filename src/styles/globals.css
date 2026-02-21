@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+@theme {
+  /* Colors */
+  --color-cream: #F7F4EF;
+  --color-card: #FFFFFF;
+  --color-primary: #C86A4A;
+  --color-secondary: #6A8F7B;
+  --color-text-primary: #2E2E2E;
+  --color-text-secondary: #6B6B6B;
+  --color-text-muted: #B5B5B5;
+  --color-border: #E5E2DD;
+  --color-award: #C9A227;
+  --color-favorite: #D45C5C;
+  --color-danger: #B94A48;
+  --color-action: #555555;
+
+  /* Font sizes */
+  --text-page-title: 28px;
+  --text-modal-title: 22px;
+  --text-section-title: 20px;
+  --text-card-title: 18px;
+  --text-body: 15px;
+  --text-meta: 13px;
+  --text-button: 14px;
+
+  /* Border radius */
+  --radius-card: 16px;
+  --radius-modal: 20px;
+  --radius-button: 12px;
+  --radius-pill: 20px;
+
+  /* Shadows */
+  --shadow-card: 0 4px 12px rgba(0,0,0,0.06);
+  --shadow-modal: 0 12px 40px rgba(0,0,0,0.15);
+}
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  
+  body {
+    background-color: var(--color-cream);
+    color: var(--color-text-primary);
+  }
+}
+
+@layer components {
+  .btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-button);
+    font-weight: 500;
+    font-size: var(--text-button);
+    transition: opacity 0.2s;
+  }
+  
+  .btn-primary:hover {
+    opacity: 0.9;
+  }
+  
+  .btn-secondary {
+    background-color: var(--color-secondary);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-button);
+    font-weight: 500;
+    font-size: var(--text-button);
+    transition: opacity 0.2s;
+  }
+  
+  .btn-secondary:hover {
+    opacity: 0.9;
+  }
+  
+  .card {
+    background-color: var(--color-card);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    padding: 16px;
+  }
+  
+  .chip {
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-pill);
+    font-size: var(--text-meta);
+    border: 1px solid var(--color-border);
+    background-color: white;
+  }
+  
+  .chip-active {
+    background-color: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+  }
+}
