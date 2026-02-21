@@ -1,8 +1,8 @@
 /**
  * AdminGameGrid Component
  * 
- * Grid of compact game cards with admin actions in overlay band.
- * Uses the shared AdminGameCard component.
+ * Grid or list of compact game cards with admin actions.
+ * Supports both grid and list view modes.
  * As specified in specs/phase_7_4_ui_admin_game_list.md
  */
 
@@ -39,17 +39,15 @@ function ActionButton({ icon, title, onClick, href, className = '' }) {
   );
 }
 
-function AdminGameCardWithActions({ game, onToggleFavorite, onArchive, onRestore }) {
+// Grid card with overlay actions
+function GridCard({ game, onToggleFavorite, onArchive, onRestore }) {
   return (
     <AdminGameCard game={game}>
-      {/* Edit */}
       <ActionButton
         icon="✏️"
         title="Modifier"
         href={`/admin/edit-game/${game.id}`}
       />
-
-      {/* Archive/Restore */}
       {game.isArchived ? (
         <ActionButton
           icon="📤"
@@ -63,8 +61,6 @@ function AdminGameCardWithActions({ game, onToggleFavorite, onArchive, onRestore
           onClick={() => onArchive(game.id)}
         />
       )}
-
-      {/* Favorite toggle */}
       <ActionButton
         icon={game.isFavorite ? '❤️' : '🤍'}
         title={game.isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'}
@@ -74,7 +70,93 @@ function AdminGameCardWithActions({ game, onToggleFavorite, onArchive, onRestore
   );
 }
 
-export default function AdminGameGrid({ games, onToggleFavorite, onArchive, onRestore }) {
+// List row with inline actions
+function ListRow({ game, onToggleFavorite, onArchive, onRestore }) {
+  const imageId = game.primaryImage?.id || game.primaryImage;
+
+  return (
+    <div className={`flex items-center gap-4 p-3 bg-white rounded-lg border border-border ${game.isArchived ? 'opacity-60' : ''}`}>
+      {/* Thumbnail */}
+      <div className="w-12 h-12 bg-border rounded overflow-hidden flex-shrink-0">
+        {imageId ? (
+          <img
+            src={`/images/${imageId}.jpg`}
+            alt={game.title}
+            className="w-full h-full object-contain"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-text-muted text-xs">
+            ?
+          </div>
+        )}
+      </div>
+
+      {/* Title */}
+      <div className="flex-1 min-w-0">
+        <h3 className="text-body text-text-primary font-medium truncate">
+          {game.title}
+          {game.isArchived && (
+            <span className="text-meta text-text-muted ml-2">(archivé)</span>
+          )}
+        </h3>
+        <p className="text-meta text-text-secondary">
+          {game.playerCount}
+        </p>
+      </div>
+
+      {/* Indicators */}
+      <div className="flex items-center gap-2">
+        {game.hasAwards && <span title="Primé">🏆</span>}
+        {game.isFavorite && <span title="Favori">❤️</span>}
+      </div>
+
+      {/* Actions */}
+      <div className="flex items-center gap-1">
+        <a
+          href={`/admin/edit-game/${game.id}`}
+          className="p-2 rounded-button hover:bg-cream transition-colors text-action"
+          title="Modifier"
+        >
+          ✏️
+        </a>
+        {game.isArchived ? (
+          <button
+            onClick={() => onRestore(game.id)}
+            className="p-2 rounded-button hover:bg-cream transition-colors text-secondary"
+            title="Restaurer"
+          >
+            📤
+          </button>
+        ) : (
+          <button
+            onClick={() => onArchive(game.id)}
+            className="p-2 rounded-button hover:bg-cream transition-colors text-action"
+            title="Archiver"
+          >
+            📦
+          </button>
+        )}
+        <button
+          onClick={() => onToggleFavorite(game.id)}
+          className={`p-2 rounded-button hover:bg-cream transition-colors ${
+            game.isFavorite ? 'text-favorite' : 'text-action'
+          }`}
+          title={game.isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'}
+        >
+          {game.isFavorite ? '❤️' : '🤍'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export default function AdminGameGrid({ 
+  games, 
+  onToggleFavorite, 
+  onArchive, 
+  onRestore,
+  viewMode = 'grid'
+}) {
   if (!games || games.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-20">
@@ -85,10 +167,26 @@ export default function AdminGameGrid({ games, onToggleFavorite, onArchive, onRe
     );
   }
 
+  if (viewMode === 'list') {
+    return (
+      <div className="flex flex-col gap-2">
+        {games.map(game => (
+          <ListRow
+            key={game.id}
+            game={game}
+            onToggleFavorite={onToggleFavorite}
+            onArchive={onArchive}
+            onRestore={onRestore}
+          />
+        ))}
+      </div>
+    );
+  }
+
   return (
     <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
       {games.map(game => (
-        <AdminGameCardWithActions
+        <GridCard
           key={game.id}
           game={game}
           onToggleFavorite={onToggleFavorite}

@@ -1,13 +1,20 @@
 /**
  * AdminHeader Component
  * 
- * Header for admin interface with search and actions.
+ * Header for admin interface with search, view toggle, and actions.
  * As specified in specs/phase_7_4_ui_admin_game_list.md
  */
 
 import Link from 'next/link';
 
-export default function AdminHeader({ searchQuery, onSearchChange, onToggleHistory, historyCount }) {
+export default function AdminHeader({ 
+  searchQuery, 
+  onSearchChange, 
+  onToggleHistory, 
+  historyCount,
+  viewMode,
+  onViewModeChange 
+}) {
   return (
     <header className="bg-white border-b border-border">
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center gap-4">
@@ -34,6 +41,32 @@ export default function AdminHeader({ searchQuery, onSearchChange, onToggleHisto
 
         {/* Actions */}
         <div className="flex items-center gap-3">
+          {/* View mode toggle */}
+          <div className="flex items-center border border-border rounded-button overflow-hidden">
+            <button
+              onClick={() => onViewModeChange('grid')}
+              className={`px-3 py-2 transition-colors ${
+                viewMode === 'grid' 
+                  ? 'bg-primary text-white' 
+                  : 'bg-white text-text-primary hover:bg-cream'
+              }`}
+              title="Vue grille"
+            >
+              ⊞
+            </button>
+            <button
+              onClick={() => onViewModeChange('list')}
+              className={`px-3 py-2 transition-colors ${
+                viewMode === 'list' 
+                  ? 'bg-primary text-white' 
+                  : 'bg-white text-text-primary hover:bg-cream'
+              }`}
+              title="Vue liste"
+            >
+              ☰
+            </button>
+          </div>
+
           {/* Add Game button */}
           <Link
             href="/admin/add-game"

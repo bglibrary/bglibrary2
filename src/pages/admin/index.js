@@ -22,6 +22,7 @@ export default function AdminDashboard() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showHistory, setShowHistory] = useState(false);
   const [confirmDialog, setConfirmDialog] = useState(null);
+  const [viewMode, setViewMode] = useState('grid');
 
   // Session history
   const sessionHistory = useMemo(() => getSessionHistory(), []);
@@ -169,6 +170,8 @@ export default function AdminDashboard() {
           onSearchChange={setSearchQuery}
           onToggleHistory={() => setShowHistory(!showHistory)}
           historyCount={sessionHistory.getCount()}
+          viewMode={viewMode}
+          onViewModeChange={setViewMode}
         />
 
         <div className="flex">
@@ -184,6 +187,7 @@ export default function AdminDashboard() {
                 onToggleFavorite={handleToggleFavorite}
                 onArchive={handleArchive}
                 onRestore={handleRestore}
+                viewMode={viewMode}
               />
             )}
           </div>
