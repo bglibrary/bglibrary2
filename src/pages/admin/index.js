@@ -140,6 +140,10 @@ export default function AdminDashboard() {
     });
   }, [sessionHistory]);
 
+  const handleDeleteAction = useCallback((index) => {
+    sessionHistory.removeAction(index);
+  }, [sessionHistory]);
+
   const handleExportScript = useCallback(() => {
     const script = sessionHistory.generatePythonScript();
     const blob = new Blob([script], { type: 'text/plain' });
@@ -199,6 +203,7 @@ export default function AdminDashboard() {
               onClearAll={handleClearSession}
               onExport={handleExportScript}
               onClose={() => setShowHistory(false)}
+              onDeleteAction={handleDeleteAction}
             />
           )}
         </div>

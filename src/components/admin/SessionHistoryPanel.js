@@ -81,7 +81,7 @@ function ActionItem({ action, index, onEdit, onDelete }) {
   );
 }
 
-export default function SessionHistoryPanel({ actions, onClearAll, onExport, onClose }) {
+export default function SessionHistoryPanel({ actions, onClearAll, onExport, onClose, onDeleteAction }) {
   const hasChanges = actions && actions.length > 0;
 
   return (
@@ -123,7 +123,7 @@ export default function SessionHistoryPanel({ actions, onClearAll, onExport, onC
               action={action}
               index={index}
               onEdit={() => {}}
-              onDelete={() => {}}
+              onDelete={() => onDeleteAction && onDeleteAction(index)}
             />
           ))
         )}
