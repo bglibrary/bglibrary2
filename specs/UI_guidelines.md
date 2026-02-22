@@ -166,26 +166,41 @@ Grid must be primary visual focus.
 
 ## 5.2 Game Card (Visitor)
 
-**Compact card with overlay info band:**
+**Card with title below image and overlay info band:**
+
+- **Card container**:
+  - White background with rounded corners (`rounded-xl`)
+  - Shadow and border for "tile" appearance
+  - Padding around image to create cream/white frame effect
+  - Hover effect: elevation + slight lift (`hover:shadow-xl hover:-translate-y-1`)
 
 - **Square image** (aspect-ratio 1:1)
   - Uses `object-contain` to preserve image proportions without cropping
-  - No title displayed on card (shown only in detail view)
+  - Rounded corners inside the padding
+
 - **Info band overlay** at bottom of image:
-  - Semi-transparent black background with blur
-  - Left side: Player count + Duration hourglasses (⏳⏳⏳)
-  - Right side: Award trophy (🏆) and/or favorite heart (❤️) if applicable
+  - Semi-transparent black background with blur (`bg-black/60 backdrop-blur-sm`)
+  - Fixed layout: **32% 32% 18% 18%** for 4 positions
+  - Position 1 (32%): Players 👥 + range - left aligned
+  - Position 2 (32%): Duration hourglasses (⏳⏳⏳) - centered
+  - Position 3 (18%): Award trophy (🏆) - centered (invisible if not applicable)
+  - Position 4 (18%): Favorite heart (❤️) - right aligned (invisible if not applicable)
+  - Each position is fixed regardless of whether the icon is displayed
+
+- **Title below image**:
+  - Truncated if too long
+  - Padding for spacing
 
 Card hover:
-- Slight elevation
+- Shadow elevation + slight vertical lift
 - Cursor pointer
 
 Clicking a card opens a modal.
 
-**Grid Layout**: 4-6 columns on desktop for compact display.
+**Grid Layout**: 5-6 columns on desktop (`lg:grid-cols-5 xl:grid-cols-6`).
 
 **Shared Component**: `src/components/common/GameCard.js` exports:
-- `VisitorGameCard`: Compact card with info overlay
+- `VisitorGameCard`: Card with title and info overlay
 - `AdminGameCard`: Compact card with action buttons overlay
 - `GameImage`: Reusable image component
 

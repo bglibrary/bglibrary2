@@ -1,7 +1,7 @@
 /**
  * GameGrid Component
  * 
- * Responsive grid of game cards.
+ * Responsive grid of game cards with 6-7 columns on desktop.
  * As specified in specs/UI_guidelines.md
  */
 
@@ -19,7 +19,7 @@ export default function GameGrid({ games, onGameClick }) {
   }
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-grid-gap">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
       {games.map(game => (
         <GameCard
           key={game.id}

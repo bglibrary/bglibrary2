@@ -1,7 +1,7 @@
 /**
  * GameCard Component (Shared)
  * 
- * Compact card with overlay info band.
+ * Card with title below image and overlay info band.
  * Used by both visitor and admin views.
  * As specified in specs/UI_guidelines.md and specs/phase_7_2_ui_visitor_game_library.md
  */
@@ -31,7 +31,7 @@ const DurationHourglasses = ({ duration }) => {
  */
 export function GameImage({ imageId, title, className = '' }) {
   return (
-    <div className={`aspect-square bg-border rounded-lg overflow-hidden ${className}`}>
+    <div className={`aspect-square bg-border overflow-hidden ${className}`}>
       {imageId ? (
         <img
           src={`/images/${imageId}.jpg`}
@@ -45,25 +45,44 @@ export function GameImage({ imageId, title, className = '' }) {
       )}
     </div>
   );
-};
+}
 
 /**
  * Info band overlay for visitor cards
- * Shows player count, duration, awards, favorite
+ * Shows player count, duration, awards, favorite - in fixed positions (35% 35% 15% 15%)
  */
 function InfoBand({ game }) {
+  // Extract just the player range (e.g., "3-4" from "3-4 joueurs")
+  const playerRange = game.playerCount?.replace(/\s*joueurs?\s*/gi, '').trim() || game.playerCount;
+
   return (
-    <div className="absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-sm px-2 py-1.5 flex items-center justify-between text-white text-xs">
-      <div className="flex items-center gap-2">
-        <span>{game.playerCount}</span>
+    <div className="absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-sm px-2 py-2 flex items-center text-white text-sm">
+      {/* Position 1: Players - 32% - aligné à gauche */}
+      <div className="w-[32%] flex items-center justify-start gap-1 pl-1" title={game.playerCount}>
+        <span>👥</span>
+        <span>{playerRange}</span>
+      </div>
+      
+      {/* Position 2: Duration - 32% - centré */}
+      <div className="w-[32%] flex items-center justify-center">
         <DurationHourglasses duration={game.playDuration} />
       </div>
-      <div className="flex items-center gap-1.5">
-        {game.hasAwards && (
+      
+      {/* Position 3: Awards - 18% - centré */}
+      <div className="w-[18%] flex items-center justify-center">
+        {game.hasAwards ? (
           <span title="Primé">🏆</span>
+        ) : (
+          <span className="invisible">🏆</span>
         )}
-        {game.isFavorite && (
+      </div>
+      
+      {/* Position 4: Favorite - 18% - aligné à droite */}
+      <div className="w-[18%] flex items-center justify-end pr-1">
+        {game.isFavorite ? (
           <span title="Favori">❤️</span>
+        ) : (
+          <span className="invisible">❤️</span>
         )}
       </div>
     </div>
@@ -83,7 +102,8 @@ export function ActionBand({ children }) {
 }
 
 /**
- * Visitor GameCard - compact with info overlay
+ * Visitor GameCard - card with title below image and info overlay
+ * Cream background wraps the entire card
  */
 export function VisitorGameCard({ game, onClick, className = '' }) {
   const imageId = game.primaryImage?.id || game.primaryImage;
@@ -91,17 +111,25 @@ export function VisitorGameCard({ game, onClick, className = '' }) {
   return (
     <article
       onClick={onClick ? () => onClick(game.id) : undefined}
-      className={`relative rounded-lg overflow-hidden ${onClick ? 'cursor-pointer hover:shadow-lg transition-shadow' : ''} ${className}`}
+      className={`bg-white rounded-xl shadow-md border border-border overflow-hidden 
+        ${onClick ? 'cursor-pointer transition-all duration-200 hover:shadow-xl hover:-translate-y-1' : ''} 
+        ${className}`}
     >
-      {/* Game image - square format */}
-      <GameImage 
-        imageId={imageId} 
-        title={game.title} 
-        className="rounded-none"
-      />
+      {/* Image container with overlay - overlay width matches image */}
+      <div className="relative p-2 pb-0">
+        <div className="relative rounded-lg overflow-hidden">
+          <GameImage 
+            imageId={imageId} 
+            title={game.title}
+          />
+          <InfoBand game={game} />
+        </div>
+      </div>
 
-      {/* Info band overlay */}
-      <InfoBand game={game} />
+      {/* Title below image */}
+      <h3 className="text-card-title text-text-primary px-3 py-2 truncate">
+        {game.title}
+      </h3>
     </article>
   );
 }
@@ -133,7 +161,7 @@ export function AdminGameCard({ game, children, className = '' }) {
 
 /**
  * Base GameCard component (kept for backward compatibility)
- * Now uses the compact visitor style
+ * Now uses the visitor style with title
  */
 export default function GameCard({ 
   game, 
