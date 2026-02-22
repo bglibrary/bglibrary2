@@ -41,7 +41,7 @@ const SORT_LABELS = {
 };
 
 // Dropdown component for filter chips
-function FilterDropdown({ label, value, options, onSelect, isActive, multiSelect = false, selectedValues = [] }) {
+function FilterDropdown({ label, icon, value, options, onSelect, isActive, multiSelect = false, selectedValues = [] }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -82,6 +82,7 @@ function FilterDropdown({ label, value, options, onSelect, isActive, multiSelect
             : 'bg-white border border-border text-text-primary hover:border-primary'
         }`}
       >
+        {icon && <span>{icon}</span>}
         <span className="font-medium">{label}</span>
         {displayValue && (
           <span className={isActive ? 'text-white/80' : 'text-text-secondary'}>
@@ -215,6 +216,7 @@ export default function FilterPanel({ filters, onFiltersChange, sortMode, onSort
         {/* Player count filter */}
         <FilterDropdown
           label="Joueurs"
+          icon="👥"
           value={activePlayerBucket?.label}
           options={playerCountOptions}
           onSelect={handlePlayerCountSelect}
@@ -224,6 +226,7 @@ export default function FilterPanel({ filters, onFiltersChange, sortMode, onSort
         {/* Duration filter */}
         <FilterDropdown
           label="Durée"
+          icon="⏳"
           options={durationOptions}
           onSelect={handleDurationSelect}
           multiSelect
@@ -234,6 +237,7 @@ export default function FilterPanel({ filters, onFiltersChange, sortMode, onSort
         {/* Complexity filter */}
         <FilterDropdown
           label="Complexité"
+          icon="🧠"
           options={complexityOptions}
           onSelect={handleComplexitySelect}
           multiSelect

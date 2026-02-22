@@ -126,6 +126,7 @@ Required icons:
 - Trophy (award)
 - Heart (favorite toggle)
 - Hourglass (duration)
+- Brain (complexity)
 - Pencil (edit)
 - Archive box
 - Trash (delete change)
