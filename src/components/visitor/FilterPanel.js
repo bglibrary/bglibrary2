@@ -5,7 +5,7 @@
  * As specified in specs/UI_guidelines.md and specs/phase_7_2_ui_visitor_game_library.md
  */
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { PlayDuration, FirstPlayComplexity } from '@/domain/Game';
 import { SortMode } from '@/engines/SortingEngine';
 import { hasActiveFilters } from '@/domain/Filters';
@@ -139,11 +139,28 @@ function BooleanChip({ label, icon, isActive, onToggle }) {
   );
 }
 
-export default function FilterPanel({ filters, onFiltersChange, sortMode, onSortModeChange }) {
+export default function FilterPanel({ filters, onFiltersChange, sortMode, onSortModeChange, games = [] }) {
   const playerCountOptions = PLAYER_COUNT_BUCKETS.map(b => ({ value: b.label, label: b.label, ...b }));
   const durationOptions = Object.entries(DURATION_LABELS).map(([value, label]) => ({ value, label }));
   const complexityOptions = Object.entries(COMPLEXITY_LABELS).map(([value, label]) => ({ value, label }));
   const sortOptions = Object.entries(SORT_LABELS).map(([value, label]) => ({ value, label }));
+
+  // Extract unique categories and mechanics from games
+  const categoryOptions = useMemo(() => {
+    const allCategories = new Set();
+    games.forEach(game => {
+      game.categories?.forEach(cat => allCategories.add(cat));
+    });
+    return Array.from(allCategories).sort().map(cat => ({ value: cat, label: cat }));
+  }, [games]);
+
+  const mechanicOptions = useMemo(() => {
+    const allMechanics = new Set();
+    games.forEach(game => {
+      game.mechanics?.forEach(mech => allMechanics.add(mech));
+    });
+    return Array.from(allMechanics).sort().map(mech => ({ value: mech, label: mech }));
+  }, [games]);
 
   const activePlayerBucket = PLAYER_COUNT_BUCKETS.find(b => 
     filters.playerCount?.minPlayers === b.min && filters.playerCount?.maxPlayers === b.max
@@ -198,6 +215,20 @@ export default function FilterPanel({ filters, onFiltersChange, sortMode, onSort
     });
   };
 
+  const handleCategorySelect = (selectedValues) => {
+    onFiltersChange({
+      ...filters,
+      categories: selectedValues.length > 0 ? { values: selectedValues } : null,
+    });
+  };
+
+  const handleMechanicSelect = (selectedValues) => {
+    onFiltersChange({
+      ...filters,
+      mechanics: selectedValues.length > 0 ? { values: selectedValues } : null,
+    });
+  };
+
   const handleClearFilters = () => {
     onFiltersChange({
       playerCount: null,
@@ -244,6 +275,32 @@ export default function FilterPanel({ filters, onFiltersChange, sortMode, onSort
           selectedValues={filters.firstPlayComplexity?.values || []}
           isActive={!!filters.firstPlayComplexity}
         />
+
+        {/* Category filter */}
+        {categoryOptions.length > 0 && (
+          <FilterDropdown
+            label="Catégorie"
+            icon="🏷️"
+            options={categoryOptions}
+            onSelect={handleCategorySelect}
+            multiSelect
+            selectedValues={filters.categories?.values || []}
+            isActive={!!filters.categories}
+          />
+        )}
+
+        {/* Mechanic filter */}
+        {mechanicOptions.length > 0 && (
+          <FilterDropdown
+            label="Mécanique"
+            icon="⚙️"
+            options={mechanicOptions}
+            onSelect={handleMechanicSelect}
+            multiSelect
+            selectedValues={filters.mechanics?.values || []}
+            isActive={!!filters.mechanics}
+          />
+        )}
 
         {/* Boolean filters */}
         <BooleanChip

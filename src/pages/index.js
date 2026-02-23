@@ -75,6 +75,7 @@ export default function Home() {
             onFiltersChange={setFilters}
             sortMode={sortMode}
             onSortModeChange={setSortMode}
+            games={games}
           />
           
           {loading ? (

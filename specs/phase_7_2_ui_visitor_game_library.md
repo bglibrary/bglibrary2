@@ -40,8 +40,9 @@ All data must conform strictly to Phase 5 contracts.
 - **Filter chips with dropdown menus**:
   - Each chip shows filter label and selected value(s)
   - Clicking opens a dropdown menu to select values
-  - Multi-select support for duration and complexity filters
+  - Multi-select support for duration, complexity, category, and mechanic filters
   - Single-select for player count
+  - Category and mechanic options are dynamically extracted from available games
 - **Boolean toggle chips** for awards and favorites
 - **Sort dropdown** integrated in the filter line
 - **Clear all** button appears when filters are active
