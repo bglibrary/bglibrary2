@@ -70,27 +70,10 @@ function GridCard({ game, onToggleFavorite, onArchive, onRestore }) {
   );
 }
 
-// List row with inline actions
+// List row with inline actions (simplified: title + actions only)
 function ListRow({ game, onToggleFavorite, onArchive, onRestore }) {
-  const imageId = game.primaryImage?.id || game.primaryImage;
-
   return (
     <div className={`flex items-center gap-4 p-3 bg-white rounded-lg border border-border ${game.isArchived ? 'opacity-60' : ''}`}>
-      {/* Thumbnail */}
-      <div className="w-12 h-12 bg-border rounded overflow-hidden flex-shrink-0">
-        {imageId ? (
-          <img
-            src={`/images/${imageId}.jpg`}
-            alt={game.title}
-            className="w-full h-full object-contain"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-text-muted text-xs">
-            ?
-          </div>
-        )}
-      </div>
-
       {/* Title */}
       <div className="flex-1 min-w-0">
         <h3 className="text-body text-text-primary font-medium truncate">
@@ -99,15 +82,6 @@ function ListRow({ game, onToggleFavorite, onArchive, onRestore }) {
             <span className="text-meta text-text-muted ml-2">(archivé)</span>
           )}
         </h3>
-        <p className="text-meta text-text-secondary">
-          {game.playerCount}
-        </p>
-      </div>
-
-      {/* Indicators */}
-      <div className="flex items-center gap-2">
-        {game.hasAwards && <span title="Primé">🏆</span>}
-        {game.isFavorite && <span title="Favori">❤️</span>}
       </div>
 
       {/* Actions */}

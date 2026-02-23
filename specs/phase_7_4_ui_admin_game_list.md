@@ -69,7 +69,12 @@ This screen allows administrators to view all games and manage pending changes.
   - Icon button (history/list icon)
   - Badge showing pending change count (if any)
 
-### Game Grid
+### View Mode Toggle
+- **Grid view** (default): Shows game cards with images and details
+- **List view**: Simplified view showing only title and action buttons
+- Toggle buttons in header: ⊞ (grid) / ☰ (list)
+
+### Game Grid (Grid View)
 - Grid of game cards (3-4 columns on desktop, 2 on tablet)
 - Filtered by search text (game title)
 - **Shared Component**: Uses `GameCard` from `src/components/common/GameCard.js`
@@ -87,6 +92,13 @@ This screen allows administrators to view all games and manage pending changes.
     - Pencil (edit)
     - Archive/Restore
     - Heart (toggle favorite)
+
+### Game List (List View)
+- Simplified list rows showing:
+  - Title (with archived indicator if applicable)
+  - Action buttons only (edit, archive/restore, toggle favorite)
+- No thumbnail, player count, or other metadata displayed
+- Designed for quick administrative actions on multiple games
 
 ### Session History Panel
 - **Header**: "Changements en attente" with close button
