@@ -89,6 +89,27 @@ It acts as the single application-level entry point for creating, updating, arch
 
 ---
 
+## Action Deduplication
+
+The session history automatically deduplicates actions to avoid redundant operations:
+
+- **TOGGLE_FAVORITE**: If a toggle favorite action already exists for a game, the new toggle removes the existing action (returning to original state) instead of creating a duplicate.
+- **ARCHIVE_GAME / RESTORE_GAME**: These are mutually exclusive. If an archive action exists and a restore is added (or vice versa), the existing action is removed.
+
+This ensures the exported script only contains meaningful changes without redundant operations.
+
+---
+
+## Action Removal and Visual Reversal
+
+When an action is removed from the session history (via the trash icon in the UI):
+- The visual effect of the action is reversed in the UI
+- For TOGGLE_FAVORITE: the favorite state is toggled back
+- For ARCHIVE_GAME: the game is unarchived
+- For RESTORE_GAME: the game is re-archived
+
+---
+
 ## Session History Actions
 
 ### Action Structure

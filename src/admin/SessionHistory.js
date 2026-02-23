@@ -96,13 +96,68 @@ export class SessionHistory {
 
   /**
    * Add a new action to the history
+   * Handles deduplication: if same action type for same game exists,
+   * it will replace or remove based on the action type.
    * @param {string} type - Action type from ActionType
    * @param {string} gameId - Target game ID
    * @param {string} gameTitle - Game title for display
    * @param {object|null} payload - Action-specific data
-   * @returns {number} Index of the added action
+   * @returns {object} Result with index and info about what happened
    */
   addAction(type, gameId, gameTitle, payload = null) {
+    // For toggle actions, check if there's already a toggle action for this game
+    // If the new toggle brings back to original state, remove the existing action
+    if (type === ActionType.TOGGLE_FAVORITE) {
+      const existingIndex = this.actions.findIndex(
+        a => a.type === ActionType.TOGGLE_FAVORITE && a.gameId === gameId
+      );
+      
+      if (existingIndex !== -1) {
+        // Remove the existing toggle action (we're back to original state)
+        this.actions.splice(existingIndex, 1);
+        console.log('[SessionHistory]', 'addAction', { 
+          type, 
+          gameId, 
+          action: 'removed_existing_toggle',
+          totalActions: this.actions.length 
+        });
+        this.saveToStorage();
+        return { index: -1, action: 'removed' };
+      }
+    }
+
+    // For archive/restore, they are mutually exclusive
+    if (type === ActionType.ARCHIVE_GAME || type === ActionType.RESTORE_GAME) {
+      const oppositeType = type === ActionType.ARCHIVE_GAME 
+        ? ActionType.RESTORE_GAME 
+        : ActionType.ARCHIVE_GAME;
+      
+      const existingIndex = this.actions.findIndex(
+        a => a.type === oppositeType && a.gameId === gameId
+      );
+      
+      if (existingIndex !== -1) {
+        // Remove the opposite action (we're back to original state)
+        this.actions.splice(existingIndex, 1);
+        console.log('[SessionHistory]', 'addAction', { 
+          type, 
+          gameId, 
+          action: 'removed_opposite_archive_restore',
+          totalActions: this.actions.length 
+        });
+        this.saveToStorage();
+        return { index: -1, action: 'removed' };
+      }
+
+      // Also check for same type - replace with new one
+      const sameTypeIndex = this.actions.findIndex(
+        a => a.type === type && a.gameId === gameId
+      );
+      if (sameTypeIndex !== -1) {
+        this.actions.splice(sameTypeIndex, 1);
+      }
+    }
+
     const action = {
       id: generateId(),
       type,
@@ -125,7 +180,7 @@ export class SessionHistory {
     // Auto-save to localStorage
     this.saveToStorage();
 
-    return this.actions.length - 1;
+    return { index: this.actions.length - 1, action: 'added' };
   }
 
   /**

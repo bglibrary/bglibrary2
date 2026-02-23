@@ -23,6 +23,7 @@ export default function AdminDashboard() {
   const [showHistory, setShowHistory] = useState(false);
   const [confirmDialog, setConfirmDialog] = useState(null);
   const [viewMode, setViewMode] = useState('grid');
+  const [historyVersion, setHistoryVersion] = useState(0); // Force re-render on history changes
 
   // Session history
   const sessionHistory = useMemo(() => getSessionHistory(), []);
@@ -60,6 +61,10 @@ export default function AdminDashboard() {
   // Map to card view models
   const gameCards = useMemo(() => mapToGameCards(filteredGames), [filteredGames]);
 
+  // Get history actions (re-compute when historyVersion changes)
+  const historyActions = useMemo(() => sessionHistory.getActions(), [sessionHistory, historyVersion]);
+  const historyCount = useMemo(() => sessionHistory.getCount(), [sessionHistory, historyVersion]);
+
   // Actions
   const handleToggleFavorite = useCallback(async (gameId) => {
     const game = games.find(g => g.id === gameId);
@@ -75,6 +80,8 @@ export default function AdminDashboard() {
           setGames(prev => prev.map(g => 
             g.id === gameId ? { ...g, favorite: !g.favorite } : g
           ));
+          // Force history panel to update
+          setHistoryVersion(v => v + 1);
         } catch (error) {
           console.error('Failed to toggle favorite:', error);
         }
@@ -97,6 +104,8 @@ export default function AdminDashboard() {
           setGames(prev => prev.map(g => 
             g.id === gameId ? { ...g, archived: true } : g
           ));
+          // Force history panel to update
+          setHistoryVersion(v => v + 1);
         } catch (error) {
           console.error('Failed to archive game:', error);
         }
@@ -119,6 +128,8 @@ export default function AdminDashboard() {
           setGames(prev => prev.map(g => 
             g.id === gameId ? { ...g, archived: false } : g
           ));
+          // Force history panel to update
+          setHistoryVersion(v => v + 1);
         } catch (error) {
           console.error('Failed to restore game:', error);
         }
@@ -132,8 +143,16 @@ export default function AdminDashboard() {
     setConfirmDialog({
       title: 'Effacer la session',
       message: 'Supprimer toutes les modifications en attente ? Cette action est irréversible.',
-      onConfirm: () => {
+      onConfirm: async () => {
         sessionHistory.clearAll();
+        setHistoryVersion(v => v + 1); // Force re-render
+        // Reload games from repository to reset visual state
+        try {
+          const allGames = await getAllGames(Context.ADMIN);
+          setGames(allGames);
+        } catch (error) {
+          console.error('Failed to reload games:', error);
+        }
         setConfirmDialog(null);
       },
       onCancel: () => setConfirmDialog(null),
@@ -141,7 +160,31 @@ export default function AdminDashboard() {
   }, [sessionHistory]);
 
   const handleDeleteAction = useCallback((index) => {
+    // Get the action before removing it to reverse its effect
+    const action = sessionHistory.getAction(index);
+    
+    if (action) {
+      // Reverse the visual effect based on action type
+      if (action.type === 'TOGGLE_FAVORITE') {
+        // Toggle back the favorite state
+        setGames(prev => prev.map(g => 
+          g.id === action.gameId ? { ...g, favorite: !g.favorite } : g
+        ));
+      } else if (action.type === 'ARCHIVE_GAME') {
+        // Un-archive the game
+        setGames(prev => prev.map(g => 
+          g.id === action.gameId ? { ...g, archived: false } : g
+        ));
+      } else if (action.type === 'RESTORE_GAME') {
+        // Re-archive the game
+        setGames(prev => prev.map(g => 
+          g.id === action.gameId ? { ...g, archived: true } : g
+        ));
+      }
+    }
+    
     sessionHistory.removeAction(index);
+    setHistoryVersion(v => v + 1); // Force re-render
   }, [sessionHistory]);
 
   const handleExportScript = useCallback(() => {
@@ -173,7 +216,7 @@ export default function AdminDashboard() {
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
           onToggleHistory={() => setShowHistory(!showHistory)}
-          historyCount={sessionHistory.getCount()}
+          historyCount={historyCount}
           viewMode={viewMode}
           onViewModeChange={setViewMode}
         />
@@ -199,7 +242,7 @@ export default function AdminDashboard() {
           {/* Session History Panel */}
           {showHistory && (
             <SessionHistoryPanel
-              actions={sessionHistory.getActions()}
+              actions={historyActions}
               onClearAll={handleClearSession}
               onExport={handleExportScript}
               onClose={() => setShowHistory(false)}

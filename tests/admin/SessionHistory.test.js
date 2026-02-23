@@ -22,15 +22,16 @@ describe('SessionHistory', () => {
   });
 
   describe('addAction', () => {
-    it('should add an action and return index', () => {
-      const index = history.addAction(
+    it('should add an action and return result object', () => {
+      const result = history.addAction(
         ActionType.ADD_GAME,
         'test-game',
         'Test Game',
         { title: 'Test Game' }
       );
       
-      expect(index).toBe(0);
+      expect(result.index).toBe(0);
+      expect(result.action).toBe('added');
       expect(history.getCount()).toBe(1);
       expect(history.hasChanges()).toBe(true);
     });
@@ -68,6 +69,28 @@ describe('SessionHistory', () => {
       expect(actions[3].summary).toBe('Restaurer: Game 4');
       expect(actions[4].summary).toBe('Non favori: Game 5');
       expect(actions[5].summary).toBe('Supprimer: Game 6');
+    });
+
+    it('should remove existing toggle favorite when toggling again', () => {
+      // First toggle
+      history.addAction(ActionType.TOGGLE_FAVORITE, 'game-a', 'Game A', { favorite: true });
+      expect(history.getCount()).toBe(1);
+      
+      // Second toggle (should remove the first)
+      const result = history.addAction(ActionType.TOGGLE_FAVORITE, 'game-a', 'Game A', { favorite: false });
+      expect(result.action).toBe('removed');
+      expect(history.getCount()).toBe(0);
+    });
+
+    it('should remove opposite archive/restore action', () => {
+      // Archive
+      history.addAction(ActionType.ARCHIVE_GAME, 'game-a', 'Game A', null);
+      expect(history.getCount()).toBe(1);
+      
+      // Restore (should remove the archive action)
+      const result = history.addAction(ActionType.RESTORE_GAME, 'game-a', 'Game A', null);
+      expect(result.action).toBe('removed');
+      expect(history.getCount()).toBe(0);
     });
   });
 
