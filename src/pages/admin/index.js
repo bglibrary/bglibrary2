@@ -7,6 +7,7 @@
 
 import Head from 'next/head';
 import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useRouter } from 'next/router';
 import { getAllGames, Context } from '@/repository/GameRepository';
 import { mapToGameCards } from '@/domain/GameCard';
 import { getSessionHistory } from '@/admin/SessionHistory';
@@ -17,6 +18,7 @@ import SessionHistoryPanel from '@/components/admin/SessionHistoryPanel';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 
 export default function AdminDashboard() {
+  const router = useRouter();
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -254,6 +256,14 @@ export default function AdminDashboard() {
     URL.revokeObjectURL(url);
   }, [sessionHistory]);
 
+  // Handle edit action from history panel
+  const handleEditAction = useCallback((index, action) => {
+    if (!action || !action.gameId) return;
+    
+    // Navigate to the edit page for the game
+    router.push(`/admin/edit-game/${action.gameId}`);
+  }, [router]);
+
   return (
     <>
       <Head>
@@ -317,6 +327,7 @@ export default function AdminDashboard() {
               onExport={handleExportScript}
               onClose={() => setShowHistory(false)}
               onDeleteAction={handleDeleteAction}
+              onEditAction={handleEditAction}
             />
           )}
         </div>
