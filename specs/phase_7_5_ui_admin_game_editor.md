@@ -79,6 +79,20 @@ This screen is used to add or update a game. All changes are stored in the sessi
 - "Save" button (primary)
 - "Cancel" button (secondary)
 
+### Sticky Action Bar (Edit Mode)
+When editing an existing game, a sticky action bar appears at the bottom of the screen as soon as any modification is made:
+- **Position**: Fixed at bottom of viewport
+- **Visibility**: Only visible when form has unsaved changes
+- **Content**: Same "Save" and "Cancel" buttons as inline form
+- **Behavior**: 
+  - Appears immediately on first field change
+  - Stays visible while scrolling
+  - Submits the form via the `form` attribute
+- **Layout**: 
+  - White background with top border and shadow
+  - Centered within max-width container
+  - Padding added to form container to prevent content overlap
+
 ---
 
 ## User Actions

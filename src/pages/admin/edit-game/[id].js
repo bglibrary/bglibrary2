@@ -6,7 +6,7 @@
  */
 
 import Head from 'next/head';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { PlayDuration, FirstPlayComplexity } from '@/domain/Game';
 import { getAllGames, Context } from '@/repository/GameRepository';
@@ -307,6 +307,7 @@ export default function EditGamePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [game, setGame] = useState(null);
+  const [originalFormData, setOriginalFormData] = useState(null);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -364,7 +365,7 @@ export default function EditGamePage() {
         }
 
         setGame(foundGame);
-        setFormData({
+        const initialData = {
           title: foundGame.title || '',
           description: foundGame.description || '',
           minPlayers: foundGame.minPlayers?.toString() || '',
@@ -376,7 +377,9 @@ export default function EditGamePage() {
           mechanics: (foundGame.mechanics || []).join(', '),
           awards: foundGame.awards || [],
           favorite: foundGame.favorite || false,
-        });
+        };
+        setFormData(initialData);
+        setOriginalFormData(initialData);
       } catch (error) {
         console.error('Failed to load game:', error);
         router.push('/admin');
@@ -391,6 +394,25 @@ export default function EditGamePage() {
   const updateField = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
+
+  // Check if form has been modified
+  const hasChanges = useMemo(() => {
+    if (!originalFormData) return false;
+    
+    return (
+      formData.title !== originalFormData.title ||
+      formData.description !== originalFormData.description ||
+      formData.minPlayers !== originalFormData.minPlayers ||
+      formData.maxPlayers !== originalFormData.maxPlayers ||
+      formData.playDuration !== originalFormData.playDuration ||
+      formData.firstPlayComplexity !== originalFormData.firstPlayComplexity ||
+      formData.ageRecommendation !== originalFormData.ageRecommendation ||
+      JSON.stringify(formData.categories.sort()) !== JSON.stringify(originalFormData.categories.sort()) ||
+      formData.mechanics !== originalFormData.mechanics ||
+      JSON.stringify(formData.awards) !== JSON.stringify(originalFormData.awards) ||
+      formData.favorite !== originalFormData.favorite
+    );
+  }, [formData, originalFormData]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -466,7 +488,7 @@ export default function EditGamePage() {
           onViewModeChange={() => {}}
         />
 
-        <div className="max-w-2xl mx-auto p-6">
+        <div className={`max-w-2xl mx-auto p-6 ${hasChanges ? 'pb-24' : ''}`}>
           {/* Header */}
           <div className="mb-6">
             <h1 className="text-page-title text-text-primary mb-2">Modifier un jeu</h1>
@@ -475,7 +497,7 @@ export default function EditGamePage() {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form id="edit-game-form" onSubmit={handleSubmit} className="space-y-6">
             {/* Main Info */}
             <Section title="Informations principales">
               <Input
@@ -580,7 +602,7 @@ export default function EditGamePage() {
               </label>
             </Section>
 
-            {/* Actions */}
+            {/* Actions - inline for no-js fallback */}
             <div className="flex gap-3 pt-4">
               <button
                 type="button"
@@ -599,6 +621,29 @@ export default function EditGamePage() {
             </div>
           </form>
         </div>
+
+        {/* Sticky action bar - visible when form has changes */}
+        {hasChanges && (
+          <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-border shadow-lg z-50">
+            <div className="max-w-2xl mx-auto p-4 flex gap-3">
+              <button
+                type="button"
+                onClick={() => router.push('/admin')}
+                className="flex-1 py-3 px-6 rounded-button border border-border bg-white text-text-primary hover:bg-cream transition-colors text-button"
+              >
+                Annuler
+              </button>
+              <button
+                type="submit"
+                form="edit-game-form"
+                disabled={saving}
+                className="flex-1 btn-primary py-3 px-6 disabled:opacity-50"
+              >
+                {saving ? 'Enregistrement...' : 'Enregistrer les modifications'}
+              </button>
+            </div>
+          </div>
+        )}
       </main>
     </>
   );
