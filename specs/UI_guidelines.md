@@ -38,33 +38,87 @@ This document is binding for all UI implementation.
 
 ## 3.1 Color Palette
 
-### Background
+### Light Mode (Default)
+
+#### Background
 - Warm cream: `#F7F4EF`
 
-### Card Surface
+#### Card Surface
 - White: `#FFFFFF`
 
-### Primary Accent
+#### Primary Accent
 - Muted terracotta: `#C86A4A`
 
-### Secondary Accent
+#### Secondary Accent
 - Muted green: `#6A8F7B`
 
-### Text
+#### Text
 - Primary: `#2E2E2E`
 - Secondary: `#6B6B6B`
 - Muted: `#B5B5B5`
 
-### Borders
+#### Borders
 - `#E5E2DD`
 
-### Semantic
+#### Semantic
 - Award badge: `#C9A227`
 - Favorite: `#D45C5C`
 - Delete (danger): `#B94A48`
 - Neutral action icons: `#555555`
 
+### Dark Mode
+
+#### Background
+- Dark charcoal: `#1A1A1A`
+
+#### Card Surface
+- Dark gray: `#2A2A2A`
+
+#### Primary Accent
+- Light terracotta: `#D4856A`
+
+#### Secondary Accent
+- Light green: `#7AA88B`
+
+#### Text
+- Primary: `#F0F0F0`
+- Secondary: `#A0A0A0`
+- Muted: `#6B6B6B`
+
+#### Borders
+- `#3A3A3A`
+
+#### Semantic
+- Award badge: `#D4B227`
+- Favorite: `#E06060`
+- Delete (danger): `#D45A58`
+- Neutral action icons: `#B0B0B0`
+
 No high-saturation colors.
+
+---
+
+## 3.2 Theme Management
+
+### Theme Toggle
+- **Location**: Header (both visitor and admin interfaces)
+- **Icon**: Sun (☀️) for light mode, Moon (🌙) for dark mode
+- **Behavior**: 
+  - Click toggles between light and dark themes
+  - Theme preference is persisted in localStorage
+  - Default follows OS preference (`prefers-color-scheme`)
+
+### System Preference Detection
+- On first load, the application checks:
+  1. localStorage for saved preference
+  2. OS preference via `prefers-color-scheme` media query
+- If no saved preference, follows OS setting
+- Automatically updates when OS theme changes (if using system preference)
+
+### Implementation
+- Theme is managed via `ThemeContext` provider
+- Dark mode is applied by adding `.dark` class to `<html>` element
+- CSS variables are redefined in dark mode for automatic color switching
 
 ---
 

@@ -6,6 +6,23 @@
  */
 
 import Link from 'next/link';
+import { useTheme } from '@/context/ThemeContext';
+
+// Theme toggle button component
+function ThemeToggle() {
+  const { isDark, toggleTheme } = useTheme();
+  
+  return (
+    <button
+      onClick={toggleTheme}
+      className="p-2 rounded-button border border-border bg-white hover:bg-cream dark:bg-card dark:hover:bg-cream transition-colors"
+      title={isDark ? 'Passer en mode clair' : 'Passer en mode sombre'}
+      aria-label={isDark ? 'Passer en mode clair' : 'Passer en mode sombre'}
+    >
+      {isDark ? '☀️' : '🌙'}
+    </button>
+  );
+}
 
 export default function AdminHeader({ 
   searchQuery, 
@@ -75,6 +92,9 @@ export default function AdminHeader({
             <span>+</span>
             <span className="hidden sm:inline">Ajouter</span>
           </Link>
+
+          {/* Theme toggle */}
+          <ThemeToggle />
 
           {/* History toggle */}
           <button
