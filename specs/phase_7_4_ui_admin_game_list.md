@@ -75,20 +75,18 @@ This screen allows administrators to view all games and manage pending changes.
 - Toggle buttons in header: ⊞ (grid) / ☰ (list)
 
 ### Game Grid (Grid View)
-- Grid of game cards (3-4 columns on desktop, 2 on tablet)
+- Grid of game cards (same responsive layout as visitor: 2-6 columns)
 - Filtered by search text (game title)
-- **Shared Component**: Uses `GameCard` from `src/components/common/GameCard.js`
+- **Shared Component**: Uses `AdminGameCard` from `src/components/common/GameCard.js`
+- **Card Style**: Same visual style as visitor cards (white background, border, rounded corners, title below image)
+- **Overlay Difference**: Admin cards show action buttons instead of info band
 - Cards include:
   - **Square image** (aspect-ratio 1:1)
     - Uses `object-contain` to preserve image proportions without cropping
     - Suitable for both landscape and portrait game box images
-  - Title
-  - Player count
-  - Duration
-  - Award badge (if exists)
-  - Favorite heart (if true)
-  - Archived badge (if archived)
-  - **Icon-only action buttons at bottom**:
+    - Padding and rounded corners
+  - Title below image (same style as visitor cards)
+  - **Action buttons overlay** (instead of info band):
     - Pencil (edit)
     - Archive/Restore
     - Heart (toggle favorite)

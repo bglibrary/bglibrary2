@@ -135,26 +135,33 @@ export function VisitorGameCard({ game, onClick, className = '' }) {
 }
 
 /**
- * Admin GameCard - compact with action buttons overlay
+ * Admin GameCard - same style as visitor card but with action buttons overlay
  */
 export function AdminGameCard({ game, children, className = '' }) {
   const imageId = game.primaryImage?.id || game.primaryImage;
 
   return (
     <article
-      className={`relative rounded-lg overflow-hidden ${game.isArchived ? 'opacity-60' : ''} ${className}`}
+      className={`bg-white rounded-xl shadow-md border border-border overflow-hidden ${game.isArchived ? 'opacity-60' : ''} ${className}`}
     >
-      {/* Game image - square format */}
-      <GameImage 
-        imageId={imageId} 
-        title={game.title} 
-        className="rounded-none"
-      />
+      {/* Image container with overlay - same style as visitor card */}
+      <div className="relative p-2 pb-0">
+        <div className="relative rounded-lg overflow-hidden">
+          <GameImage 
+            imageId={imageId} 
+            title={game.title}
+          />
+          {/* Action buttons overlay instead of info band */}
+          <ActionBand>
+            {children}
+          </ActionBand>
+        </div>
+      </div>
 
-      {/* Action buttons overlay */}
-      <ActionBand>
-        {children}
-      </ActionBand>
+      {/* Title below image - same style as visitor card */}
+      <h3 className="text-card-title text-text-primary px-3 py-2 truncate">
+        {game.title}
+      </h3>
     </article>
   );
 }

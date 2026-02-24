@@ -224,6 +224,7 @@ export default function AdminDashboard() {
         <div className="flex">
           {/* Main content */}
           <div className={`flex-1 p-6 ${showHistory ? 'mr-80' : ''}`}>
+            <div className="max-w-7xl mx-auto">
             {loading ? (
               <div className="flex justify-center items-center py-20">
                 <p className="text-text-secondary">Chargement...</p>
@@ -237,6 +238,7 @@ export default function AdminDashboard() {
                 viewMode={viewMode}
               />
             )}
+            </div>
           </div>
 
           {/* Session History Panel */}
