@@ -35,12 +35,12 @@ export function mapToGameCard(game) {
     title: game.title,
     playerCount: formatPlayerCount(game.minPlayers, game.maxPlayers),
     playDuration: game.playDuration,
-    hasAwards: game.awards && game.awards.length > 0,
-    isFavorite: game.favorite,
+    hasAwards: !!(game.awards && game.awards.length > 0),
+    isFavorite: !!game.favorite,
     // Include primary image reference for display
     primaryImage: game.images && game.images.length > 0 ? game.images[0] : null,
     // Include archived status for admin context
-    isArchived: game.archived,
+    isArchived: !!game.archived,
   };
 }
 
