@@ -39,13 +39,20 @@ This screen allows administrators to view all games and manage pending changes.
 | Header: Title | Search | + Add | History toggle |
 +--------------------------------------------------+
 |                                    |              |
-|   Game Grid                        |  Session     |
+|   Game Grid (Active Games)         |  Session     |
 |   (filtered by search)             |  History     |
 |                                    |  Panel       |
 |   Cards with icon-only actions:    |  (hidden     |
 |   - Pencil (edit)                  |   by         |
 |   - Archive/Restore                |   default)   |
 |   - Heart (toggle favorite)        |              |
+|                                    |              |
+|   -------------------------------- |              |
+|   Jeux archivés                    |              |
+|   -------------------------------- |              |
+|                                    |              |
+|   Archived Games Grid              |              |
+|   (filtered by search)             |              |
 |                                    |              |
 +--------------------------------------------------+
 ```
@@ -73,6 +80,25 @@ This screen allows administrators to view all games and manage pending changes.
 - **Grid view** (default): Shows game cards with images and details
 - **List view**: Simplified view showing only title and action buttons
 - Toggle buttons in header: ⊞ (grid) / ☰ (list)
+
+### Game Sections
+
+The admin game list is divided into two distinct sections:
+
+#### Active Games Section
+- **Position**: Top of the main content area
+- **Content**: All non-archived games
+- **Title**: No title displayed (main content)
+- **Empty State**: "Aucun jeu actif."
+
+#### Archived Games Section
+- **Position**: Below active games section
+- **Title**: "Jeux archivés" (h2 heading)
+- **Content**: All archived games
+- **Empty State**: "Aucun jeu archivé."
+- **Visual**: Same card layout as active games
+
+Both sections are affected by the search filter and view mode toggle.
 
 ### Game Grid (Grid View)
 - Grid of game cards (same responsive layout as visitor: 2-6 columns)

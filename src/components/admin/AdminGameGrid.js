@@ -129,23 +129,42 @@ export default function AdminGameGrid({
   onToggleFavorite, 
   onArchive, 
   onRestore,
-  viewMode = 'grid'
+  viewMode = 'grid',
+  title = null,
+  emptyMessage = 'Aucun jeu trouvé.'
 }) {
-  if (!games || games.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center py-20">
-        <p className="text-text-secondary text-body">
-          Aucun jeu trouvé.
-        </p>
-      </div>
-    );
-  }
+  // Render section with optional title
+  const renderContent = () => {
+    if (!games || games.length === 0) {
+      return (
+        <div className="flex flex-col items-center justify-center py-8">
+          <p className="text-text-secondary text-body">
+            {emptyMessage}
+          </p>
+        </div>
+      );
+    }
 
-  if (viewMode === 'list') {
+    if (viewMode === 'list') {
+      return (
+        <div className="flex flex-col gap-2">
+          {games.map(game => (
+            <ListRow
+              key={game.id}
+              game={game}
+              onToggleFavorite={onToggleFavorite}
+              onArchive={onArchive}
+              onRestore={onRestore}
+            />
+          ))}
+        </div>
+      );
+    }
+
     return (
-      <div className="flex flex-col gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
         {games.map(game => (
-          <ListRow
+          <GridCard
             key={game.id}
             game={game}
             onToggleFavorite={onToggleFavorite}
@@ -155,19 +174,14 @@ export default function AdminGameGrid({
         ))}
       </div>
     );
-  }
+  };
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-      {games.map(game => (
-        <GridCard
-          key={game.id}
-          game={game}
-          onToggleFavorite={onToggleFavorite}
-          onArchive={onArchive}
-          onRestore={onRestore}
-        />
-      ))}
+    <div className="mb-8">
+      {title && (
+        <h2 className="text-h2 text-text-primary mb-4">{title}</h2>
+      )}
+      {renderContent()}
     </div>
   );
 }

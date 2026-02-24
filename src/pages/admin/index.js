@@ -69,8 +69,23 @@ export default function AdminDashboard() {
     );
   }, [games, searchQuery]);
 
+  // Separate active and archived games
+  const { activeGames, archivedGames } = useMemo(() => {
+    const active = [];
+    const archived = [];
+    filteredGames.forEach(game => {
+      if (game.archived) {
+        archived.push(game);
+      } else {
+        active.push(game);
+      }
+    });
+    return { activeGames: active, archivedGames: archived };
+  }, [filteredGames]);
+
   // Map to card view models
-  const gameCards = useMemo(() => mapToGameCards(filteredGames), [filteredGames]);
+  const activeGameCards = useMemo(() => mapToGameCards(activeGames), [activeGames]);
+  const archivedGameCards = useMemo(() => mapToGameCards(archivedGames), [archivedGames]);
 
   // Get history actions (re-compute when historyVersion changes)
   const historyActions = useMemo(() => sessionHistory.getActions(), [sessionHistory, historyVersion]);
@@ -269,13 +284,25 @@ export default function AdminDashboard() {
                 <p className="text-text-secondary">Chargement...</p>
               </div>
             ) : (
-              <AdminGameGrid
-                games={gameCards}
-                onToggleFavorite={handleToggleFavorite}
-                onArchive={handleArchive}
-                onRestore={handleRestore}
-                viewMode={viewMode}
-              />
+              <>
+                <AdminGameGrid
+                  games={activeGameCards}
+                  onToggleFavorite={handleToggleFavorite}
+                  onArchive={handleArchive}
+                  onRestore={handleRestore}
+                  viewMode={viewMode}
+                  emptyMessage="Aucun jeu actif."
+                />
+                <AdminGameGrid
+                  games={archivedGameCards}
+                  onToggleFavorite={handleToggleFavorite}
+                  onArchive={handleArchive}
+                  onRestore={handleRestore}
+                  viewMode={viewMode}
+                  title="Jeux archivés"
+                  emptyMessage="Aucun jeu archivé."
+                />
+              </>
             )}
             </div>
           </div>
