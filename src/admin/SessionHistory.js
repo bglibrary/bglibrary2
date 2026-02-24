@@ -105,6 +105,35 @@ export class SessionHistory {
    * @returns {object} Result with index and info about what happened
    */
   addAction(type, gameId, gameTitle, payload = null) {
+    // For UPDATE_GAME actions, replace existing update for same game
+    if (type === ActionType.UPDATE_GAME) {
+      const existingIndex = this.actions.findIndex(
+        a => a.type === ActionType.UPDATE_GAME && a.gameId === gameId
+      );
+      
+      if (existingIndex !== -1) {
+        // Replace the existing update action with the new one
+        const action = {
+          id: generateId(),
+          type,
+          timestamp: new Date().toISOString(),
+          gameId,
+          gameTitle: gameTitle, // Update with new title
+          payload: payload ? JSON.parse(JSON.stringify(payload)) : null,
+          summary: generateSummary(type, gameTitle, payload),
+        };
+        this.actions[existingIndex] = action;
+        console.log('[SessionHistory]', 'addAction', { 
+          type, 
+          gameId, 
+          action: 'replaced_existing_update',
+          totalActions: this.actions.length 
+        });
+        this.saveToStorage();
+        return { index: existingIndex, action: 'replaced' };
+      }
+    }
+
     // For toggle actions, check if there's already a toggle action for this game
     // If the new toggle brings back to original state, remove the existing action
     if (type === ActionType.TOGGLE_FAVORITE) {

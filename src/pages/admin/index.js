@@ -34,7 +34,21 @@ export default function AdminDashboard() {
     async function loadGames() {
       try {
         const allGames = await getAllGames(Context.ADMIN);
-        setGames(allGames);
+        
+        // Apply pending UPDATE_GAME actions from session history
+        sessionHistory.loadFromStorage();
+        const actions = sessionHistory.getActions();
+        let updatedGames = [...allGames];
+        
+        actions.forEach(action => {
+          if (action.type === 'UPDATE_GAME' && action.payload) {
+            updatedGames = updatedGames.map(g => 
+              g.id === action.gameId ? { ...g, ...action.payload } : g
+            );
+          }
+        });
+        
+        setGames(updatedGames);
       } catch (error) {
         console.error('Failed to load games:', error);
       } finally {
@@ -42,9 +56,6 @@ export default function AdminDashboard() {
       }
     }
     loadGames();
-
-    // Load session from storage
-    sessionHistory.loadFromStorage();
   }, [sessionHistory]);
 
   // Filter games by search query
@@ -139,6 +150,14 @@ export default function AdminDashboard() {
     });
   }, [games, adminService]);
 
+  // Handle game update from edit page
+  const handleGameUpdated = useCallback((gameId, updatedData) => {
+    setGames(prev => prev.map(g => 
+      g.id === gameId ? { ...g, ...updatedData } : g
+    ));
+    setHistoryVersion(v => v + 1);
+  }, []);
+
   const handleClearSession = useCallback(() => {
     setConfirmDialog({
       title: 'Effacer la session',
@@ -180,12 +199,32 @@ export default function AdminDashboard() {
         setGames(prev => prev.map(g => 
           g.id === action.gameId ? { ...g, archived: true } : g
         ));
+      } else if (action.type === 'UPDATE_GAME') {
+        // Reload games from repository to get original data
+        getAllGames(Context.ADMIN).then(allGames => {
+          setGames(allGames);
+          setHistoryVersion(v => v + 1);
+        });
+        sessionHistory.removeAction(index);
+        return;
       }
     }
     
     sessionHistory.removeAction(index);
     setHistoryVersion(v => v + 1); // Force re-render
   }, [sessionHistory]);
+
+  // Apply pending UPDATE_GAME actions from session history to local state
+  useEffect(() => {
+    const actions = sessionHistory.getActions();
+    actions.forEach(action => {
+      if (action.type === 'UPDATE_GAME' && action.payload) {
+        setGames(prev => prev.map(g => 
+          g.id === action.gameId ? { ...g, ...action.payload } : g
+        ));
+      }
+    });
+  }, [historyVersion, sessionHistory]);
 
   const handleExportScript = useCallback(() => {
     const script = sessionHistory.generatePythonScript();

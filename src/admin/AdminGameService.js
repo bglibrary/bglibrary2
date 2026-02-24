@@ -61,30 +61,6 @@ export class AdminGameService {
    * @returns {Promise<object|null>}
    */
   async _getGameCurrentState(gameId) {
-    // Check pending actions first (most recent wins)
-    const actions = this.sessionHistory.getActionsForGame(gameId);
-    
-    // Find the most recent ADD or UPDATE action
-    for (let i = actions.length - 1; i >= 0; i--) {
-      const action = actions[i];
-      if (action.type === ActionType.ADD_GAME || action.type === ActionType.UPDATE_GAME) {
-        return { ...action.payload };
-      }
-      if (action.type === ActionType.ARCHIVE_GAME) {
-        // Get base game and apply archived status
-        const baseGame = await getGameById(gameId, 'admin');
-        return { ...baseGame, archived: true };
-      }
-      if (action.type === ActionType.RESTORE_GAME) {
-        const baseGame = await getGameById(gameId, 'admin');
-        return { ...baseGame, archived: false };
-      }
-      if (action.type === ActionType.TOGGLE_FAVORITE) {
-        const baseGame = await getGameById(gameId, 'admin');
-        return { ...baseGame, favorite: action.payload.favorite };
-      }
-    }
-
     // No pending actions, get from repository
     try {
       const game = await getGameById(gameId, 'admin');
@@ -145,6 +121,41 @@ export class AdminGameService {
   }
 
   /**
+   * Deep compare two objects to check if they are equal
+   * @param {object} obj1 
+   * @param {object} obj2 
+   * @returns {boolean}
+   */
+  _deepEqual(obj1, obj2) {
+    if (obj1 === obj2) return true;
+    if (obj1 === null || obj2 === null) return false;
+    if (typeof obj1 !== 'object' || typeof obj2 !== 'object') return false;
+    
+    const keys1 = Object.keys(obj1);
+    const keys2 = Object.keys(obj2);
+    
+    if (keys1.length !== keys2.length) return false;
+    
+    for (const key of keys1) {
+      if (!keys2.includes(key)) return false;
+      
+      const val1 = obj1[key];
+      const val2 = obj2[key];
+      
+      if (Array.isArray(val1) && Array.isArray(val2)) {
+        if (val1.length !== val2.length) return false;
+        if (!val1.every((v, i) => this._deepEqual(v, val2[i]))) return false;
+      } else if (typeof val1 === 'object' && typeof val2 === 'object') {
+        if (!this._deepEqual(val1, val2)) return false;
+      } else if (val1 !== val2) {
+        return false;
+      }
+    }
+    
+    return true;
+  }
+
+  /**
    * Update an existing game
    * @param {string} gameId - Target game ID
    * @param {object} gameData - Full game definition
@@ -185,8 +196,36 @@ export class AdminGameService {
       );
     }
 
+    // Get original game data from repository (not from pending actions)
+    let originalGame = null;
+    try {
+      originalGame = await getGameById(gameId, 'admin');
+    } catch {
+      // Game might be a pending ADD, in which case we can't compare
+    }
+    
     // Create game entity
     const game = createGame(gameData);
+
+    // Check if there are actual changes compared to original
+    if (originalGame && this._deepEqual(game, originalGame)) {
+      // No changes - remove any existing UPDATE action for this game
+      const actions = this.sessionHistory.getActions();
+      const existingIndex = actions.findIndex(
+        a => a.type === ActionType.UPDATE_GAME && a.gameId === gameId
+      );
+      if (existingIndex !== -1) {
+        this.sessionHistory.removeAction(existingIndex);
+        console.log('[AdminGameService]', 'updateGame', { noChanges: true, removedAction: true });
+      } else {
+        console.log('[AdminGameService]', 'updateGame', { noChanges: true });
+      }
+      return {
+        success: true,
+        gameId: game.id,
+        noChanges: true,
+      };
+    }
 
     // Add to session history
     this.sessionHistory.addAction(

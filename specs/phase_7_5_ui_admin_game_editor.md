@@ -37,7 +37,9 @@ This screen is used to add or update a game. All changes are stored in the sessi
 ### Edit Mode
 - URL: `/admin/edit-game/[id]`
 - Form is pre-filled with existing game data
-- Submit creates UPDATE_GAME action
+- If a pending UPDATE_GAME action exists for this game, form shows the pending data
+- Submit creates UPDATE_GAME action (replaces existing one for same game)
+- If submitted data matches original repository data, action is removed from history (diff behavior)
 
 ### Edit Action Mode
 - Accessed from Session History Panel
