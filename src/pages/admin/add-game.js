@@ -6,7 +6,7 @@
  */
 
 import Head from 'next/head';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { PlayDuration, FirstPlayComplexity, createGame } from '@/domain/Game';
 import { getSessionHistory } from '@/admin/SessionHistory';
@@ -28,6 +28,102 @@ function Dropdown({ label, value, onChange, options, placeholder }) {
           <option key={opt.value} value={opt.value}>{opt.label}</option>
         ))}
       </select>
+    </div>
+  );
+}
+
+// Multi-select component for categories
+function MultiSelect({ label, options, selectedValues, onChange, placeholder }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const toggleOption = (value) => {
+    if (selectedValues.includes(value)) {
+      onChange(selectedValues.filter(v => v !== value));
+    } else {
+      onChange([...selectedValues, value]);
+    }
+  };
+
+  const removeValue = (value) => {
+    onChange(selectedValues.filter(v => v !== value));
+  };
+
+  return (
+    <div className="space-y-1.5" ref={dropdownRef}>
+      <label className="block text-meta text-text-secondary font-medium">{label}</label>
+      <div className="relative">
+        <button
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
+          className="w-full px-4 py-3 rounded-lg border border-border bg-white text-body focus:outline-none focus:border-primary transition-colors text-left flex items-center justify-between"
+        >
+          <span className={selectedValues.length > 0 ? 'text-text-primary' : 'text-text-muted'}>
+            {selectedValues.length > 0 
+              ? `${selectedValues.length} sélectionnée${selectedValues.length > 1 ? 's' : ''}`
+              : placeholder
+            }
+          </span>
+          <span className={`text-xs transition-transform ${isOpen ? 'rotate-180' : ''}`}>▼</span>
+        </button>
+
+        {isOpen && (
+          <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-border rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
+            {options.map(opt => (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => toggleOption(opt.value)}
+                className={`w-full text-left px-4 py-2 text-body transition-colors flex items-center gap-2 ${
+                  selectedValues.includes(opt.value)
+                    ? 'bg-primary/10 text-primary'
+                    : 'text-text-primary hover:bg-cream'
+                }`}
+              >
+                <span className="w-4 text-center">
+                  {selectedValues.includes(opt.value) ? '✓' : ''}
+                </span>
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+      
+      {/* Selected tags */}
+      {selectedValues.length > 0 && (
+        <div className="flex flex-wrap gap-1.5 mt-2">
+          {selectedValues.map(value => {
+            const opt = options.find(o => o.value === value);
+            return (
+              <span
+                key={value}
+                className="inline-flex items-center gap-1 px-2 py-1 bg-primary/10 text-primary rounded-pill text-meta"
+              >
+                {opt?.label || value}
+                <button
+                  type="button"
+                  onClick={() => removeValue(value)}
+                  className="hover:text-danger"
+                >
+                  ×
+                </button>
+              </span>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
@@ -273,12 +369,12 @@ export default function AddGamePage() {
 
             {/* Categories */}
             <Section title="Classification">
-              <Dropdown
-                label="Catégorie principale"
-                value={formData.categories[0] || ''}
-                onChange={(v) => updateField('categories', v ? [v] : [])}
+              <MultiSelect
+                label="Catégories"
                 options={CATEGORY_OPTIONS}
-                placeholder="Sélectionner..."
+                selectedValues={formData.categories}
+                onChange={(values) => updateField('categories', values)}
+                placeholder="Sélectionner les catégories..."
               />
 
               <Input
