@@ -61,6 +61,9 @@ function matchesComplexity(game, filter) {
  */
 function matchesCategory(game, filter) {
   // Game must have at least one of the selected categories (OR)
+  if (!game.categories || !Array.isArray(game.categories)) {
+    return false;
+  }
   return filter.values.some(cat => game.categories.includes(cat));
 }
 
@@ -72,6 +75,9 @@ function matchesCategory(game, filter) {
  */
 function matchesMechanic(game, filter) {
   // Game must have at least one of the selected mechanics (OR)
+  if (!game.mechanics || !Array.isArray(game.mechanics)) {
+    return false;
+  }
   return filter.values.some(mech => game.mechanics.includes(mech));
 }
 
