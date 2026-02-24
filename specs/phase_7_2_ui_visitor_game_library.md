@@ -45,6 +45,7 @@ All data must conform strictly to Phase 5 contracts.
   - Category and mechanic options are dynamically extracted from available games
 - **Boolean toggle chips** for awards and favorites
 - **Sort dropdown** integrated in the filter line
+  - Displays human-readable labels (e.g., "Titre A-Z", "Durée ↑") instead of internal keys
 - **Clear all** button appears when filters are active
 - Active filters highlighted with primary color
 

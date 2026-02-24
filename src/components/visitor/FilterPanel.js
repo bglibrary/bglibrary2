@@ -70,7 +70,7 @@ function FilterDropdown({ label, icon, value, options, onSelect, isActive, multi
 
   const displayValue = multiSelect 
     ? (selectedValues.length > 0 ? selectedValues.map(v => options.find(o => o.value === v)?.label || v).join(', ') : null)
-    : value;
+    : (value ? options.find(o => o.value === value)?.label : null);
 
   return (
     <div className="relative" ref={dropdownRef}>
