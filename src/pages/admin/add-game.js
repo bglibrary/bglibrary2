@@ -32,6 +32,93 @@ function Dropdown({ label, value, onChange, options, placeholder }) {
   );
 }
 
+// Award list component
+function AwardList({ awards, onChange }) {
+  const [newAwardName, setNewAwardName] = useState('');
+  const [newAwardYear, setNewAwardYear] = useState('');
+
+  const addAward = () => {
+    if (!newAwardName.trim()) return;
+    
+    const award = { name: newAwardName.trim() };
+    if (newAwardYear) {
+      award.year = parseInt(newAwardYear);
+    }
+    
+    onChange([...awards, award]);
+    setNewAwardName('');
+    setNewAwardYear('');
+  };
+
+  const removeAward = (index) => {
+    onChange(awards.filter((_, i) => i !== index));
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      addAward();
+    }
+  };
+
+  return (
+    <div className="space-y-1.5">
+      <label className="block text-meta text-text-secondary font-medium">Prix et récompenses</label>
+      
+      {/* Existing awards */}
+      {awards.length > 0 && (
+        <div className="flex flex-wrap gap-1.5 mb-2">
+          {awards.map((award, index) => (
+            <span
+              key={index}
+              className="inline-flex items-center gap-1 px-2 py-1 bg-award/20 text-award rounded-pill text-meta"
+            >
+              🏆 {award.name}{award.year ? ` (${award.year})` : ''}
+              <button
+                type="button"
+                onClick={() => removeAward(index)}
+                className="hover:text-danger"
+              >
+                ×
+              </button>
+            </span>
+          ))}
+        </div>
+      )}
+      
+      {/* Add new award */}
+      <div className="flex gap-2">
+        <input
+          type="text"
+          value={newAwardName}
+          onChange={(e) => setNewAwardName(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="Nom du prix..."
+          className="flex-1 px-3 py-2 rounded-lg border border-border bg-white text-body focus:outline-none focus:border-primary transition-colors"
+        />
+        <input
+          type="number"
+          value={newAwardYear}
+          onChange={(e) => setNewAwardYear(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="Année"
+          min="1900"
+          max="2100"
+          className="w-24 px-3 py-2 rounded-lg border border-border bg-white text-body focus:outline-none focus:border-primary transition-colors"
+        />
+        <button
+          type="button"
+          onClick={addAward}
+          disabled={!newAwardName.trim()}
+          className="px-3 py-2 rounded-lg bg-primary text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-colors"
+        >
+          +
+        </button>
+      </div>
+    </div>
+  );
+}
+
 // Multi-select component for categories
 function MultiSelect({ label, options, selectedValues, onChange, placeholder }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -225,6 +312,7 @@ export default function AddGamePage() {
     ageRecommendation: '',
     categories: [],
     mechanics: '',
+    awards: [],
     favorite: false,
   });
 
@@ -254,9 +342,9 @@ export default function AddGamePage() {
         ageRecommendation: formData.ageRecommendation || '10+',
         categories: formData.categories,
         mechanics: formData.mechanics ? formData.mechanics.split(',').map(m => m.trim()) : [],
+        awards: formData.awards,
         favorite: formData.favorite,
         archived: false,
-        awards: [],
         images: [],
       };
 
@@ -382,6 +470,11 @@ export default function AddGamePage() {
                 value={formData.mechanics}
                 onChange={(v) => updateField('mechanics', v)}
                 placeholder="Séparer par des virgules: Deck building, Placement, ..."
+              />
+
+              <AwardList
+                awards={formData.awards}
+                onChange={(awards) => updateField('awards', awards)}
               />
             </Section>
 
