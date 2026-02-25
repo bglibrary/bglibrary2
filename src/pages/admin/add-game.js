@@ -21,7 +21,7 @@ function Dropdown({ label, value, onChange, options, placeholder }) {
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full px-4 py-3 rounded-lg border border-border bg-white text-body focus:outline-none focus:border-primary transition-colors"
+        className="w-full px-4 py-3 rounded-lg border border-border bg-card text-body focus:outline-none focus:border-primary transition-colors"
       >
         <option value="">{placeholder}</option>
         {options.map(opt => (
@@ -94,7 +94,7 @@ function AwardList({ awards, onChange }) {
           onChange={(e) => setNewAwardName(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Nom du prix..."
-          className="flex-1 px-3 py-2 rounded-lg border border-border bg-white text-body focus:outline-none focus:border-primary transition-colors"
+          className="flex-1 px-3 py-2 rounded-lg border border-border bg-card text-body focus:outline-none focus:border-primary transition-colors"
         />
         <input
           type="number"
@@ -104,7 +104,7 @@ function AwardList({ awards, onChange }) {
           placeholder="Année"
           min="1900"
           max="2100"
-          className="w-24 px-3 py-2 rounded-lg border border-border bg-white text-body focus:outline-none focus:border-primary transition-colors"
+          className="w-24 px-3 py-2 rounded-lg border border-border bg-card text-body focus:outline-none focus:border-primary transition-colors"
         />
         <button
           type="button"
@@ -154,7 +154,7 @@ function MultiSelect({ label, options, selectedValues, onChange, placeholder }) 
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="w-full px-4 py-3 rounded-lg border border-border bg-white text-body focus:outline-none focus:border-primary transition-colors text-left flex items-center justify-between"
+          className="w-full px-4 py-3 rounded-lg border border-border bg-card text-body focus:outline-none focus:border-primary transition-colors text-left flex items-center justify-between"
         >
           <span className={selectedValues.length > 0 ? 'text-text-primary' : 'text-text-muted'}>
             {selectedValues.length > 0 
@@ -166,7 +166,7 @@ function MultiSelect({ label, options, selectedValues, onChange, placeholder }) 
         </button>
 
         {isOpen && (
-          <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-border rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
+          <div className="absolute top-full left-0 right-0 mt-1 bg-card border border-border rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
             {options.map(opt => (
               <button
                 key={opt.value}
@@ -175,7 +175,7 @@ function MultiSelect({ label, options, selectedValues, onChange, placeholder }) 
                 className={`w-full text-left px-4 py-2 text-body transition-colors flex items-center gap-2 ${
                   selectedValues.includes(opt.value)
                     ? 'bg-primary/10 text-primary'
-                    : 'text-text-primary hover:bg-cream'
+                    : 'text-text-primary hover:bg-cream dark:hover:bg-cream/10'
                 }`}
               >
                 <span className="w-4 text-center">
@@ -228,7 +228,7 @@ function Input({ label, type = 'text', value, onChange, placeholder, required })
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full px-4 py-3 rounded-lg border border-border bg-white text-body focus:outline-none focus:border-primary transition-colors"
+        className="w-full px-4 py-3 rounded-lg border border-border bg-card text-body focus:outline-none focus:border-primary transition-colors"
       />
     </div>
   );
@@ -244,7 +244,7 @@ function Textarea({ label, value, onChange, placeholder, rows = 4 }) {
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         rows={rows}
-        className="w-full px-4 py-3 rounded-lg border border-border bg-white text-body focus:outline-none focus:border-primary transition-colors resize-none"
+        className="w-full px-4 py-3 rounded-lg border border-border bg-card text-body focus:outline-none focus:border-primary transition-colors resize-none"
       />
     </div>
   );
@@ -253,7 +253,7 @@ function Textarea({ label, value, onChange, placeholder, rows = 4 }) {
 // Section component
 function Section({ title, children }) {
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm border border-border">
+    <div className="bg-card rounded-xl p-6 shadow-sm border border-border">
       <h3 className="text-section-title text-text-primary mb-4 pb-2 border-b border-border">{title}</h3>
       <div className="space-y-4">
         {children}
@@ -498,7 +498,7 @@ export default function AddGamePage() {
               <button
                 type="button"
                 onClick={() => router.push('/admin')}
-                className="flex-1 py-3 px-6 rounded-button border border-border bg-white text-text-primary hover:bg-cream transition-colors text-button"
+                className="flex-1 py-3 px-6 rounded-button border border-border bg-card text-text-primary hover:bg-cream dark:hover:bg-cream/10 transition-colors text-button"
               >
                 Annuler
               </button>

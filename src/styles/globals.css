@@ -49,13 +49,13 @@
   /* Dark mode - with subtle warm/cool tones for better contrast */
   .dark {
     --color-cream: #0A0A0A;
-    --color-card: #1C1917;
+    --color-card: #333833;
     --color-primary: #E8956A;
     --color-secondary: #6BAF8B;
     --color-text-primary: #FAFAF9;
     --color-text-secondary: #C4C4C4;
     --color-text-muted: #78716C;
-    --color-border: #44403C;
+    --color-border: #766f68;
     --color-award: #EAB308;
     --color-favorite: #EF6B6B;
     --color-danger: #DC5A4A;

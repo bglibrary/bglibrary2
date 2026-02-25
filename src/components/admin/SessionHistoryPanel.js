@@ -40,7 +40,7 @@ function ActionItem({ action, index, onEdit, onDelete }) {
   const canEdit = action.type === ActionType.ADD_GAME || action.type === ActionType.UPDATE_GAME;
 
   return (
-    <div className="bg-cream rounded-lg p-3 mb-2">
+    <div className="bg-cream dark:bg-card rounded-lg p-3 mb-2">
       <div className="flex items-start gap-3">
         {/* Icon */}
         <span className="text-lg">
@@ -62,7 +62,7 @@ function ActionItem({ action, index, onEdit, onDelete }) {
           {canEdit && (
             <button
               onClick={() => onEdit(index)}
-              className="p-1 rounded hover:bg-white transition-colors text-action"
+              className="p-1 rounded hover:bg-card dark:hover:bg-cream/10 transition-colors text-action"
               title="Modifier"
             >
               ✏️
@@ -70,7 +70,7 @@ function ActionItem({ action, index, onEdit, onDelete }) {
           )}
           <button
             onClick={() => onDelete(index)}
-            className="p-1 rounded hover:bg-white transition-colors text-danger"
+            className="p-1 rounded hover:bg-card dark:hover:bg-cream/10 transition-colors text-danger"
             title="Supprimer"
           >
             🗑️
@@ -85,7 +85,7 @@ export default function SessionHistoryPanel({ actions, onClearAll, onExport, onC
   const hasChanges = actions && actions.length > 0;
 
   return (
-    <aside className="fixed right-0 top-0 h-full w-80 bg-white border-l border-border shadow-lg z-40 flex flex-col">
+    <aside className="fixed right-0 top-0 h-full w-80 bg-card border-l border-border shadow-lg z-40 flex flex-col">
       {/* Header */}
       <div className="p-4 border-b border-border flex items-center justify-between">
         <h2 className="text-section-title text-text-primary">
@@ -98,7 +98,7 @@ export default function SessionHistoryPanel({ actions, onClearAll, onExport, onC
         </h2>
         <button
           onClick={onClose}
-          className="p-1 rounded hover:bg-cream transition-colors text-text-secondary"
+          className="p-1 rounded hover:bg-cream dark:hover:bg-cream/10 transition-colors text-text-secondary"
           title="Fermer"
         >
           ✕
@@ -141,7 +141,7 @@ export default function SessionHistoryPanel({ actions, onClearAll, onExport, onC
           </button>
           <button
             onClick={onClearAll}
-            className="w-full py-2 px-4 rounded-button border border-danger text-danger hover:bg-red-50 transition-colors text-button"
+            className="w-full py-2 px-4 rounded-button border border-danger text-danger hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-button"
           >
             Effacer tout
           </button>
