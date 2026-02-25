@@ -60,8 +60,10 @@ This screen is used to add or update a game. All changes are stored in the sessi
 - **Play Duration** (select: SHORT, MEDIUM, LONG)
 - **Age Recommendation** (select)
 - **First Play Complexity** (select: LOW, MEDIUM, HIGH)
-- **Categories** (multi-select)
-- **Mechanics** (multi-select)
+- **Categories** (multi-select from predefined list)
+- **Mechanics** (multi-select from predefined list + custom input option)
+  - Predefined mechanics: Deck building, Draft, Bluff, Placement d'ouvriers, etc.
+  - "Other" option allows custom mechanic name input
 - **Images** (file upload with metadata)
 
 #### Optional Fields
