@@ -531,3 +531,133 @@ describe('Edit Game Page - Player Count Validation', () => {
     });
   });
 });
+
+// Tests for Award dropdown functionality
+describe('Edit Game Page - Award Dropdown', () => {
+  // Simulating the AwardList component logic
+  function processAwardAdd(selectedAward, customAwardName, showCustomInput, awardYear) {
+    const awardName = showCustomInput ? customAwardName.trim() : selectedAward;
+    if (!awardName) return null;
+    
+    const award = { name: awardName };
+    if (awardYear) {
+      award.year = parseInt(awardYear);
+    }
+    return award;
+  }
+
+  // Predefined award options
+  const AWARD_OPTIONS = [
+    { value: 'Spiel des Jahres', label: 'Spiel des Jahres' },
+    { value: 'Kennerspiel des Jahres', label: 'Kennerspiel des Jahres' },
+    { value: 'As d\'Or', label: 'As d\'Or' },
+    { value: 'Other', label: 'Autre (préciser)' },
+  ];
+
+  describe('processAwardAdd', () => {
+    describe('predefined awards', () => {
+      it('should create award from predefined selection', () => {
+        const award = processAwardAdd('Spiel des Jahres', '', false, '2020');
+        
+        expect(award).toEqual({
+          name: 'Spiel des Jahres',
+          year: 2020
+        });
+      });
+
+      it('should create award without year', () => {
+        const award = processAwardAdd('Kennerspiel des Jahres', '', false, '');
+        
+        expect(award).toEqual({
+          name: 'Kennerspiel des Jahres'
+        });
+      });
+
+      it('should create award from As d\'Or', () => {
+        const award = processAwardAdd('As d\'Or', '', false, '2023');
+        
+        expect(award).toEqual({
+          name: 'As d\'Or',
+          year: 2023
+        });
+      });
+    });
+
+    describe('custom awards (Other)', () => {
+      it('should create custom award when Other is selected', () => {
+        const award = processAwardAdd('Other', 'Prix du Public', true, '2021');
+        
+        expect(award).toEqual({
+          name: 'Prix du Public',
+          year: 2021
+        });
+      });
+
+      it('should create custom award without year', () => {
+        const award = processAwardAdd('Other', 'Local Award', true, '');
+        
+        expect(award).toEqual({
+          name: 'Local Award'
+        });
+      });
+
+      it('should trim custom award name', () => {
+        const award = processAwardAdd('Other', '  Spaced Award  ', true, '');
+        
+        expect(award).toEqual({
+          name: 'Spaced Award'
+        });
+      });
+
+      it('should return null for empty custom award name', () => {
+        const award = processAwardAdd('Other', '', true, '2020');
+        
+        expect(award).toBeNull();
+      });
+
+      it('should return null for whitespace-only custom award name', () => {
+        const award = processAwardAdd('Other', '   ', true, '2020');
+        
+        expect(award).toBeNull();
+      });
+    });
+
+    describe('validation', () => {
+      it('should return null when no award selected', () => {
+        const award = processAwardAdd('', '', false, '2020');
+        
+        expect(award).toBeNull();
+      });
+
+      it('should parse year as integer', () => {
+        const award = processAwardAdd('Spiel des Jahres', '', false, '2020');
+        
+        expect(award.year).toBe(2020);
+        expect(typeof award.year).toBe('number');
+      });
+
+      it('should handle year as empty string', () => {
+        const award = processAwardAdd('Spiel des Jahres', '', false, '');
+        
+        expect(award.year).toBeUndefined();
+      });
+    });
+
+    describe('award options list', () => {
+      it('should contain common board game awards', () => {
+        const awardValues = AWARD_OPTIONS.map(o => o.value);
+        
+        expect(awardValues).toContain('Spiel des Jahres');
+        expect(awardValues).toContain('Kennerspiel des Jahres');
+        expect(awardValues).toContain('As d\'Or');
+      });
+
+      it('should contain Other option for custom awards', () => {
+        const otherOption = AWARD_OPTIONS.find(o => o.value === 'Other');
+        
+        expect(otherOption).toBeDefined();
+        expect(otherOption.label).toBe('Autre (préciser)');
+      });
+    });
+  });
+});
