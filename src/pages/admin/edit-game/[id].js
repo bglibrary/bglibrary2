@@ -308,6 +308,8 @@ export default function EditGamePage() {
   const [saving, setSaving] = useState(false);
   const [game, setGame] = useState(null);
   const [originalFormData, setOriginalFormData] = useState(null);
+  const [inlineButtonsVisible, setInlineButtonsVisible] = useState(false);
+  const inlineButtonsRef = useRef(null);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -413,6 +415,27 @@ export default function EditGamePage() {
       formData.favorite !== originalFormData.favorite
     );
   }, [formData, originalFormData]);
+
+  // Observe inline buttons visibility to hide sticky bar when they're visible
+  useEffect(() => {
+    if (!inlineButtonsRef.current || !hasChanges) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        // If inline buttons are visible (intersecting with viewport), hide sticky
+        setInlineButtonsVisible(entry.isIntersecting && entry.intersectionRatio > 0.5);
+      },
+      {
+        threshold: 0.5,
+        rootMargin: '0px 0px -80px 0px', // Account for sticky bar height
+      }
+    );
+
+    observer.observe(inlineButtonsRef.current);
+
+    return () => observer.disconnect();
+  }, [hasChanges]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -602,8 +625,8 @@ export default function EditGamePage() {
               </label>
             </Section>
 
-            {/* Actions - inline for no-js fallback */}
-            <div className="flex gap-3 pt-4">
+            {/* Actions - inline buttons with ref for visibility detection */}
+            <div ref={inlineButtonsRef} className="flex gap-3 pt-4">
               <button
                 type="button"
                 onClick={() => router.push('/admin')}
@@ -622,8 +645,8 @@ export default function EditGamePage() {
           </form>
         </div>
 
-        {/* Sticky action bar - visible when form has changes */}
-        {hasChanges && (
+        {/* Sticky action bar - visible when form has changes AND inline buttons are NOT visible */}
+        {hasChanges && !inlineButtonsVisible && (
           <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-border shadow-lg z-50">
             <div className="max-w-2xl mx-auto p-4 flex gap-3">
               <button
