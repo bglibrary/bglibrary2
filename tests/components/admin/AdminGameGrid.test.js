@@ -2,7 +2,7 @@
  * Tests for AdminGameGrid component
  */
 
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import AdminGameGrid from '@/components/admin/AdminGameGrid';
 
 // Mock Next.js router
@@ -86,6 +86,80 @@ describe('AdminGameGrid', () => {
       render(<AdminGameGrid games={mockGames} {...defaultProps} title="Jeux archivés" />);
       
       expect(screen.getByRole('heading', { name: 'Jeux archivés', level: 2 })).toBeInTheDocument();
+    });
+
+    it('renders title with larger font and bold when provided', () => {
+      render(<AdminGameGrid games={mockGames} {...defaultProps} title="Jeux archivés" />);
+      
+      const title = screen.getByRole('heading', { name: 'Jeux archivés', level: 2 });
+      expect(title).toHaveClass('text-page-title');
+      expect(title).toHaveClass('font-semibold');
+    });
+  });
+
+  describe('Collapsible section', () => {
+    it('does not collapse when collapsible is false', () => {
+      render(<AdminGameGrid games={mockGames} {...defaultProps} title="Jeux archivés" collapsible={false} />);
+      
+      // Content should be visible
+      expect(screen.getByText('Active Game')).toBeInTheDocument();
+      expect(screen.getByText('Archived Game')).toBeInTheDocument();
+    });
+
+    it('collapses by default when collapsible is true and defaultCollapsed is true', () => {
+      render(<AdminGameGrid games={mockGames} {...defaultProps} title="Jeux archivés" collapsible={true} defaultCollapsed={true} />);
+      
+      // Content should be hidden
+      expect(screen.queryByText('Active Game')).not.toBeInTheDocument();
+      expect(screen.queryByText('Archived Game')).not.toBeInTheDocument();
+    });
+
+    it('expands by default when collapsible is true and defaultCollapsed is false', () => {
+      render(<AdminGameGrid games={mockGames} {...defaultProps} title="Jeux archivés" collapsible={true} defaultCollapsed={false} />);
+      
+      // Content should be visible
+      expect(screen.getByText('Active Game')).toBeInTheDocument();
+      expect(screen.getByText('Archived Game')).toBeInTheDocument();
+    });
+
+    it('toggles collapse when clicking on title', () => {
+      render(<AdminGameGrid games={mockGames} {...defaultProps} title="Jeux archivés" collapsible={true} defaultCollapsed={true} />);
+      
+      // Initially collapsed
+      expect(screen.queryByText('Active Game')).not.toBeInTheDocument();
+      
+      // Click to expand
+      fireEvent.click(screen.getByRole('heading', { name: /Jeux archivés/ }));
+      
+      // Now expanded
+      expect(screen.getByText('Active Game')).toBeInTheDocument();
+      expect(screen.getByText('Archived Game')).toBeInTheDocument();
+      
+      // Click to collapse again
+      fireEvent.click(screen.getByRole('heading', { name: /Jeux archivés/ }));
+      
+      // Now collapsed again
+      expect(screen.queryByText('Active Game')).not.toBeInTheDocument();
+    });
+
+    it('shows chevron icon when collapsible', () => {
+      const { container } = render(<AdminGameGrid games={mockGames} {...defaultProps} title="Jeux archivés" collapsible={true} />);
+      
+      const chevron = container.querySelector('svg');
+      expect(chevron).toBeInTheDocument();
+    });
+
+    it('does not show chevron icon when not collapsible', () => {
+      const { container } = render(<AdminGameGrid games={mockGames} {...defaultProps} title="Jeux actifs" collapsible={false} />);
+      
+      const chevron = container.querySelector('svg');
+      expect(chevron).not.toBeInTheDocument();
+    });
+
+    it('shows game count when collapsible', () => {
+      render(<AdminGameGrid games={mockGames} {...defaultProps} title="Jeux archivés" collapsible={true} />);
+      
+      expect(screen.getByText('(2)')).toBeInTheDocument();
     });
   });
 

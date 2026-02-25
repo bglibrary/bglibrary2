@@ -6,6 +6,7 @@
  * As specified in specs/phase_7_4_ui_admin_game_list.md
  */
 
+import { useState } from 'react';
 import { AdminGameCard } from '@/components/common/GameCard';
 
 // Icon button for action band overlay
@@ -131,8 +132,19 @@ export default function AdminGameGrid({
   onRestore,
   viewMode = 'grid',
   title = null,
-  emptyMessage = 'Aucun jeu trouvé.'
+  emptyMessage = 'Aucun jeu trouvé.',
+  collapsible = false,
+  defaultCollapsed = true
 }) {
+  const [isCollapsed, setIsCollapsed] = useState(collapsible ? defaultCollapsed : false);
+
+  // Toggle collapse state
+  const toggleCollapse = () => {
+    if (collapsible) {
+      setIsCollapsed(!isCollapsed);
+    }
+  };
+
   // Render section with optional title
   const renderContent = () => {
     if (!games || games.length === 0) {
@@ -176,12 +188,34 @@ export default function AdminGameGrid({
     );
   };
 
+  // Chevron icon component
+  const ChevronIcon = () => (
+    <svg 
+      className={`w-5 h-5 transition-transform duration-200 ${isCollapsed ? '' : 'rotate-180'}`}
+      fill="none" 
+      stroke="currentColor" 
+      viewBox="0 0 24 24"
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+    </svg>
+  );
+
   return (
     <div className="mb-8">
       {title && (
-        <h2 className="text-h2 text-text-primary mb-4">{title}</h2>
+        <button
+          onClick={toggleCollapse}
+          className={`w-full flex items-center gap-2 mb-4 ${collapsible ? 'cursor-pointer hover:opacity-80 transition-opacity' : 'cursor-default'}`}
+          disabled={!collapsible}
+        >
+          {collapsible && <ChevronIcon />}
+          <h2 className="text-page-title font-semibold text-text-primary">{title}</h2>
+          {collapsible && games && games.length > 0 && (
+            <span className="text-meta text-text-muted ml-2">({games.length})</span>
+          )}
+        </button>
       )}
-      {renderContent()}
+      {(!collapsible || !isCollapsed) && renderContent()}
     </div>
   );
 }

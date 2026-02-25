@@ -301,6 +301,8 @@ export default function AdminDashboard() {
                   viewMode={viewMode}
                   title="Jeux archivés"
                   emptyMessage="Aucun jeu archivé."
+                  collapsible={true}
+                  defaultCollapsed={true}
                 />
               </>
             )}
