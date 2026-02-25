@@ -61,16 +61,18 @@ function ActionItem({ action, index, onEdit, onDelete }) {
         <div className="flex items-center gap-1">
           {canEdit && (
             <button
+              type="button"
               onClick={() => onEdit(index)}
-              className="p-1 rounded hover:bg-card dark:hover:bg-cream/10 transition-colors text-action"
+              className="p-1.5 rounded hover:bg-card dark:hover:bg-cream/10 transition-colors text-action cursor-pointer"
               title="Modifier"
             >
               ✏️
             </button>
           )}
           <button
+            type="button"
             onClick={() => onDelete(index)}
-            className="p-1 rounded hover:bg-card dark:hover:bg-cream/10 transition-colors text-danger"
+            className="p-1.5 rounded hover:bg-card dark:hover:bg-cream/10 transition-colors text-danger cursor-pointer"
             title="Supprimer"
           >
             🗑️
