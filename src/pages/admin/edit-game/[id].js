@@ -331,13 +331,38 @@ export default function EditGamePage() {
       if (!id) return;
       
       try {
-        // First check if there's a pending UPDATE_GAME action for this game
+        // Load original game data from repository first
+        const allGames = await getAllGames(Context.ADMIN);
+        const originalGame = allGames.find(g => g.id === id);
+        
+        if (!originalGame) {
+          router.push('/admin');
+          return;
+        }
+
+        // Set original form data for comparison (from repository)
+        const originalData = {
+          title: originalGame.title || '',
+          description: originalGame.description || '',
+          minPlayers: originalGame.minPlayers?.toString() || '',
+          maxPlayers: originalGame.maxPlayers?.toString() || '',
+          playDuration: originalGame.playDuration || '',
+          firstPlayComplexity: originalGame.firstPlayComplexity || '',
+          ageRecommendation: originalGame.ageRecommendation || '',
+          categories: originalGame.categories || [],
+          mechanics: (originalGame.mechanics || []).join(', '),
+          awards: originalGame.awards || [],
+          favorite: originalGame.favorite || false,
+        };
+        setOriginalFormData(originalData);
+
+        // Check if there's a pending UPDATE_GAME action for this game
         sessionHistory.loadFromStorage();
         const actions = sessionHistory.getActionsForGame(id);
         const pendingUpdate = actions.find(a => a.type === ActionType.UPDATE_GAME);
         
         if (pendingUpdate && pendingUpdate.payload) {
-          // Use the pending update data for display
+          // Use the pending update data for display (modified data)
           const foundGame = pendingUpdate.payload;
           setGame(foundGame);
           setFormData({
@@ -353,35 +378,11 @@ export default function EditGamePage() {
             awards: foundGame.awards || [],
             favorite: foundGame.favorite || false,
           });
-          setLoading(false);
-          return;
+        } else {
+          // No pending update, use original data
+          setGame(originalGame);
+          setFormData(originalData);
         }
-
-        // Otherwise load from repository
-        const allGames = await getAllGames(Context.ADMIN);
-        const foundGame = allGames.find(g => g.id === id);
-        
-        if (!foundGame) {
-          router.push('/admin');
-          return;
-        }
-
-        setGame(foundGame);
-        const initialData = {
-          title: foundGame.title || '',
-          description: foundGame.description || '',
-          minPlayers: foundGame.minPlayers?.toString() || '',
-          maxPlayers: foundGame.maxPlayers?.toString() || '',
-          playDuration: foundGame.playDuration || '',
-          firstPlayComplexity: foundGame.firstPlayComplexity || '',
-          ageRecommendation: foundGame.ageRecommendation || '',
-          categories: foundGame.categories || [],
-          mechanics: (foundGame.mechanics || []).join(', '),
-          awards: foundGame.awards || [],
-          favorite: foundGame.favorite || false,
-        };
-        setFormData(initialData);
-        setOriginalFormData(initialData);
       } catch (error) {
         console.error('Failed to load game:', error);
         router.push('/admin');
