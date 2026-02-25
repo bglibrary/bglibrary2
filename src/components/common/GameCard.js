@@ -111,7 +111,7 @@ export function VisitorGameCard({ game, onClick, className = '' }) {
   return (
     <article
       onClick={onClick ? () => onClick(game.id) : undefined}
-      className={`bg-white rounded-xl shadow-md border border-border overflow-hidden 
+      className={`bg-card rounded-xl shadow-md border border-border overflow-hidden 
         ${onClick ? 'cursor-pointer transition-all duration-200 hover:shadow-xl hover:-translate-y-1' : ''} 
         ${className}`}
     >
@@ -142,7 +142,7 @@ export function AdminGameCard({ game, children, className = '' }) {
 
   return (
     <article
-      className={`bg-white rounded-xl shadow-md border border-border overflow-hidden ${game.isArchived ? 'opacity-60' : ''} ${className}`}
+      className={`bg-card rounded-xl shadow-md border border-border overflow-hidden ${game.isArchived ? 'opacity-60' : ''} ${className}`}
     >
       {/* Image container with overlay - same style as visitor card */}
       <div className="relative p-2 pb-0">

@@ -8,18 +8,50 @@
 import Link from 'next/link';
 import { useTheme } from '@/context/ThemeContext';
 
-// Theme toggle button component
+// Theme toggle button component with colored SVG icons
 function ThemeToggle() {
   const { isDark, toggleTheme } = useTheme();
   
   return (
     <button
       onClick={toggleTheme}
-      className="p-2 rounded-button border border-border bg-white hover:bg-cream dark:bg-card dark:hover:bg-cream transition-colors"
+      className="p-2 rounded-button border border-border bg-card hover:bg-cream dark:hover:bg-cream/10 transition-colors"
       title={isDark ? 'Passer en mode clair' : 'Passer en mode sombre'}
       aria-label={isDark ? 'Passer en mode clair' : 'Passer en mode sombre'}
     >
-      {isDark ? '☀️' : '🌙'}
+      {isDark ? (
+        // Sun icon (yellow/orange) for light mode
+        <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          className="h-5 w-5 text-yellow-500" 
+          fill="none" 
+          viewBox="0 0 24 24" 
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <path 
+            strokeLinecap="round" 
+            strokeLinejoin="round" 
+            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" 
+          />
+        </svg>
+      ) : (
+        // Moon icon (purple/blue) for dark mode
+        <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          className="h-5 w-5 text-indigo-600" 
+          fill="none" 
+          viewBox="0 0 24 24" 
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <path 
+            strokeLinecap="round" 
+            strokeLinejoin="round" 
+            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" 
+          />
+        </svg>
+      )}
     </button>
   );
 }
@@ -33,7 +65,7 @@ export default function AdminHeader({
   onViewModeChange 
 }) {
   return (
-    <header className="bg-white border-b border-border">
+    <header className="bg-card border-b border-border">
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center gap-4">
         {/* Title */}
         <Link href="/" className="text-page-title text-text-primary hover:opacity-80 transition-opacity">
@@ -51,7 +83,7 @@ export default function AdminHeader({
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               placeholder="Rechercher un jeu..."
-              className="w-full pl-10 pr-4 py-2 rounded-button border border-border bg-white text-body focus:outline-none focus:border-primary"
+              className="w-full pl-10 pr-4 py-2 rounded-button border border-border bg-card text-body focus:outline-none focus:border-primary"
             />
           </div>
         </div>
@@ -65,7 +97,7 @@ export default function AdminHeader({
               className={`px-3 py-2 transition-colors ${
                 viewMode === 'grid' 
                   ? 'bg-primary text-white' 
-                  : 'bg-white text-text-primary hover:bg-cream'
+                  : 'bg-card text-text-primary hover:bg-cream dark:hover:bg-cream/10'
               }`}
               title="Vue grille"
             >
@@ -76,7 +108,7 @@ export default function AdminHeader({
               className={`px-3 py-2 transition-colors ${
                 viewMode === 'list' 
                   ? 'bg-primary text-white' 
-                  : 'bg-white text-text-primary hover:bg-cream'
+                  : 'bg-card text-text-primary hover:bg-cream dark:hover:bg-cream/10'
               }`}
               title="Vue liste"
             >
@@ -99,7 +131,7 @@ export default function AdminHeader({
           {/* History toggle */}
           <button
             onClick={onToggleHistory}
-            className="relative p-2 rounded-button border border-border bg-white hover:bg-cream transition-colors"
+            className="relative p-2 rounded-button border border-border bg-card hover:bg-cream dark:hover:bg-cream/10 transition-colors"
             title="Historique de session"
           >
             📋

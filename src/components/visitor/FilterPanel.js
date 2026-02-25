@@ -79,7 +79,7 @@ function FilterDropdown({ label, icon, value, options, onSelect, isActive, multi
         className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-pill text-meta transition-colors ${
           isActive 
             ? 'bg-primary text-white' 
-            : 'bg-white border border-border text-text-primary hover:border-primary'
+            : 'bg-card border border-border text-text-primary hover:border-primary'
         }`}
       >
         {icon && <span>{icon}</span>}
@@ -93,7 +93,7 @@ function FilterDropdown({ label, icon, value, options, onSelect, isActive, multi
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-1 bg-white border border-border rounded-lg shadow-lg z-50 min-w-[150px] py-1">
+        <div className="absolute top-full left-0 mt-1 bg-card border border-border rounded-lg shadow-lg z-50 min-w-[150px] py-1">
           {options.map((option) => {
             const isSelected = multiSelect 
               ? selectedValues.includes(option.value)
@@ -106,7 +106,7 @@ function FilterDropdown({ label, icon, value, options, onSelect, isActive, multi
                 className={`w-full text-left px-3 py-2 text-meta transition-colors ${
                   isSelected 
                     ? 'bg-primary/10 text-primary' 
-                    : 'text-text-primary hover:bg-cream'
+                    : 'text-text-primary hover:bg-cream dark:hover:bg-cream/10'
                 }`}
               >
                 {multiSelect && (
@@ -130,7 +130,7 @@ function BooleanChip({ label, icon, isActive, onToggle }) {
       className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-pill text-meta transition-colors ${
         isActive 
           ? 'bg-primary text-white' 
-          : 'bg-white border border-border text-text-primary hover:border-primary'
+          : 'bg-card border border-border text-text-primary hover:border-primary'
       }`}
     >
       {icon && <span>{icon}</span>}
