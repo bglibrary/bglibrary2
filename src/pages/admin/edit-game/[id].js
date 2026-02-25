@@ -233,8 +233,8 @@ function MultiSelect({ label, options, selectedValues, onChange, placeholder, is
   );
 }
 
-// Input component with change indicator
-function Input({ label, type = 'text', value, onChange, placeholder, required, isModified = false, min, max }) {
+// Input component with change indicator and error state
+function Input({ label, type = 'text', value, onChange, placeholder, required, isModified = false, min, max, error }) {
   return (
     <div className="space-y-1.5">
       <label className="block text-meta text-text-secondary font-medium">
@@ -250,11 +250,16 @@ function Input({ label, type = 'text', value, onChange, placeholder, required, i
         min={min}
         max={max}
         className={`w-full px-4 py-3 rounded-lg border bg-card text-body focus:outline-none transition-colors ${
-          isModified 
-            ? 'border-primary border-2 ring-1 ring-primary/20' 
-            : 'border-border focus:border-primary'
+          error 
+            ? 'border-danger border-2 ring-1 ring-danger/20' 
+            : isModified 
+              ? 'border-primary border-2 ring-1 ring-primary/20' 
+              : 'border-border focus:border-primary'
         }`}
       />
+      {error && (
+        <p className="text-meta text-danger">{error}</p>
+      )}
     </div>
   );
 }
@@ -467,6 +472,39 @@ export default function EditGamePage() {
     };
   }, [formData, originalFormData]);
 
+  // Validation errors for player count
+  const playerErrors = useMemo(() => {
+    const errors = {};
+    const minPlayers = parseInt(formData.minPlayers);
+    const maxPlayers = parseInt(formData.maxPlayers);
+    
+    // Validate minPlayers
+    if (formData.minPlayers !== '') {
+      if (isNaN(minPlayers) || minPlayers < 1) {
+        errors.minPlayers = 'Le minimum doit être au moins 1';
+      }
+    }
+    
+    // Validate maxPlayers
+    if (formData.maxPlayers !== '') {
+      if (isNaN(maxPlayers) || maxPlayers < 1) {
+        errors.maxPlayers = 'Le maximum doit être au moins 1';
+      }
+    }
+    
+    // Validate max >= min (only if both are valid numbers)
+    if (!errors.minPlayers && !errors.maxPlayers && 
+        formData.minPlayers !== '' && formData.maxPlayers !== '' &&
+        maxPlayers < minPlayers) {
+      errors.maxPlayers = 'Le maximum doit être supérieur ou égal au minimum';
+    }
+    
+    return errors;
+  }, [formData.minPlayers, formData.maxPlayers]);
+
+  // Check if form has validation errors
+  const hasValidationErrors = Object.keys(playerErrors).length > 0;
+
   // Observe inline buttons visibility to hide sticky bar when they're visible
   useEffect(() => {
     if (!inlineButtonsRef.current || !hasChanges) return;
@@ -491,8 +529,29 @@ export default function EditGamePage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    // Check required fields
     if (!formData.title || !formData.minPlayers || !formData.maxPlayers) {
       alert('Veuillez remplir les champs obligatoires');
+      return;
+    }
+
+    // Check for validation errors
+    if (hasValidationErrors) {
+      alert('Veuillez corriger les erreurs de validation');
+      return;
+    }
+
+    // Parse and validate player counts
+    const minPlayers = parseInt(formData.minPlayers);
+    const maxPlayers = parseInt(formData.maxPlayers);
+    
+    if (minPlayers < 1 || maxPlayers < 1) {
+      alert('Le nombre de joueurs doit être au moins 1');
+      return;
+    }
+    
+    if (maxPlayers < minPlayers) {
+      alert('Le maximum doit être supérieur ou égal au minimum');
       return;
     }
 
@@ -512,8 +571,8 @@ export default function EditGamePage() {
         ...originalGame,
         title: formData.title,
         description: formData.description || '',
-        minPlayers: parseInt(formData.minPlayers),
-        maxPlayers: parseInt(formData.maxPlayers),
+        minPlayers: minPlayers,
+        maxPlayers: maxPlayers,
         playDuration: formData.playDuration || PlayDuration.MEDIUM,
         firstPlayComplexity: formData.firstPlayComplexity || FirstPlayComplexity.MEDIUM,
         ageRecommendation: formData.ageRecommendation || '10+',
@@ -602,8 +661,10 @@ export default function EditGamePage() {
                   value={formData.minPlayers}
                   onChange={(v) => updateField('minPlayers', v)}
                   placeholder="1"
+                  min="1"
                   required
                   isModified={fieldChanges.minPlayers}
+                  error={playerErrors.minPlayers}
                 />
                 <Input
                   label="Max joueurs"
@@ -611,8 +672,10 @@ export default function EditGamePage() {
                   value={formData.maxPlayers}
                   onChange={(v) => updateField('maxPlayers', v)}
                   placeholder="6"
+                  min="1"
                   required
                   isModified={fieldChanges.maxPlayers}
+                  error={playerErrors.maxPlayers}
                 />
               </div>
 

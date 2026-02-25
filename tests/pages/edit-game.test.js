@@ -395,3 +395,139 @@ describe('Edit Game Page - Field Change Detection', () => {
     });
   });
 });
+
+// Tests for player count validation
+describe('Edit Game Page - Player Count Validation', () => {
+  // Simulating the playerErrors logic from the component
+  function computePlayerErrors(minPlayersStr, maxPlayersStr) {
+    const errors = {};
+    const minPlayers = parseInt(minPlayersStr);
+    const maxPlayers = parseInt(maxPlayersStr);
+    
+    // Validate minPlayers
+    if (minPlayersStr !== '') {
+      if (isNaN(minPlayers) || minPlayers < 1) {
+        errors.minPlayers = 'Le minimum doit être au moins 1';
+      }
+    }
+    
+    // Validate maxPlayers
+    if (maxPlayersStr !== '') {
+      if (isNaN(maxPlayers) || maxPlayers < 1) {
+        errors.maxPlayers = 'Le maximum doit être au moins 1';
+      }
+    }
+    
+    // Validate max >= min (only if both are valid numbers)
+    if (!errors.minPlayers && !errors.maxPlayers && 
+        minPlayersStr !== '' && maxPlayersStr !== '' &&
+        maxPlayers < minPlayers) {
+      errors.maxPlayers = 'Le maximum doit être supérieur ou égal au minimum';
+    }
+    
+    return errors;
+  }
+
+  describe('computePlayerErrors', () => {
+    describe('minPlayers validation', () => {
+      it('should return no error for valid minPlayers', () => {
+        const errors = computePlayerErrors('1', '');
+        expect(errors.minPlayers).toBeUndefined();
+      });
+
+      it('should return error for minPlayers = 0', () => {
+        const errors = computePlayerErrors('0', '');
+        expect(errors.minPlayers).toBe('Le minimum doit être au moins 1');
+      });
+
+      it('should return error for negative minPlayers', () => {
+        const errors = computePlayerErrors('-5', '');
+        expect(errors.minPlayers).toBe('Le minimum doit être au moins 1');
+      });
+
+      it('should return error for minPlayers = -1', () => {
+        const errors = computePlayerErrors('-1', '');
+        expect(errors.minPlayers).toBe('Le minimum doit être au moins 1');
+      });
+
+      it('should return no error for empty string', () => {
+        const errors = computePlayerErrors('', '');
+        expect(errors.minPlayers).toBeUndefined();
+      });
+    });
+
+    describe('maxPlayers validation', () => {
+      it('should return no error for valid maxPlayers', () => {
+        const errors = computePlayerErrors('', '6');
+        expect(errors.maxPlayers).toBeUndefined();
+      });
+
+      it('should return error for maxPlayers = 0', () => {
+        const errors = computePlayerErrors('', '0');
+        expect(errors.maxPlayers).toBe('Le maximum doit être au moins 1');
+      });
+
+      it('should return error for negative maxPlayers', () => {
+        const errors = computePlayerErrors('', '-3');
+        expect(errors.maxPlayers).toBe('Le maximum doit être au moins 1');
+      });
+
+      it('should return error for maxPlayers = -1', () => {
+        const errors = computePlayerErrors('', '-1');
+        expect(errors.maxPlayers).toBe('Le maximum doit être au moins 1');
+      });
+    });
+
+    describe('max >= min validation', () => {
+      it('should return no error when max > min', () => {
+        const errors = computePlayerErrors('2', '4');
+        expect(errors.maxPlayers).toBeUndefined();
+      });
+
+      it('should return no error when max = min', () => {
+        const errors = computePlayerErrors('2', '2');
+        expect(errors.maxPlayers).toBeUndefined();
+      });
+
+      it('should return error when max < min', () => {
+        const errors = computePlayerErrors('4', '2');
+        expect(errors.maxPlayers).toBe('Le maximum doit être supérieur ou égal au minimum');
+      });
+
+      it('should return error when max < min with larger values', () => {
+        const errors = computePlayerErrors('10', '5');
+        expect(errors.maxPlayers).toBe('Le maximum doit être supérieur ou égal au minimum');
+      });
+    });
+
+    describe('combined validations', () => {
+      it('should return both errors for negative values', () => {
+        const errors = computePlayerErrors('-1', '-2');
+        expect(errors.minPlayers).toBe('Le minimum doit être au moins 1');
+        expect(errors.maxPlayers).toBe('Le maximum doit être au moins 1');
+      });
+
+      it('should return only minPlayers error when min is negative and max is valid', () => {
+        const errors = computePlayerErrors('-1', '4');
+        expect(errors.minPlayers).toBe('Le minimum doit être au moins 1');
+        expect(errors.maxPlayers).toBeUndefined();
+      });
+
+      it('should return only maxPlayers error when max is negative and min is valid', () => {
+        const errors = computePlayerErrors('2', '-1');
+        expect(errors.minPlayers).toBeUndefined();
+        expect(errors.maxPlayers).toBe('Le maximum doit être au moins 1');
+      });
+
+      it('should return no errors for valid player counts', () => {
+        const errors = computePlayerErrors('2', '6');
+        expect(Object.keys(errors)).toHaveLength(0);
+      });
+
+      it('should return no errors for single player game', () => {
+        const errors = computePlayerErrors('1', '1');
+        expect(Object.keys(errors)).toHaveLength(0);
+      });
+    });
+  });
+});
