@@ -40,22 +40,38 @@ function Dropdown({ label, value, onChange, options, placeholder, isModified = f
   );
 }
 
-// Award list component with change indicator
-function AwardList({ awards, onChange, isModified = false }) {
-  const [newAwardName, setNewAwardName] = useState('');
-  const [newAwardYear, setNewAwardYear] = useState('');
+// Award list component with dropdown and custom input
+function AwardList({ awards, onChange, isModified = false, awardOptions }) {
+  const [selectedAward, setSelectedAward] = useState('');
+  const [customAwardName, setCustomAwardName] = useState('');
+  const [awardYear, setAwardYear] = useState('');
+  const [showCustomInput, setShowCustomInput] = useState(false);
+
+  const handleAwardSelect = (value) => {
+    setSelectedAward(value);
+    if (value === 'Other') {
+      setShowCustomInput(true);
+    } else {
+      setShowCustomInput(false);
+      setCustomAwardName('');
+    }
+  };
 
   const addAward = () => {
-    if (!newAwardName.trim()) return;
+    const awardName = showCustomInput ? customAwardName.trim() : selectedAward;
+    if (!awardName) return;
     
-    const award = { name: newAwardName.trim() };
-    if (newAwardYear) {
-      award.year = parseInt(newAwardYear);
+    const award = { name: awardName };
+    if (awardYear) {
+      award.year = parseInt(awardYear);
     }
     
     onChange([...awards, award]);
-    setNewAwardName('');
-    setNewAwardYear('');
+    // Reset form
+    setSelectedAward('');
+    setCustomAwardName('');
+    setAwardYear('');
+    setShowCustomInput(false);
   };
 
   const removeAward = (index) => {
@@ -68,6 +84,8 @@ function AwardList({ awards, onChange, isModified = false }) {
       addAward();
     }
   };
+
+  const canAdd = showCustomInput ? customAwardName.trim() : selectedAward;
 
   return (
     <div className="space-y-1.5">
@@ -97,34 +115,50 @@ function AwardList({ awards, onChange, isModified = false }) {
         </div>
       )}
       
-      {/* Add new award */}
-      <div className="flex gap-2">
-        <input
-          type="text"
-          value={newAwardName}
-          onChange={(e) => setNewAwardName(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Nom du prix..."
-          className="flex-1 px-3 py-2 rounded-lg border border-border bg-card text-body focus:outline-none focus:border-primary transition-colors"
-        />
-        <input
-          type="number"
-          value={newAwardYear}
-          onChange={(e) => setNewAwardYear(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Année"
-          min="1900"
-          max="2100"
-          className="w-24 px-3 py-2 rounded-lg border border-border bg-card text-body focus:outline-none focus:border-primary transition-colors"
-        />
-        <button
-          type="button"
-          onClick={addAward}
-          disabled={!newAwardName.trim()}
-          className="px-3 py-2 rounded-lg bg-primary text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-colors"
-        >
-          +
-        </button>
+      {/* Add new award - dropdown */}
+      <div className="space-y-2">
+        <div className="flex gap-2">
+          <select
+            value={selectedAward}
+            onChange={(e) => handleAwardSelect(e.target.value)}
+            className="flex-1 px-3 py-2 rounded-lg border border-border bg-card text-body focus:outline-none focus:border-primary transition-colors"
+          >
+            <option value="">Sélectionner un prix...</option>
+            {awardOptions.map(opt => (
+              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            ))}
+          </select>
+          <input
+            type="number"
+            value={awardYear}
+            onChange={(e) => setAwardYear(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Année"
+            min="1900"
+            max="2100"
+            className="w-24 px-3 py-2 rounded-lg border border-border bg-card text-body focus:outline-none focus:border-primary transition-colors"
+          />
+          <button
+            type="button"
+            onClick={addAward}
+            disabled={!canAdd}
+            className="px-3 py-2 rounded-lg bg-primary text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-colors"
+          >
+            +
+          </button>
+        </div>
+        
+        {/* Custom award name input (shown when "Other" is selected) */}
+        {showCustomInput && (
+          <input
+            type="text"
+            value={customAwardName}
+            onChange={(e) => setCustomAwardName(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Nom du prix personnalisé..."
+            className="w-full px-3 py-2 rounded-lg border border-primary/50 bg-card text-body focus:outline-none focus:border-primary transition-colors"
+          />
+        )}
       </div>
     </div>
   );
@@ -332,6 +366,17 @@ const CATEGORY_OPTIONS = [
   { value: 'Coopératif', label: 'Coopératif' },
   { value: 'Famille', label: 'Famille' },
   { value: 'Expert', label: 'Expert' },
+];
+
+// Award options - predefined list of common board game awards
+const AWARD_OPTIONS = [
+  { value: 'Spiel des Jahres', label: 'Spiel des Jahres' },
+  { value: 'Kennerspiel des Jahres', label: 'Kennerspiel des Jahres' },
+  { value: 'Kinderspiel des Jahres', label: 'Kinderspiel des Jahres' },
+  { value: 'As d\'Or', label: 'As d\'Or' },
+  { value: 'Golden Geek', label: 'Golden Geek' },
+  { value: 'Tric Trac d\'Or', label: 'Tric Trac d\'Or' },
+  { value: 'Other', label: 'Autre (préciser)' },
 ];
 
 export default function EditGamePage() {
@@ -731,6 +776,7 @@ export default function EditGamePage() {
                 awards={formData.awards}
                 onChange={(awards) => updateField('awards', awards)}
                 isModified={fieldChanges.awards}
+                awardOptions={AWARD_OPTIONS}
               />
             </Section>
 
