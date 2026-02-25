@@ -169,6 +169,25 @@ When editing an existing game, a sticky action bar appears at the bottom of the 
   - Message: "Voulez-vous abandonner vos modifications ?"
   - Actions: Annuler / Abandonner
 
+### Visual Diff (Edit Mode Only)
+
+When editing an existing game, modified fields are visually highlighted:
+
+- **Border highlight**: Modified fields have a primary color border (2px) with a subtle ring
+- **Label indicator**: A "● modifié" badge appears next to the field label
+- **Background highlight**: For checkbox fields, a light primary background is applied
+
+This applies to all form fields:
+- Text inputs (title, mechanics)
+- Number inputs (min/max players)
+- Textarea (description)
+- Dropdowns (duration, complexity, age)
+- Multi-select (categories)
+- Award list
+- Checkbox (favorite)
+
+The visual diff helps users quickly identify which fields have been modified before saving.
+
 ---
 
 ## ID Generation (Add Mode)
