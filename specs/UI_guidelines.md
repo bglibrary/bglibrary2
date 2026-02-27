@@ -120,6 +120,14 @@ No high-saturation colors.
 - Dark mode is applied by adding `.dark` class to `<html>` element
 - CSS variables are redefined in dark mode for automatic color switching
 
+### Dark Mode Support for Components
+All UI components must support dark mode using CSS variables:
+- **Background colors**: Use `bg-card` instead of `bg-white`
+- **Text colors**: Use `text-text-primary`, `text-text-secondary`, `text-text-muted`
+- **Border colors**: Use `border-border`
+- **Hover states**: Use `hover:bg-cream dark:hover:bg-cream/10` pattern
+- **Confirmation dialogs**: Must use `bg-card` background and proper text/border variables
+
 ---
 
 ## 3.2 Typography
