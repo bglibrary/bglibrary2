@@ -65,7 +65,10 @@ This screen is used to add or update a game. All changes are stored in the sessi
 - **Images** (file upload with metadata)
 
 #### Optional Fields
-- **Awards** (dynamic list: name + year)
+- **Awards** (dropdown with predefined list + custom input option)
+  - Predefined awards: Spiel des Jahres, Kennerspiel des Jahres, As d'Or, etc.
+  - "Other" option allows custom award name input
+  - Year field (optional)
 - **Favorite** (checkbox)
 
 ### Image Upload
