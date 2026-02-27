@@ -125,6 +125,8 @@ When editing an existing game, a sticky action bar appears at the bottom of the 
 
 ### Client-Side Validation
 - All mandatory fields must be filled
+- `minPlayers >= 1` (minimum 1 player)
+- `maxPlayers >= 1` (minimum 1 player)
 - `minPlayers <= maxPlayers`
 - At least one image required
 - Categories and mechanics from controlled vocabularies
