@@ -66,6 +66,37 @@
 - ESLint + Prettier  
 - Tailwind CLI / PostCSS  
 - **No GitHub API libraries required** (replaced by Python script)
+- **serve** (required for static production serving)
+
+---
+
+## npm Scripts
+
+| Command | Purpose | Notes |
+|---------|---------|-------|
+| `npm run dev` | Development server | Uses Next.js dev server with hot reload |
+| `npm run build` | Build static site | Generates `out/` folder with static files |
+| `npm start` | Production preview | Serves `out/` folder using `serve` package |
+
+### Static Export Configuration
+
+The project uses `output: 'export'` in `next.config.js` to generate a fully static site:
+
+```javascript
+// next.config.js
+const nextConfig = {
+  output: 'export',  // Enables static HTML export
+  trailingSlash: true,
+  images: {
+    unoptimized: true,  // Required for static export
+  },
+};
+```
+
+**Important:** 
+- `next start` does NOT work with `output: 'export'` - it requires a server build
+- Use `serve out` instead to preview the static build locally
+- The `serve` package must be installed as a dev dependency
 
 ---
 
