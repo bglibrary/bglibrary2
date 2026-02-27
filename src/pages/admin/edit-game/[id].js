@@ -14,15 +14,22 @@ import { getSessionHistory, ActionType } from '@/admin/SessionHistory';
 import { getAdminGameService } from '@/admin/AdminGameService';
 import AdminHeader from '@/components/admin/AdminHeader';
 
-// Dropdown component
-function Dropdown({ label, value, onChange, options, placeholder }) {
+// Dropdown component with change indicator
+function Dropdown({ label, value, onChange, options, placeholder, isModified = false }) {
   return (
     <div className="space-y-1.5">
-      <label className="block text-meta text-text-secondary font-medium">{label}</label>
+      <label className="block text-meta text-text-secondary font-medium">
+        {label}
+        {isModified && <span className="ml-2 text-primary text-xs">● modifié</span>}
+      </label>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full px-4 py-3 rounded-lg border border-border bg-card text-body focus:outline-none focus:border-primary transition-colors"
+        className={`w-full px-4 py-3 rounded-lg border bg-card text-body focus:outline-none transition-colors ${
+          isModified 
+            ? 'border-primary border-2 ring-1 ring-primary/20' 
+            : 'border-border focus:border-primary'
+        }`}
       >
         <option value="">{placeholder}</option>
         {options.map(opt => (
@@ -33,8 +40,8 @@ function Dropdown({ label, value, onChange, options, placeholder }) {
   );
 }
 
-// Award list component
-function AwardList({ awards, onChange }) {
+// Award list component with change indicator
+function AwardList({ awards, onChange, isModified = false }) {
   const [newAwardName, setNewAwardName] = useState('');
   const [newAwardYear, setNewAwardYear] = useState('');
 
@@ -64,7 +71,10 @@ function AwardList({ awards, onChange }) {
 
   return (
     <div className="space-y-1.5">
-      <label className="block text-meta text-text-secondary font-medium">Prix et récompenses</label>
+      <label className="block text-meta text-text-secondary font-medium">
+        Prix et récompenses
+        {isModified && <span className="ml-2 text-primary text-xs">● modifié</span>}
+      </label>
       
       {/* Existing awards */}
       {awards.length > 0 && (
@@ -120,8 +130,8 @@ function AwardList({ awards, onChange }) {
   );
 }
 
-// Multi-select component for categories
-function MultiSelect({ label, options, selectedValues, onChange, placeholder }) {
+// Multi-select component for categories with change indicator
+function MultiSelect({ label, options, selectedValues, onChange, placeholder, isModified = false }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -150,12 +160,19 @@ function MultiSelect({ label, options, selectedValues, onChange, placeholder }) 
 
   return (
     <div className="space-y-1.5" ref={dropdownRef}>
-      <label className="block text-meta text-text-secondary font-medium">{label}</label>
+      <label className="block text-meta text-text-secondary font-medium">
+        {label}
+        {isModified && <span className="ml-2 text-primary text-xs">● modifié</span>}
+      </label>
       <div className="relative">
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="w-full px-4 py-3 rounded-lg border border-border bg-card text-body focus:outline-none focus:border-primary transition-colors text-left flex items-center justify-between"
+          className={`w-full px-4 py-3 rounded-lg border bg-card text-body focus:outline-none transition-colors text-left flex items-center justify-between ${
+            isModified 
+              ? 'border-primary border-2 ring-1 ring-primary/20' 
+              : 'border-border focus:border-primary'
+          }`}
         >
           <span className={selectedValues.length > 0 ? 'text-text-primary' : 'text-text-muted'}>
             {selectedValues.length > 0 
@@ -216,36 +233,50 @@ function MultiSelect({ label, options, selectedValues, onChange, placeholder }) 
   );
 }
 
-// Input component
-function Input({ label, type = 'text', value, onChange, placeholder, required }) {
+// Input component with change indicator
+function Input({ label, type = 'text', value, onChange, placeholder, required, isModified = false, min, max }) {
   return (
     <div className="space-y-1.5">
       <label className="block text-meta text-text-secondary font-medium">
         {label}
         {required && <span className="text-danger ml-1">*</span>}
+        {isModified && <span className="ml-2 text-primary text-xs">● modifié</span>}
       </label>
       <input
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full px-4 py-3 rounded-lg border border-border bg-card text-body focus:outline-none focus:border-primary transition-colors"
+        min={min}
+        max={max}
+        className={`w-full px-4 py-3 rounded-lg border bg-card text-body focus:outline-none transition-colors ${
+          isModified 
+            ? 'border-primary border-2 ring-1 ring-primary/20' 
+            : 'border-border focus:border-primary'
+        }`}
       />
     </div>
   );
 }
 
-// Textarea component
-function Textarea({ label, value, onChange, placeholder, rows = 4 }) {
+// Textarea component with change indicator
+function Textarea({ label, value, onChange, placeholder, rows = 4, isModified = false }) {
   return (
     <div className="space-y-1.5">
-      <label className="block text-meta text-text-secondary font-medium">{label}</label>
+      <label className="block text-meta text-text-secondary font-medium">
+        {label}
+        {isModified && <span className="ml-2 text-primary text-xs">● modifié</span>}
+      </label>
       <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         rows={rows}
-        className="w-full px-4 py-3 rounded-lg border border-border bg-card text-body focus:outline-none focus:border-primary transition-colors resize-none"
+        className={`w-full px-4 py-3 rounded-lg border bg-card text-body focus:outline-none transition-colors resize-none ${
+          isModified 
+            ? 'border-primary border-2 ring-1 ring-primary/20' 
+            : 'border-border focus:border-primary'
+        }`}
       />
     </div>
   );
@@ -417,6 +448,25 @@ export default function EditGamePage() {
     );
   }, [formData, originalFormData]);
 
+  // Track which individual fields have been modified
+  const fieldChanges = useMemo(() => {
+    if (!originalFormData) return {};
+    
+    return {
+      title: formData.title !== originalFormData.title,
+      description: formData.description !== originalFormData.description,
+      minPlayers: formData.minPlayers !== originalFormData.minPlayers,
+      maxPlayers: formData.maxPlayers !== originalFormData.maxPlayers,
+      playDuration: formData.playDuration !== originalFormData.playDuration,
+      firstPlayComplexity: formData.firstPlayComplexity !== originalFormData.firstPlayComplexity,
+      ageRecommendation: formData.ageRecommendation !== originalFormData.ageRecommendation,
+      categories: JSON.stringify(formData.categories.sort()) !== JSON.stringify(originalFormData.categories.sort()),
+      mechanics: formData.mechanics !== originalFormData.mechanics,
+      awards: JSON.stringify(formData.awards) !== JSON.stringify(originalFormData.awards),
+      favorite: formData.favorite !== originalFormData.favorite,
+    };
+  }, [formData, originalFormData]);
+
   // Observe inline buttons visibility to hide sticky bar when they're visible
   useEffect(() => {
     if (!inlineButtonsRef.current || !hasChanges) return;
@@ -530,6 +580,7 @@ export default function EditGamePage() {
                 onChange={(v) => updateField('title', v)}
                 placeholder="Nom du jeu"
                 required
+                isModified={fieldChanges.title}
               />
               
               <Textarea
@@ -538,6 +589,7 @@ export default function EditGamePage() {
                 onChange={(v) => updateField('description', v)}
                 placeholder="Description courte du jeu..."
                 rows={4}
+                isModified={fieldChanges.description}
               />
             </Section>
 
@@ -551,6 +603,7 @@ export default function EditGamePage() {
                   onChange={(v) => updateField('minPlayers', v)}
                   placeholder="1"
                   required
+                  isModified={fieldChanges.minPlayers}
                 />
                 <Input
                   label="Max joueurs"
@@ -559,6 +612,7 @@ export default function EditGamePage() {
                   onChange={(v) => updateField('maxPlayers', v)}
                   placeholder="6"
                   required
+                  isModified={fieldChanges.maxPlayers}
                 />
               </div>
 
@@ -569,6 +623,7 @@ export default function EditGamePage() {
                   onChange={(v) => updateField('playDuration', v)}
                   options={DURATION_OPTIONS}
                   placeholder="Sélectionner..."
+                  isModified={fieldChanges.playDuration}
                 />
                 <Dropdown
                   label="Complexité"
@@ -576,6 +631,7 @@ export default function EditGamePage() {
                   onChange={(v) => updateField('firstPlayComplexity', v)}
                   options={COMPLEXITY_OPTIONS}
                   placeholder="Sélectionner..."
+                  isModified={fieldChanges.firstPlayComplexity}
                 />
               </div>
 
@@ -585,6 +641,7 @@ export default function EditGamePage() {
                 onChange={(v) => updateField('ageRecommendation', v)}
                 options={AGE_OPTIONS}
                 placeholder="Sélectionner..."
+                isModified={fieldChanges.ageRecommendation}
               />
             </Section>
 
@@ -596,6 +653,7 @@ export default function EditGamePage() {
                 selectedValues={formData.categories}
                 onChange={(values) => updateField('categories', values)}
                 placeholder="Sélectionner les catégories..."
+                isModified={fieldChanges.categories}
               />
 
               <Input
@@ -603,17 +661,19 @@ export default function EditGamePage() {
                 value={formData.mechanics}
                 onChange={(v) => updateField('mechanics', v)}
                 placeholder="Séparer par des virgules: Deck building, Placement, ..."
+                isModified={fieldChanges.mechanics}
               />
 
               <AwardList
                 awards={formData.awards}
                 onChange={(awards) => updateField('awards', awards)}
+                isModified={fieldChanges.awards}
               />
             </Section>
 
             {/* Flags */}
             <Section title="Options">
-              <label className="flex items-center gap-3 cursor-pointer">
+              <label className={`flex items-center gap-3 cursor-pointer p-3 rounded-lg transition-colors ${fieldChanges.favorite ? 'bg-primary/5 border border-primary/20' : ''}`}>
                 <input
                   type="checkbox"
                   checked={formData.favorite}
@@ -623,6 +683,7 @@ export default function EditGamePage() {
                 <span className="text-body text-text-primary">
                   Marquer comme coup de cœur ❤️
                 </span>
+                {fieldChanges.favorite && <span className="ml-auto text-primary text-xs">● modifié</span>}
               </label>
             </Section>
 
