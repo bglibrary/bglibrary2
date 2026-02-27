@@ -69,8 +69,19 @@ Definition:
 - An "Other" option is allowed with free text.
 - The admin is responsible for maintaining the relevance of the enum.
 
-### Categories / Mechanics
-- Categories and mechanics must use predefined values.
-- An "Other" option is allowed.
+### Categories
+- Categories must use predefined values from a controlled vocabulary.
+- Predefined categories: Stratégie, Négociation, Chance, Ambiance, Coopératif, Famille, Expert.
+- An "Other" option is allowed with free text input.
+- Custom values entered via "Other" are stored as-is but are not filterable individually.
+- In filters, "Other" can be selected to find all games with custom categories.
+- The admin decides if a new value should be promoted to the enum.
+
+### Mechanics
+- Mechanics must use predefined values from a controlled vocabulary.
+- Predefined mechanics: Deck building, Placement d'ouvriers, Gestion de main, Lancer de dés, Pioche de tuiles, Enchères, Draft, Contrôle de zone, Course, Coopération, Bluff, Déduction, Push your luck, Majorité, Collection de sets, Échange.
+- An "Other" option is allowed with free text input.
+- Custom values entered via "Other" are stored as-is but are not filterable individually.
+- In filters, "Other" can be selected to find all games with custom mechanics.
 - The admin decides if a new value should be promoted to the enum.
 

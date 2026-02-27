@@ -40,6 +40,39 @@ const SORT_LABELS = {
   [SortMode.FIRST_PLAY_COMPLEXITY_DESC]: 'Complexité ↓',
 };
 
+// Predefined category options (same as in admin editor)
+const CATEGORY_OPTIONS = [
+  { value: 'Stratégie', label: 'Stratégie' },
+  { value: 'Négociation', label: 'Négociation' },
+  { value: 'Chance', label: 'Chance' },
+  { value: 'Ambiance', label: 'Ambiance' },
+  { value: 'Coopératif', label: 'Coopératif' },
+  { value: 'Famille', label: 'Famille' },
+  { value: 'Expert', label: 'Expert' },
+  { value: 'Other', label: 'Autre' },
+];
+
+// Predefined mechanic options (same as in admin editor)
+const MECHANIC_OPTIONS = [
+  { value: 'Deck building', label: 'Deck building' },
+  { value: 'Placement d\'ouvriers', label: 'Placement d\'ouvriers' },
+  { value: 'Gestion de main', label: 'Gestion de main' },
+  { value: 'Lancer de dés', label: 'Lancer de dés' },
+  { value: 'Pioche de tuiles', label: 'Pioche de tuiles' },
+  { value: 'Enchères', label: 'Enchères' },
+  { value: 'Draft', label: 'Draft' },
+  { value: 'Contrôle de zone', label: 'Contrôle de zone' },
+  { value: 'Course', label: 'Course' },
+  { value: 'Coopération', label: 'Coopération' },
+  { value: 'Bluff', label: 'Bluff' },
+  { value: 'Déduction', label: 'Déduction' },
+  { value: 'Push your luck', label: 'Push your luck' },
+  { value: 'Majorité', label: 'Majorité' },
+  { value: 'Collection de sets', label: 'Collection de sets' },
+  { value: 'Échange', label: 'Échange' },
+  { value: 'Other', label: 'Autre' },
+];
+
 // Dropdown component for filter chips
 function FilterDropdown({ label, icon, value, options, onSelect, isActive, multiSelect = false, selectedValues = [] }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -145,22 +178,10 @@ export default function FilterPanel({ filters, onFiltersChange, sortMode, onSort
   const complexityOptions = Object.entries(COMPLEXITY_LABELS).map(([value, label]) => ({ value, label }));
   const sortOptions = Object.entries(SORT_LABELS).map(([value, label]) => ({ value, label }));
 
-  // Extract unique categories and mechanics from games
-  const categoryOptions = useMemo(() => {
-    const allCategories = new Set();
-    games.forEach(game => {
-      game.categories?.forEach(cat => allCategories.add(cat));
-    });
-    return Array.from(allCategories).sort().map(cat => ({ value: cat, label: cat }));
-  }, [games]);
-
-  const mechanicOptions = useMemo(() => {
-    const allMechanics = new Set();
-    games.forEach(game => {
-      game.mechanics?.forEach(mech => allMechanics.add(mech));
-    });
-    return Array.from(allMechanics).sort().map(mech => ({ value: mech, label: mech }));
-  }, [games]);
+  // Use predefined category and mechanic options (controlled vocabulary)
+  // Note: Custom values (entered via "Other") are not filterable individually
+  const categoryOptions = CATEGORY_OPTIONS;
+  const mechanicOptions = MECHANIC_OPTIONS;
 
   const activePlayerBucket = PLAYER_COUNT_BUCKETS.find(b => 
     filters.playerCount?.minPlayers === b.min && filters.playerCount?.maxPlayers === b.max

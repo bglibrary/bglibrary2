@@ -324,10 +324,13 @@ function MechanicsSelect({ selectedValues, onChange, placeholder, isModified = f
   );
 }
 
-// Multi-select component for categories with change indicator
-function MultiSelect({ label, options, selectedValues, onChange, placeholder, isModified = false }) {
+// Categories select component with multi-select and custom input (similar to MechanicsSelect)
+function CategoriesSelect({ selectedValues, onChange, placeholder, isModified = false, options }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [customCategory, setCustomCategory] = useState('');
+  const [showCustomInput, setShowCustomInput] = useState(false);
   const dropdownRef = useRef(null);
+  const customInputRef = useRef(null);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -340,7 +343,20 @@ function MultiSelect({ label, options, selectedValues, onChange, placeholder, is
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Focus custom input when shown
+  useEffect(() => {
+    if (showCustomInput && customInputRef.current) {
+      customInputRef.current.focus();
+    }
+  }, [showCustomInput]);
+
   const toggleOption = (value) => {
+    if (value === 'Other') {
+      setShowCustomInput(true);
+      setIsOpen(false);
+      return;
+    }
+    
     if (selectedValues.includes(value)) {
       onChange(selectedValues.filter(v => v !== value));
     } else {
@@ -352,10 +368,26 @@ function MultiSelect({ label, options, selectedValues, onChange, placeholder, is
     onChange(selectedValues.filter(v => v !== value));
   };
 
+  const addCustomCategory = () => {
+    const trimmed = customCategory.trim();
+    if (trimmed && !selectedValues.includes(trimmed)) {
+      onChange([...selectedValues, trimmed]);
+      setCustomCategory('');
+      setShowCustomInput(false);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      addCustomCategory();
+    }
+  };
+
   return (
     <div className="space-y-1.5" ref={dropdownRef}>
       <label className="block text-meta text-text-secondary font-medium">
-        {label}
+        Catégories
         {isModified && <span className="ml-2 text-primary text-xs">● modifié</span>}
       </label>
       <div className="relative">
@@ -385,9 +417,11 @@ function MultiSelect({ label, options, selectedValues, onChange, placeholder, is
                 type="button"
                 onClick={() => toggleOption(opt.value)}
                 className={`w-full text-left px-4 py-2 text-body transition-colors flex items-center gap-2 ${
-                  selectedValues.includes(opt.value)
+                  opt.value === 'Other' && showCustomInput
                     ? 'bg-primary/10 text-primary'
-                    : 'text-text-primary hover:bg-cream dark:hover:bg-cream/10'
+                    : selectedValues.includes(opt.value)
+                      ? 'bg-primary/10 text-primary'
+                      : 'text-text-primary hover:bg-cream dark:hover:bg-cream/10'
                 }`}
               >
                 <span className="w-4 text-center">
@@ -399,6 +433,29 @@ function MultiSelect({ label, options, selectedValues, onChange, placeholder, is
           </div>
         )}
       </div>
+      
+      {/* Custom category input */}
+      {showCustomInput && (
+        <div className="flex gap-2 mt-2">
+          <input
+            ref={customInputRef}
+            type="text"
+            value={customCategory}
+            onChange={(e) => setCustomCategory(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Nom de la catégorie..."
+            className="flex-1 px-3 py-2 rounded-lg border border-primary/50 bg-card text-body focus:outline-none focus:border-primary transition-colors"
+          />
+          <button
+            type="button"
+            onClick={addCustomCategory}
+            disabled={!customCategory.trim()}
+            className="px-3 py-2 rounded-lg bg-primary text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-colors"
+          >
+            +
+          </button>
+        </div>
+      )}
       
       {/* Selected tags */}
       {selectedValues.length > 0 && (
@@ -517,7 +574,7 @@ const AGE_OPTIONS = [
   { value: '16+', label: '16+ ans' },
 ];
 
-// Category options
+// Category options - predefined list of common board game categories
 const CATEGORY_OPTIONS = [
   { value: 'Stratégie', label: 'Stratégie' },
   { value: 'Négociation', label: 'Négociation' },
@@ -526,6 +583,7 @@ const CATEGORY_OPTIONS = [
   { value: 'Coopératif', label: 'Coopératif' },
   { value: 'Famille', label: 'Famille' },
   { value: 'Expert', label: 'Expert' },
+  { value: 'Other', label: 'Autre (préciser)' },
 ];
 
 // Award options - predefined list of common board game awards
@@ -942,13 +1000,12 @@ export default function EditGamePage() {
 
             {/* Categories */}
             <Section title="Classification">
-              <MultiSelect
-                label="Catégories"
-                options={CATEGORY_OPTIONS}
+              <CategoriesSelect
                 selectedValues={formData.categories}
                 onChange={(values) => updateField('categories', values)}
                 placeholder="Sélectionner les catégories..."
                 isModified={fieldChanges.categories}
+                options={CATEGORY_OPTIONS}
               />
 
               <MechanicsSelect
