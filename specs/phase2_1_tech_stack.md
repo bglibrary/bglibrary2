@@ -98,6 +98,51 @@ const nextConfig = {
 - Use `serve out` instead to preview the static build locally
 - The `serve` package must be installed as a dev dependency
 
+### Dynamic Routes with Static Export
+
+Dynamic routes (e.g., `/admin/edit-game/[id]`) require special handling with `output: 'export'`:
+
+**Problem:** Next.js cannot generate static pages for dynamic routes without knowing all possible paths at build time.
+
+**Solution:** Use `getStaticPaths` + `getStaticProps` to pre-generate pages:
+
+```javascript
+// Example: src/pages/admin/edit-game/[id].js
+import fs from 'fs';
+import path from 'path';
+
+export async function getStaticPaths() {
+  // Read game IDs from index.json at build time
+  const gamesDirectory = path.join(process.cwd(), 'public/data/games');
+  const indexPath = path.join(gamesDirectory, 'index.json');
+  const indexContent = fs.readFileSync(indexPath, 'utf8');
+  const index = JSON.parse(indexContent);
+  
+  return {
+    paths: index.games.map(id => ({ params: { id } })),
+    fallback: false, // 404 for unknown IDs
+  };
+}
+
+export async function getStaticProps({ params }) {
+  return {
+    props: { id: params.id },
+  };
+}
+
+export default function EditGamePage({ id }) {
+  // Component receives id as prop
+  // Data loading happens client-side via useEffect
+}
+```
+
+**Key Points:**
+- Use `fs` module to read files at build time (fetch doesn't work during build)
+- `getStaticPaths` defines which paths to pre-generate
+- `getStaticProps` passes parameters as props to the component
+- `fallback: false` returns 404 for unknown paths
+- When adding new games, rebuild is required to generate their edit pages
+
 ---
 
 ## Rationale Summary

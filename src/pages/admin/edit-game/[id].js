@@ -13,6 +13,8 @@ import { getAllGames, Context } from '@/repository/GameRepository';
 import { getSessionHistory, ActionType } from '@/admin/SessionHistory';
 import { getAdminGameService } from '@/admin/AdminGameService';
 import AdminHeader from '@/components/admin/AdminHeader';
+import fs from 'fs';
+import path from 'path';
 
 // Dropdown component with change indicator
 function Dropdown({ label, value, onChange, options, placeholder, isModified = false }) {
@@ -379,9 +381,46 @@ const AWARD_OPTIONS = [
   { value: 'Other', label: 'Autre (préciser)' },
 ];
 
-export default function EditGamePage() {
+// Static paths for static export - pre-generate pages for all known games
+// Uses fs to read game files at build time (fetch doesn't work during build)
+export async function getStaticPaths() {
+  const gamesDirectory = path.join(process.cwd(), 'public/data/games');
+  
+  // Read the index file to get list of games
+  const indexPath = path.join(gamesDirectory, 'index.json');
+  let gameIds = [];
+  
+  try {
+    const indexContent = fs.readFileSync(indexPath, 'utf8');
+    const index = JSON.parse(indexContent);
+    gameIds = index.games || [];
+  } catch (error) {
+    console.warn('[getStaticPaths] Could not read index.json, scanning directory');
+    // Fallback: scan directory for .json files
+    const files = fs.readdirSync(gamesDirectory);
+    gameIds = files
+      .filter(f => f.endsWith('.json') && f !== 'index.json')
+      .map(f => f.replace('.json', ''));
+  }
+  
+  return {
+    paths: gameIds.map(id => ({ params: { id } })),
+    fallback: false, // 404 for unknown IDs
+  };
+}
+
+// Static props - required alongside getStaticPaths
+export async function getStaticProps({ params }) {
+  // Just return the id, the page will load data client-side
+  return {
+    props: {
+      id: params.id,
+    },
+  };
+}
+
+export default function EditGamePage({ id }) {
   const router = useRouter();
-  const { id } = router.query;
   const sessionHistory = getSessionHistory();
   const adminService = getAdminGameService();
 
