@@ -23,7 +23,7 @@ describe('Edit Game Page - Field Change Detection', () => {
       firstPlayComplexity: formData.firstPlayComplexity !== originalFormData.firstPlayComplexity,
       ageRecommendation: formData.ageRecommendation !== originalFormData.ageRecommendation,
       categories: JSON.stringify(getCategories(formData).sort()) !== JSON.stringify(getCategories(originalFormData).sort()),
-      mechanics: formData.mechanics !== originalFormData.mechanics,
+      mechanics: JSON.stringify((formData.mechanics || []).sort()) !== JSON.stringify((originalFormData.mechanics || []).sort()),
       awards: JSON.stringify(getAwards(formData)) !== JSON.stringify(getAwards(originalFormData)),
       favorite: formData.favorite !== originalFormData.favorite,
     };
@@ -50,7 +50,7 @@ describe('Edit Game Page - Field Change Detection', () => {
         firstPlayComplexity: 'LOW',
         ageRecommendation: '10+',
         categories: ['Stratégie', 'Famille'],
-        mechanics: 'Dice, Cards',
+        mechanics: ['Deck building', 'Draft'],
         awards: [{ name: 'Award 1', year: 2020 }],
         favorite: false,
       };
@@ -161,13 +161,31 @@ describe('Edit Game Page - Field Change Detection', () => {
       expect(result.categories).toBe(true);
     });
 
-    it('should detect mechanics change', () => {
-      const original = { mechanics: 'Dice, Cards' };
-      const modified = { mechanics: 'Dice, Cards, Tiles' };
+    it('should detect mechanics change (added mechanic)', () => {
+      const original = { mechanics: ['Deck building', 'Draft'] };
+      const modified = { mechanics: ['Deck building', 'Draft', 'Bluff'] };
       
       const result = computeFieldChanges(modified, original);
       
       expect(result.mechanics).toBe(true);
+    });
+
+    it('should detect mechanics change (removed mechanic)', () => {
+      const original = { mechanics: ['Deck building', 'Draft'] };
+      const modified = { mechanics: ['Deck building'] };
+      
+      const result = computeFieldChanges(modified, original);
+      
+      expect(result.mechanics).toBe(true);
+    });
+
+    it('should not detect mechanics change for same values different order', () => {
+      const original = { mechanics: ['Deck building', 'Draft'] };
+      const modified = { mechanics: ['Draft', 'Deck building'] };
+      
+      const result = computeFieldChanges(modified, original);
+      
+      expect(result.mechanics).toBe(false);
     });
 
     it('should detect awards change (added award)', () => {
@@ -207,7 +225,7 @@ describe('Edit Game Page - Field Change Detection', () => {
         firstPlayComplexity: 'LOW',
         ageRecommendation: '10+',
         categories: ['Stratégie'],
-        mechanics: 'Dice',
+        mechanics: ['Deck building'],
         awards: [],
         favorite: false,
       };
@@ -221,7 +239,7 @@ describe('Edit Game Page - Field Change Detection', () => {
         firstPlayComplexity: 'LOW', // unchanged
         ageRecommendation: '10+', // unchanged
         categories: ['Stratégie', 'Famille'], // changed
-        mechanics: 'Dice', // unchanged
+        mechanics: ['Deck building'], // unchanged
         awards: [], // unchanged
         favorite: true, // changed
       };
@@ -348,9 +366,9 @@ describe('Edit Game Page - Field Change Detection', () => {
       expect(result.minPlayers).toBe(false);
     });
 
-    it('should detect change from empty string to value', () => {
-      const original = { mechanics: '' };
-      const modified = { mechanics: 'Deck building' };
+    it('should detect change from empty array to array with values', () => {
+      const original = { mechanics: [] };
+      const modified = { mechanics: ['Deck building'] };
       
       const result = computeFieldChanges(modified, original);
       
@@ -658,6 +676,134 @@ describe('Edit Game Page - Award Dropdown', () => {
         expect(otherOption).toBeDefined();
         expect(otherOption.label).toBe('Autre (préciser)');
       });
+    });
+  });
+});
+
+// Tests for Mechanics select functionality
+describe('Edit Game Page - Mechanics Select', () => {
+  // Simulating the MechanicsSelect component logic
+  function processMechanicsToggle(selectedValues, value) {
+    if (selectedValues.includes(value)) {
+      return selectedValues.filter(v => v !== value);
+    } else {
+      return [...selectedValues, value];
+    }
+  }
+
+  function processCustomMechanicAdd(selectedValues, customMechanic) {
+    const trimmed = customMechanic.trim();
+    if (trimmed && !selectedValues.includes(trimmed)) {
+      return [...selectedValues, trimmed];
+    }
+    return selectedValues;
+  }
+
+  // Predefined mechanics options
+  const MECHANICS_OPTIONS = [
+    { value: 'Deck building', label: 'Deck building' },
+    { value: 'Placement d\'ouvriers', label: 'Placement d\'ouvriers' },
+    { value: 'Draft', label: 'Draft' },
+    { value: 'Bluff', label: 'Bluff' },
+    { value: 'Other', label: 'Autre (préciser)' },
+  ];
+
+  describe('processMechanicsToggle', () => {
+    describe('selecting mechanics', () => {
+      it('should add mechanic when not already selected', () => {
+        const result = processMechanicsToggle(['Deck building'], 'Draft');
+        
+        expect(result).toEqual(['Deck building', 'Draft']);
+      });
+
+      it('should add multiple mechanics', () => {
+        let result = processMechanicsToggle([], 'Deck building');
+        result = processMechanicsToggle(result, 'Draft');
+        result = processMechanicsToggle(result, 'Bluff');
+        
+        expect(result).toEqual(['Deck building', 'Draft', 'Bluff']);
+      });
+    });
+
+    describe('deselecting mechanics', () => {
+      it('should remove mechanic when already selected', () => {
+        const result = processMechanicsToggle(['Deck building', 'Draft'], 'Draft');
+        
+        expect(result).toEqual(['Deck building']);
+      });
+
+      it('should remove all mechanics', () => {
+        let result = processMechanicsToggle(['Deck building'], 'Deck building');
+        
+        expect(result).toEqual([]);
+      });
+    });
+  });
+
+  describe('processCustomMechanicAdd', () => {
+    describe('adding custom mechanics', () => {
+      it('should add custom mechanic to empty list', () => {
+        const result = processCustomMechanicAdd([], 'Tile placement');
+        
+        expect(result).toEqual(['Tile placement']);
+      });
+
+      it('should add custom mechanic to existing list', () => {
+        const result = processCustomMechanicAdd(['Deck building'], 'Tile placement');
+        
+        expect(result).toEqual(['Deck building', 'Tile placement']);
+      });
+
+      it('should trim custom mechanic name', () => {
+        const result = processCustomMechanicAdd([], '  Spaced Mechanic  ');
+        
+        expect(result).toEqual(['Spaced Mechanic']);
+      });
+    });
+
+    describe('validation', () => {
+      it('should not add empty custom mechanic', () => {
+        const result = processCustomMechanicAdd(['Deck building'], '');
+        
+        expect(result).toEqual(['Deck building']);
+      });
+
+      it('should not add whitespace-only custom mechanic', () => {
+        const result = processCustomMechanicAdd(['Deck building'], '   ');
+        
+        expect(result).toEqual(['Deck building']);
+      });
+
+      it('should not add duplicate mechanic', () => {
+        const result = processCustomMechanicAdd(['Deck building'], 'Deck building');
+        
+        expect(result).toEqual(['Deck building']);
+      });
+
+      it('should not add duplicate with different case (case sensitive)', () => {
+        const result = processCustomMechanicAdd(['Deck building'], 'DECK BUILDING');
+        
+        // Case sensitive - should add as different
+        expect(result).toEqual(['Deck building', 'DECK BUILDING']);
+      });
+    });
+  });
+
+  describe('mechanics options list', () => {
+    it('should contain common board game mechanics', () => {
+      const mechanicsValues = MECHANICS_OPTIONS.map(o => o.value);
+      
+      expect(mechanicsValues).toContain('Deck building');
+      expect(mechanicsValues).toContain('Placement d\'ouvriers');
+      expect(mechanicsValues).toContain('Draft');
+      expect(mechanicsValues).toContain('Bluff');
+    });
+
+    it('should contain Other option for custom mechanics', () => {
+      const otherOption = MECHANICS_OPTIONS.find(o => o.value === 'Other');
+      
+      expect(otherOption).toBeDefined();
+      expect(otherOption.label).toBe('Autre (préciser)');
     });
   });
 });

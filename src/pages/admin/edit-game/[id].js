@@ -13,8 +13,6 @@ import { getAllGames, Context } from '@/repository/GameRepository';
 import { getSessionHistory, ActionType } from '@/admin/SessionHistory';
 import { getAdminGameService } from '@/admin/AdminGameService';
 import AdminHeader from '@/components/admin/AdminHeader';
-import fs from 'fs';
-import path from 'path';
 
 // Dropdown component with change indicator
 function Dropdown({ label, value, onChange, options, placeholder, isModified = false }) {
@@ -162,6 +160,166 @@ function AwardList({ awards, onChange, isModified = false, awardOptions }) {
           />
         )}
       </div>
+    </div>
+  );
+}
+
+// Mechanics select component with multi-select and custom input
+function MechanicsSelect({ selectedValues, onChange, placeholder, isModified = false, options }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [customMechanic, setCustomMechanic] = useState('');
+  const [showCustomInput, setShowCustomInput] = useState(false);
+  const dropdownRef = useRef(null);
+  const customInputRef = useRef(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Focus custom input when shown
+  useEffect(() => {
+    if (showCustomInput && customInputRef.current) {
+      customInputRef.current.focus();
+    }
+  }, [showCustomInput]);
+
+  const toggleOption = (value) => {
+    if (value === 'Other') {
+      setShowCustomInput(true);
+      setIsOpen(false);
+      return;
+    }
+    
+    if (selectedValues.includes(value)) {
+      onChange(selectedValues.filter(v => v !== value));
+    } else {
+      onChange([...selectedValues, value]);
+    }
+  };
+
+  const removeValue = (value) => {
+    onChange(selectedValues.filter(v => v !== value));
+  };
+
+  const addCustomMechanic = () => {
+    const trimmed = customMechanic.trim();
+    if (trimmed && !selectedValues.includes(trimmed)) {
+      onChange([...selectedValues, trimmed]);
+      setCustomMechanic('');
+      setShowCustomInput(false);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      addCustomMechanic();
+    }
+  };
+
+  return (
+    <div className="space-y-1.5" ref={dropdownRef}>
+      <label className="block text-meta text-text-secondary font-medium">
+        Mécaniques
+        {isModified && <span className="ml-2 text-primary text-xs">● modifié</span>}
+      </label>
+      <div className="relative">
+        <button
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
+          className={`w-full px-4 py-3 rounded-lg border bg-card text-body focus:outline-none transition-colors text-left flex items-center justify-between ${
+            isModified 
+              ? 'border-primary border-2 ring-1 ring-primary/20' 
+              : 'border-border focus:border-primary'
+          }`}
+        >
+          <span className={selectedValues.length > 0 ? 'text-text-primary' : 'text-text-muted'}>
+            {selectedValues.length > 0 
+              ? `${selectedValues.length} sélectionnée${selectedValues.length > 1 ? 's' : ''}`
+              : placeholder
+            }
+          </span>
+          <span className={`text-xs transition-transform ${isOpen ? 'rotate-180' : ''}`}>▼</span>
+        </button>
+
+        {isOpen && (
+          <div className="absolute top-full left-0 right-0 mt-1 bg-card border border-border rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
+            {options.map(opt => (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => toggleOption(opt.value)}
+                className={`w-full text-left px-4 py-2 text-body transition-colors flex items-center gap-2 ${
+                  opt.value === 'Other' && showCustomInput
+                    ? 'bg-primary/10 text-primary'
+                    : selectedValues.includes(opt.value)
+                      ? 'bg-primary/10 text-primary'
+                      : 'text-text-primary hover:bg-cream dark:hover:bg-cream/10'
+                }`}
+              >
+                <span className="w-4 text-center">
+                  {selectedValues.includes(opt.value) ? '✓' : ''}
+                </span>
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+      
+      {/* Custom mechanic input */}
+      {showCustomInput && (
+        <div className="flex gap-2 mt-2">
+          <input
+            ref={customInputRef}
+            type="text"
+            value={customMechanic}
+            onChange={(e) => setCustomMechanic(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Nom de la mécanique..."
+            className="flex-1 px-3 py-2 rounded-lg border border-primary/50 bg-card text-body focus:outline-none focus:border-primary transition-colors"
+          />
+          <button
+            type="button"
+            onClick={addCustomMechanic}
+            disabled={!customMechanic.trim()}
+            className="px-3 py-2 rounded-lg bg-primary text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-colors"
+          >
+            +
+          </button>
+        </div>
+      )}
+      
+      {/* Selected tags */}
+      {selectedValues.length > 0 && (
+        <div className="flex flex-wrap gap-1.5 mt-2">
+          {selectedValues.map(value => {
+            const opt = options.find(o => o.value === value);
+            return (
+              <span
+                key={value}
+                className="inline-flex items-center gap-1 px-2 py-1 bg-primary/10 text-primary rounded-pill text-meta"
+              >
+                {opt?.label || value}
+                <button
+                  type="button"
+                  onClick={() => removeValue(value)}
+                  className="hover:text-danger"
+                >
+                  ×
+                </button>
+              </span>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
@@ -375,52 +533,42 @@ const AWARD_OPTIONS = [
   { value: 'Spiel des Jahres', label: 'Spiel des Jahres' },
   { value: 'Kennerspiel des Jahres', label: 'Kennerspiel des Jahres' },
   { value: 'Kinderspiel des Jahres', label: 'Kinderspiel des Jahres' },
+  { value: 'Deutscher Spiele Preis', label: 'Deutscher Spiele Preis' },
   { value: 'As d\'Or', label: 'As d\'Or' },
+  { value: 'Jeu de l\'Année', label: 'Jeu de l\'Année' },
+  { value: 'Origins Award', label: 'Origins Award' },
   { value: 'Golden Geek', label: 'Golden Geek' },
+  { value: 'International Gamers Award', label: 'International Gamers Award' },
+  { value: 'Mensa Select', label: 'Mensa Select' },
   { value: 'Tric Trac d\'Or', label: 'Tric Trac d\'Or' },
+  { value: 'Jeu de l\'Année Cannes', label: 'Jeu de l\'Année Cannes' },
   { value: 'Other', label: 'Autre (préciser)' },
 ];
 
-// Static paths for static export - pre-generate pages for all known games
-// Uses fs to read game files at build time (fetch doesn't work during build)
-export async function getStaticPaths() {
-  const gamesDirectory = path.join(process.cwd(), 'public/data/games');
-  
-  // Read the index file to get list of games
-  const indexPath = path.join(gamesDirectory, 'index.json');
-  let gameIds = [];
-  
-  try {
-    const indexContent = fs.readFileSync(indexPath, 'utf8');
-    const index = JSON.parse(indexContent);
-    gameIds = index.games || [];
-  } catch (error) {
-    console.warn('[getStaticPaths] Could not read index.json, scanning directory');
-    // Fallback: scan directory for .json files
-    const files = fs.readdirSync(gamesDirectory);
-    gameIds = files
-      .filter(f => f.endsWith('.json') && f !== 'index.json')
-      .map(f => f.replace('.json', ''));
-  }
-  
-  return {
-    paths: gameIds.map(id => ({ params: { id } })),
-    fallback: false, // 404 for unknown IDs
-  };
-}
+// Mechanics options - predefined list of common board game mechanics
+const MECHANICS_OPTIONS = [
+  { value: 'Deck building', label: 'Deck building' },
+  { value: 'Placement d\'ouvriers', label: 'Placement d\'ouvriers' },
+  { value: 'Gestion de main', label: 'Gestion de main' },
+  { value: 'Lancer de dés', label: 'Lancer de dés' },
+  { value: 'Pioche de tuiles', label: 'Pioche de tuiles' },
+  { value: 'Enchères', label: 'Enchères' },
+  { value: 'Draft', label: 'Draft' },
+  { value: 'Contrôle de zone', label: 'Contrôle de zone' },
+  { value: 'Course', label: 'Course' },
+  { value: 'Coopération', label: 'Coopération' },
+  { value: 'Bluff', label: 'Bluff' },
+  { value: 'Déduction', label: 'Déduction' },
+  { value: 'Push your luck', label: 'Push your luck' },
+  { value: 'Majorité', label: 'Majorité' },
+  { value: 'Collection de sets', label: 'Collection de sets' },
+  { value: 'Échange', label: 'Échange' },
+  { value: 'Other', label: 'Autre (préciser)' },
+];
 
-// Static props - required alongside getStaticPaths
-export async function getStaticProps({ params }) {
-  // Just return the id, the page will load data client-side
-  return {
-    props: {
-      id: params.id,
-    },
-  };
-}
-
-export default function EditGamePage({ id }) {
+export default function EditGamePage() {
   const router = useRouter();
+  const { id } = router.query;
   const sessionHistory = getSessionHistory();
   const adminService = getAdminGameService();
 
@@ -440,7 +588,7 @@ export default function EditGamePage({ id }) {
     firstPlayComplexity: '',
     ageRecommendation: '',
     categories: [],
-    mechanics: '',
+    mechanics: [],
     awards: [],
     favorite: false,
   });
@@ -470,7 +618,7 @@ export default function EditGamePage({ id }) {
           firstPlayComplexity: originalGame.firstPlayComplexity || '',
           ageRecommendation: originalGame.ageRecommendation || '',
           categories: originalGame.categories || [],
-          mechanics: (originalGame.mechanics || []).join(', '),
+          mechanics: originalGame.mechanics || [],
           awards: originalGame.awards || [],
           favorite: originalGame.favorite || false,
         };
@@ -494,7 +642,7 @@ export default function EditGamePage({ id }) {
             firstPlayComplexity: foundGame.firstPlayComplexity || '',
             ageRecommendation: foundGame.ageRecommendation || '',
             categories: foundGame.categories || [],
-            mechanics: (foundGame.mechanics || []).join(', '),
+            mechanics: foundGame.mechanics || [],
             awards: foundGame.awards || [],
             favorite: foundGame.favorite || false,
           });
@@ -531,7 +679,7 @@ export default function EditGamePage({ id }) {
       formData.firstPlayComplexity !== originalFormData.firstPlayComplexity ||
       formData.ageRecommendation !== originalFormData.ageRecommendation ||
       JSON.stringify(formData.categories.sort()) !== JSON.stringify(originalFormData.categories.sort()) ||
-      formData.mechanics !== originalFormData.mechanics ||
+      JSON.stringify(formData.mechanics.sort()) !== JSON.stringify(originalFormData.mechanics.sort()) ||
       JSON.stringify(formData.awards) !== JSON.stringify(originalFormData.awards) ||
       formData.favorite !== originalFormData.favorite
     );
@@ -550,7 +698,7 @@ export default function EditGamePage({ id }) {
       firstPlayComplexity: formData.firstPlayComplexity !== originalFormData.firstPlayComplexity,
       ageRecommendation: formData.ageRecommendation !== originalFormData.ageRecommendation,
       categories: JSON.stringify(formData.categories.sort()) !== JSON.stringify(originalFormData.categories.sort()),
-      mechanics: formData.mechanics !== originalFormData.mechanics,
+      mechanics: JSON.stringify(formData.mechanics.sort()) !== JSON.stringify(originalFormData.mechanics.sort()),
       awards: JSON.stringify(formData.awards) !== JSON.stringify(originalFormData.awards),
       favorite: formData.favorite !== originalFormData.favorite,
     };
@@ -661,7 +809,7 @@ export default function EditGamePage({ id }) {
         firstPlayComplexity: formData.firstPlayComplexity || FirstPlayComplexity.MEDIUM,
         ageRecommendation: formData.ageRecommendation || '10+',
         categories: formData.categories,
-        mechanics: formData.mechanics ? formData.mechanics.split(',').map(m => m.trim()) : [],
+        mechanics: formData.mechanics,
         awards: formData.awards,
         favorite: formData.favorite,
       };
@@ -803,12 +951,12 @@ export default function EditGamePage({ id }) {
                 isModified={fieldChanges.categories}
               />
 
-              <Input
-                label="Mécaniques"
-                value={formData.mechanics}
-                onChange={(v) => updateField('mechanics', v)}
-                placeholder="Séparer par des virgules: Deck building, Placement, ..."
+              <MechanicsSelect
+                selectedValues={formData.mechanics}
+                onChange={(values) => updateField('mechanics', values)}
+                placeholder="Sélectionner les mécaniques..."
                 isModified={fieldChanges.mechanics}
+                options={MECHANICS_OPTIONS}
               />
 
               <AwardList
