@@ -55,13 +55,13 @@ export default function GameDetailModal({ game, onClose }) {
       className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
       onClick={handleBackdropClick}
     >
-      <div className="bg-white rounded-modal shadow-modal max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-card rounded-modal shadow-modal max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         {/* Header with image */}
         <div className="relative">
           {/* Close button */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 w-8 h-8 bg-white/80 rounded-full flex items-center justify-center hover:bg-white transition-colors z-10"
+            className="absolute top-4 right-4 w-8 h-8 bg-card/80 rounded-full flex items-center justify-center hover:bg-card transition-colors z-10"
             aria-label="Fermer"
           >
             ✕
@@ -78,7 +78,7 @@ export default function GameDetailModal({ game, onClose }) {
 
           {/* Favorite badge */}
           {game.favorite && (
-            <span className="absolute bottom-4 left-4 bg-white/90 px-3 py-1 rounded-pill text-favorite">
+            <span className="absolute bottom-4 left-4 bg-card/90 px-3 py-1 rounded-pill text-favorite">
               ❤️ Favori
             </span>
           )}
