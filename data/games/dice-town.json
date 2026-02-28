@@ -1,0 +1,27 @@
+{
+  "id": "dice-town",
+  "title": "Dice Town",
+  "description": "Un jeu de dés dans le Far West où les joueurs tentent d'accumuler le plus de points de victoire à l'aide de propriétés ou de pépites d'or.'",
+  "minPlayers": 2,
+  "maxPlayers": 5,
+  "playDuration": "MEDIUM",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "MEDIUM",
+  "categories": [
+    "Chance",
+    "Gestion",
+    "Jeu de plateau",
+    "Jeu de dés"
+  ],
+  "mechanics": [],
+  "awards": [],
+  "favorite": false,
+  "archived": false,
+  "images": [
+    {
+      "id": "dice-town-main",
+      "source": "import",
+      "attribution": ""
+    }
+  ]
+}
