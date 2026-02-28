@@ -1,0 +1,27 @@
+{
+  "id": "sleeping-queens",
+  "title": "Sleeping Queens",
+  "description": "Jeu de cartes où le but est de réveiller le plus de reines possible en collectionnant des cartes et en les utilisant pour les réveiller.",
+  "minPlayers": 2,
+  "maxPlayers": 5,
+  "playDuration": "SHORT",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "LOW",
+  "categories": [
+    "Mémoire",
+    "Chance",
+    "Affrontement",
+    "Jeu de cartes"
+  ],
+  "mechanics": [],
+  "awards": [],
+  "favorite": false,
+  "archived": false,
+  "images": [
+    {
+      "id": "sleeping-queens-main",
+      "source": "import",
+      "attribution": ""
+    }
+  ]
+}
