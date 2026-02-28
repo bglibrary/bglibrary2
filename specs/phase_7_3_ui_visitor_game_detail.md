@@ -7,6 +7,23 @@ This screen displays detailed information for a single game.
 
 ---
 
+## Responsive Layout
+
+The modal adapts its layout based on screen size:
+
+### Mobile (default)
+- **Vertical layout**: Image on top, content below
+- Full-width modal
+- Scrollable content area
+
+### Tablet/Desktop (md breakpoint and above)
+- **Landscape layout**: Image on left (40% width), content on right (60% width)
+- Wider modal (`max-w-4xl`)
+- Only the content section scrolls (image remains fixed)
+- Reduces need for scrolling on larger screens
+
+---
+
 ## Data Sources
 
 - GameRepository
@@ -41,7 +58,7 @@ The Game Detail Modal fully supports dark mode by using CSS variables defined in
 - **Favorite badge**: Uses `bg-card/90` class
 - **Text colors**: Uses `text-text-primary` and `text-text-secondary` classes
 - **Borders**: Uses `border-border` class
-- **Chips (categories/mechanics)**: Uses `chip` class with `bg-card` background
+- **Chips (categories/mechanics)**: Uses `chip` class with dedicated `--color-chip` background for proper contrast in both modes
 
 All components automatically switch colors when the `.dark` class is applied to the HTML element.
 

@@ -3,6 +3,10 @@
  * 
  * Modal displaying full game details.
  * As specified in specs/UI_guidelines.md and specs/phase_7_3_ui_visitor_game_detail.md
+ * 
+ * Layout:
+ * - Mobile: Vertical (image on top, content below)
+ * - Tablet/Desktop: Landscape (image on left, content on right)
  */
 
 import { useEffect, useCallback } from 'react';
@@ -55,10 +59,12 @@ export default function GameDetailModal({ game, onClose }) {
       className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
       onClick={handleBackdropClick}
     >
-      <div className="bg-card rounded-modal shadow-modal max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        {/* Header with image */}
-        <div className="relative">
-          {/* Close button */}
+      {/* Modal container - responsive layout */}
+      <div className="bg-card rounded-modal shadow-modal w-full max-h-[90vh] overflow-hidden flex flex-col md:flex-row md:max-w-4xl">
+        
+        {/* Left side: Image section */}
+        <div className="relative md:w-2/5 md:flex-shrink-0">
+          {/* Close button - positioned differently on mobile vs desktop */}
           <button
             onClick={onClose}
             className="absolute top-4 right-4 w-8 h-8 bg-card/80 rounded-full flex items-center justify-center hover:bg-card transition-colors z-10"
@@ -68,11 +74,11 @@ export default function GameDetailModal({ game, onClose }) {
           </button>
 
           {/* Image - square format with object-contain */}
-          <div className="p-4 bg-border rounded-t-modal">
+          <div className="p-4 bg-border rounded-t-modal md:rounded-l-modal md:rounded-t-none h-full flex items-center justify-center">
             <GameImage 
               imageId={game.images && game.images.length > 0 ? game.images[0].id : null}
               title={game.title}
-              className="max-w-md mx-auto"
+              className="max-w-md mx-auto md:max-w-full"
             />
           </div>
 
@@ -84,8 +90,8 @@ export default function GameDetailModal({ game, onClose }) {
           )}
         </div>
 
-        {/* Content */}
-        <div className="p-6">
+        {/* Right side: Content section */}
+        <div className="flex-1 overflow-y-auto p-6">
           {/* Title */}
           <h2 className="text-modal-title text-text-primary mb-4">
             {game.title}
