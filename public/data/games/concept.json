@@ -1,0 +1,25 @@
+{
+  "id": "concept",
+  "title": "Concept",
+  "description": "Faites deviner des mots ou des expressions en utilisant des icônes universelles pour créer des concepts et sous-concepts.",
+  "minPlayers": 4,
+  "maxPlayers": 12,
+  "playDuration": "SHORT",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "MEDIUM",
+  "categories": [
+    "Devinette",
+    "Jeu de plateau"
+  ],
+  "mechanics": [],
+  "awards": [],
+  "favorite": false,
+  "archived": false,
+  "images": [
+    {
+      "id": "concept-main",
+      "source": "import",
+      "attribution": ""
+    }
+  ]
+}
