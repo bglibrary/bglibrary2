@@ -1,0 +1,25 @@
+{
+  "id": "les-piliers-de-la-terre",
+  "title": "Les Piliers de la Terre",
+  "description": "Participez à la construction de la cathédrale de Kingsbridge et utilisez vos ressources pour être le joueur le plus influent.",
+  "minPlayers": 2,
+  "maxPlayers": 4,
+  "playDuration": "LONG",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "MEDIUM",
+  "categories": [
+    "Gestion",
+    "Jeu de plateau"
+  ],
+  "mechanics": [],
+  "awards": [],
+  "favorite": false,
+  "archived": false,
+  "images": [
+    {
+      "id": "les-piliers-de-la-terre-main",
+      "source": "import",
+      "attribution": ""
+    }
+  ]
+}
