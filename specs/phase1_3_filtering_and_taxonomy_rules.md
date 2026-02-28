@@ -71,7 +71,7 @@ Definition:
 
 ### Categories
 - Categories must use predefined values from a controlled vocabulary.
-- Predefined categories: Stratégie, Négociation, Chance, Ambiance, Coopératif, Famille, Expert.
+- Predefined categories: Bluff, Coopératif, Affrontement, Mémoire, Chance, Rapidité, Devinette, Observation, Ambiance, Gestion, Aventure, Plis, Stratégie, Jeu de cartes, Jeu de plateau, Jeu de dés.
 - An "Other" option is allowed with free text input.
 - Custom values entered via "Other" are stored as-is but are not filterable individually.
 - In filters, "Other" can be selected to find all games with custom categories.
