@@ -1,0 +1,25 @@
+{
+  "id": "carcassonne-mers-du-sud",
+  "title": "Carcassonne : Mers du Sud",
+  "description": "Marquer le plus de points en plaçant astucieusement ses tuiles et en créant des réseaux de bateaux et d'îles.",
+  "minPlayers": 2,
+  "maxPlayers": 5,
+  "playDuration": "MEDIUM",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "MEDIUM",
+  "categories": [
+    "Gestion",
+    "Jeu de plateau"
+  ],
+  "mechanics": [],
+  "awards": [],
+  "favorite": false,
+  "archived": false,
+  "images": [
+    {
+      "id": "carcassonne-mers-du-sud-main",
+      "source": "import",
+      "attribution": ""
+    }
+  ]
+}
