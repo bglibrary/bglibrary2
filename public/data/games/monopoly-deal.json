@@ -1,0 +1,25 @@
+{
+  "id": "monopoly-deal",
+  "title": "Monopoly Deal",
+  "description": "Obtenez des propriétés, des collections et des devises pour être le premier à atteindre 3 ensembles complets dans ce jeu de cartes tirés du célèbre jeu de plateau.",
+  "minPlayers": 2,
+  "maxPlayers": 5,
+  "playDuration": "SHORT",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "MEDIUM",
+  "categories": [
+    "Chance",
+    "Jeu de cartes"
+  ],
+  "mechanics": [],
+  "awards": [],
+  "favorite": false,
+  "archived": false,
+  "images": [
+    {
+      "id": "monopoly-deal-main",
+      "source": "import",
+      "attribution": ""
+    }
+  ]
+}
