@@ -1,0 +1,25 @@
+{
+  "id": "codenames",
+  "title": "Codenames",
+  "description": "Un jeu d'association d'idées où les joueurs doivent deviner les mots qui correspondent à leur équipe sans tomber dans les pièges des mots des autres équipes.",
+  "minPlayers": 2,
+  "maxPlayers": 8,
+  "playDuration": "SHORT",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "LOW",
+  "categories": [
+    "Devinette",
+    "Jeu de cartes"
+  ],
+  "mechanics": [],
+  "awards": [],
+  "favorite": false,
+  "archived": false,
+  "images": [
+    {
+      "id": "codenames-main",
+      "source": "import",
+      "attribution": ""
+    }
+  ]
+}
