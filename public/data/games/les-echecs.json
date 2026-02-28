@@ -1,0 +1,25 @@
+{
+  "id": "les-echecs",
+  "title": "Les Échecs",
+  "description": "Dans ce jeu de plateau classique, chaque joueur dispose de seize pièces qu'il doit déplacer sur un plateau de 64 cases. Le but est de mettre en échec et mat le roi adverse en utilisant une combinaison de mouvements de pièces.",
+  "minPlayers": 2,
+  "maxPlayers": 2,
+  "playDuration": "MEDIUM",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "MEDIUM",
+  "categories": [
+    "Affrontement",
+    "Jeu de plateau"
+  ],
+  "mechanics": [],
+  "awards": [],
+  "favorite": false,
+  "archived": false,
+  "images": [
+    {
+      "id": "les-echecs-main",
+      "source": "import",
+      "attribution": ""
+    }
+  ]
+}
