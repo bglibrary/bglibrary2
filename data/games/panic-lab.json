@@ -1,0 +1,26 @@
+{
+  "id": "panic-lab",
+  "title": "Panic Lab",
+  "description": "Trouvez le bon microbes, avant les autres, dans un laboratoire en perpétuel mutation.",
+  "minPlayers": 2,
+  "maxPlayers": 8,
+  "playDuration": "SHORT",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "LOW",
+  "categories": [
+    "Rapidité",
+    "Observation",
+    "Jeu de cartes"
+  ],
+  "mechanics": [],
+  "awards": [],
+  "favorite": false,
+  "archived": false,
+  "images": [
+    {
+      "id": "panic-lab-main",
+      "source": "import",
+      "attribution": ""
+    }
+  ]
+}
