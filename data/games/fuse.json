@@ -1,0 +1,27 @@
+{
+  "id": "fuse",
+  "title": "Fuse",
+  "description": "Travaillez en équipe pour désamorcer des bombes dans un temps limité à l'aide de combinaison de dés.",
+  "minPlayers": 1,
+  "maxPlayers": 5,
+  "playDuration": "SHORT",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "LOW",
+  "categories": [
+    "Rapidité",
+    "Stratégie",
+    "Jeu de dés",
+    "Coopératif"
+  ],
+  "mechanics": [],
+  "awards": [],
+  "favorite": false,
+  "archived": false,
+  "images": [
+    {
+      "id": "fuse-main",
+      "source": "import",
+      "attribution": ""
+    }
+  ]
+}
