@@ -1,0 +1,27 @@
+{
+  "id": "the-crew-mission-sous-marine",
+  "title": "The Crew: mission sous-marine",
+  "description": "Un jeu de plis où chacun doit accomplir ses missions en remportant des cartes spécifiques dans ses plis.",
+  "minPlayers": 2,
+  "maxPlayers": 5,
+  "playDuration": "SHORT",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "MEDIUM",
+  "categories": [
+    "Stratégie",
+    "Plis",
+    "Jeu de cartes",
+    "Coopératif"
+  ],
+  "mechanics": [],
+  "awards": [],
+  "favorite": false,
+  "archived": false,
+  "images": [
+    {
+      "id": "the-crew-mission-sous-marine-main",
+      "source": "import",
+      "attribution": ""
+    }
+  ]
+}
