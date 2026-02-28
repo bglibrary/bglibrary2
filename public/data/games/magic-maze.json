@@ -1,0 +1,26 @@
+{
+  "id": "magic-maze",
+  "title": "Magic Maze",
+  "description": "Aidez des personnages à voler des objets dans un centre commercial. Coordonnez-vous bien car le temps presse !",
+  "minPlayers": 1,
+  "maxPlayers": 8,
+  "playDuration": "SHORT",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "MEDIUM",
+  "categories": [
+    "Rapidité",
+    "Stratégie",
+    "Jeu de plateau"
+  ],
+  "mechanics": [],
+  "awards": [],
+  "favorite": false,
+  "archived": false,
+  "images": [
+    {
+      "id": "magic-maze-main",
+      "source": "import",
+      "attribution": ""
+    }
+  ]
+}
