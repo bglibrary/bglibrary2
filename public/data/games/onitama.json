@@ -1,0 +1,25 @@
+{
+  "id": "onitama",
+  "title": "Onitama",
+  "description": "Jeu de stratégie pour 2 joueurs où chaque joueur contrôle une armée de pions et doit capturer le pion du maître adverse.",
+  "minPlayers": 2,
+  "maxPlayers": 2,
+  "playDuration": "SHORT",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "LOW",
+  "categories": [
+    "Affrontement",
+    "Jeu de plateau"
+  ],
+  "mechanics": [],
+  "awards": [],
+  "favorite": false,
+  "archived": false,
+  "images": [
+    {
+      "id": "onitama-main",
+      "source": "import",
+      "attribution": ""
+    }
+  ]
+}
