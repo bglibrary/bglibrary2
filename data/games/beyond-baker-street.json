@@ -1,0 +1,26 @@
+{
+  "id": "beyond-baker-street",
+  "title": "Beyond Baker Street",
+  "description": "Travaillez ensemble pour accumuler les indices et battre le fameux Sherlock Holmes !",
+  "minPlayers": 2,
+  "maxPlayers": 4,
+  "playDuration": "MEDIUM",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "MEDIUM",
+  "categories": [
+    "Stratégie",
+    "Jeu de cartes",
+    "Coopératif"
+  ],
+  "mechanics": [],
+  "awards": [],
+  "favorite": false,
+  "archived": false,
+  "images": [
+    {
+      "id": "beyond-baker-street-main",
+      "source": "import",
+      "attribution": ""
+    }
+  ]
+}
