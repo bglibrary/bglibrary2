@@ -1,0 +1,25 @@
+{
+  "id": "evo",
+  "title": "Evo",
+  "description": "Faites évoluer votre espèce de dinosaures pour survivre et dominer l'écosystème.",
+  "minPlayers": 2,
+  "maxPlayers": 5,
+  "playDuration": "LONG",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "MEDIUM",
+  "categories": [
+    "Gestion",
+    "Jeu de plateau"
+  ],
+  "mechanics": [],
+  "awards": [],
+  "favorite": false,
+  "archived": false,
+  "images": [
+    {
+      "id": "evo-main",
+      "source": "import",
+      "attribution": ""
+    }
+  ]
+}
