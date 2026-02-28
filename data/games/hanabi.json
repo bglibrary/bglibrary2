@@ -1,0 +1,26 @@
+{
+  "id": "hanabi",
+  "title": "Hanabi",
+  "description": "Poser vos cartes pour former le plus beau feu d'artifice ! Cependant seul les autres peuvent voir votre jeu.",
+  "minPlayers": 2,
+  "maxPlayers": 5,
+  "playDuration": "SHORT",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "MEDIUM",
+  "categories": [
+    "Stratégie",
+    "Mémoire",
+    "Jeu de cartes"
+  ],
+  "mechanics": [],
+  "awards": [],
+  "favorite": false,
+  "archived": false,
+  "images": [
+    {
+      "id": "hanabi-main",
+      "source": "import",
+      "attribution": ""
+    }
+  ]
+}
