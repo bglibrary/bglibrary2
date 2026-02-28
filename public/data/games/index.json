@@ -1,3 +1,1509 @@
-{
-  "games": ["catan", "azul", "archived-game"]
-}
+[
+  {
+    "id": "catane",
+    "title": "Catane",
+    "minPlayers": 3,
+    "maxPlayers": 4,
+    "playDuration": "LONG",
+    "categories": [
+      "Gestion",
+      "Jeu de plateau"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "catane-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "andor-entrez-dans-la-legende",
+    "title": "Andor: Entrez dans la légende",
+    "minPlayers": 2,
+    "maxPlayers": 4,
+    "playDuration": "LONG",
+    "categories": [
+      "Aventure",
+      "Stratégie",
+      "Jeu de plateau",
+      "Coopératif"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "andor-entrez-dans-la-legende-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "andor-2-le-voyage-vers-le-nord",
+    "title": "Andor 2 : Le Voyage vers le Nord",
+    "minPlayers": 2,
+    "maxPlayers": 4,
+    "playDuration": "LONG",
+    "categories": [
+      "Aventure",
+      "Stratégie",
+      "Jeu de plateau",
+      "Coopératif"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "andor-2-le-voyage-vers-le-nord-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "andor-3-la-derniere-espoir",
+    "title": "Andor 3 : La Dernière Espoir",
+    "minPlayers": 2,
+    "maxPlayers": 4,
+    "playDuration": "LONG",
+    "categories": [
+      "Aventure",
+      "Stratégie",
+      "Jeu de plateau",
+      "Coopératif"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "andor-3-la-derniere-espoir-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "the-crew-en-quete-de-la-neuvieme-planete",
+    "title": "The Crew: en quête de la neuvième planète",
+    "minPlayers": 2,
+    "maxPlayers": 5,
+    "playDuration": "SHORT",
+    "categories": [
+      "Stratégie",
+      "Plis",
+      "Jeu de cartes",
+      "Coopératif"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "the-crew-en-quete-de-la-neuvieme-planete-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "the-crew-mission-sous-marine",
+    "title": "The Crew: mission sous-marine",
+    "minPlayers": 2,
+    "maxPlayers": 5,
+    "playDuration": "SHORT",
+    "categories": [
+      "Stratégie",
+      "Plis",
+      "Jeu de cartes",
+      "Coopératif"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "the-crew-mission-sous-marine-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "dobble",
+    "title": "Dobble",
+    "minPlayers": 2,
+    "maxPlayers": 8,
+    "playDuration": "SHORT",
+    "categories": [
+      "Rapidité",
+      "Observation",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "dobble-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "6-qui-prend",
+    "title": "6 qui prend",
+    "minPlayers": 2,
+    "maxPlayers": 10,
+    "playDuration": "MEDIUM",
+    "categories": [
+      "Stratégie",
+      "Chance",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "6-qui-prend-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "welcome-to-your-new-home",
+    "title": "Welcome to your new home",
+    "minPlayers": 1,
+    "maxPlayers": 100,
+    "playDuration": "SHORT",
+    "categories": [
+      "Stratégie",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "welcome-to-your-new-home-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "bang",
+    "title": "Bang",
+    "minPlayers": 4,
+    "maxPlayers": 7,
+    "playDuration": "MEDIUM",
+    "categories": [
+      "Bluff",
+      "Affrontement",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "bang-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "not-alone",
+    "title": "Not Alone",
+    "minPlayers": 2,
+    "maxPlayers": 7,
+    "playDuration": "MEDIUM",
+    "categories": [
+      "Bluff",
+      "Affrontement",
+      "Jeu de plateau",
+      "Jeu de cartes",
+      "Coopératif"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "not-alone-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "la-guerre-des-moutons",
+    "title": "La guerre des moutons",
+    "minPlayers": 2,
+    "maxPlayers": 4,
+    "playDuration": "MEDIUM",
+    "categories": [
+      "Gestion",
+      "Jeu de plateau"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "la-guerre-des-moutons-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "beyond-baker-street",
+    "title": "Beyond Baker Street",
+    "minPlayers": 2,
+    "maxPlayers": 4,
+    "playDuration": "MEDIUM",
+    "categories": [
+      "Stratégie",
+      "Jeu de cartes",
+      "Coopératif"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "beyond-baker-street-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "mysterium-park",
+    "title": "Mysterium Park",
+    "minPlayers": 2,
+    "maxPlayers": 6,
+    "playDuration": "MEDIUM",
+    "categories": [
+      "Devinette",
+      "Observation",
+      "Jeu de cartes",
+      "Coopératif"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "mysterium-park-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "codenames",
+    "title": "Codenames",
+    "minPlayers": 2,
+    "maxPlayers": 8,
+    "playDuration": "SHORT",
+    "categories": [
+      "Devinette",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "codenames-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "monopoly-deal",
+    "title": "Monopoly Deal",
+    "minPlayers": 2,
+    "maxPlayers": 5,
+    "playDuration": "SHORT",
+    "categories": [
+      "Chance",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "monopoly-deal-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "dobble-star-wars",
+    "title": "Dobble Star Wars",
+    "minPlayers": 2,
+    "maxPlayers": 8,
+    "playDuration": "SHORT",
+    "categories": [
+      "Rapidité",
+      "Observation",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "dobble-star-wars-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "skyjo",
+    "title": "Skyjo",
+    "minPlayers": 2,
+    "maxPlayers": 8,
+    "playDuration": "SHORT",
+    "categories": [
+      "Chance",
+      "Stratégie",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "skyjo-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "jaipur",
+    "title": "Jaipur",
+    "minPlayers": 2,
+    "maxPlayers": 2,
+    "playDuration": "MEDIUM",
+    "categories": [
+      "Gestion",
+      "Jeu de plateau"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "jaipur-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "jungle-speed",
+    "title": "Jungle Speed",
+    "minPlayers": 3,
+    "maxPlayers": 8,
+    "playDuration": "SHORT",
+    "categories": [
+      "Rapidité",
+      "Observation",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "jungle-speed-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "fuse",
+    "title": "Fuse",
+    "minPlayers": 1,
+    "maxPlayers": 5,
+    "playDuration": "SHORT",
+    "categories": [
+      "Rapidité",
+      "Stratégie",
+      "Jeu de dés",
+      "Coopératif"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "fuse-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "mr-jack",
+    "title": "Mr Jack",
+    "minPlayers": 2,
+    "maxPlayers": 2,
+    "playDuration": "MEDIUM",
+    "categories": [
+      "Stratégie",
+      "Affrontement",
+      "Jeu de plateau"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "mr-jack-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "splendor",
+    "title": "Splendor",
+    "minPlayers": 2,
+    "maxPlayers": 4,
+    "playDuration": "SHORT",
+    "categories": [
+      "Gestion",
+      "Jeu de plateau"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "splendor-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "dice-town",
+    "title": "Dice Town",
+    "minPlayers": 2,
+    "maxPlayers": 5,
+    "playDuration": "MEDIUM",
+    "categories": [
+      "Chance",
+      "Gestion",
+      "Jeu de plateau",
+      "Jeu de dés"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "dice-town-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "paleo",
+    "title": "Paléo",
+    "minPlayers": 2,
+    "maxPlayers": 4,
+    "playDuration": "MEDIUM",
+    "categories": [
+      "Gestion",
+      "Jeu de cartes",
+      "Coopératif"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "paleo-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "agricola",
+    "title": "Agricola",
+    "minPlayers": 1,
+    "maxPlayers": 4,
+    "playDuration": "LONG",
+    "categories": [
+      "Gestion",
+      "Jeu de plateau"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "agricola-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "notre-dame",
+    "title": "Notre Dame",
+    "minPlayers": 2,
+    "maxPlayers": 5,
+    "playDuration": "LONG",
+    "categories": [
+      "Gestion",
+      "Jeu de plateau"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "notre-dame-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "thurn-taxis",
+    "title": "Thurn & Taxis",
+    "minPlayers": 2,
+    "maxPlayers": 4,
+    "playDuration": "LONG",
+    "categories": [
+      "Gestion",
+      "Jeu de plateau"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "thurn-taxis-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "concept",
+    "title": "Concept",
+    "minPlayers": 4,
+    "maxPlayers": 12,
+    "playDuration": "SHORT",
+    "categories": [
+      "Devinette",
+      "Jeu de plateau"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "concept-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "7-wonders",
+    "title": "7 Wonders",
+    "minPlayers": 3,
+    "maxPlayers": 7,
+    "playDuration": "MEDIUM",
+    "categories": [
+      "Gestion",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "7-wonders-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "evo",
+    "title": "Evo",
+    "minPlayers": 2,
+    "maxPlayers": 5,
+    "playDuration": "LONG",
+    "categories": [
+      "Gestion",
+      "Jeu de plateau"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "evo-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "les-piliers-de-la-terre",
+    "title": "Les Piliers de la Terre",
+    "minPlayers": 2,
+    "maxPlayers": 4,
+    "playDuration": "LONG",
+    "categories": [
+      "Gestion",
+      "Jeu de plateau"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "les-piliers-de-la-terre-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "mysterium",
+    "title": "Mysterium",
+    "minPlayers": 2,
+    "maxPlayers": 7,
+    "playDuration": "MEDIUM",
+    "categories": [
+      "Devinette",
+      "Observation",
+      "Jeu de cartes",
+      "Coopératif"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "mysterium-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "magic-maze",
+    "title": "Magic Maze",
+    "minPlayers": 1,
+    "maxPlayers": 8,
+    "playDuration": "SHORT",
+    "categories": [
+      "Rapidité",
+      "Stratégie",
+      "Jeu de plateau"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "magic-maze-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "tabou-xxl",
+    "title": "Tabou XXL",
+    "minPlayers": 4,
+    "maxPlayers": 20,
+    "playDuration": "MEDIUM",
+    "categories": [
+      "Devinette",
+      "Ambiance",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "tabou-xxl-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "colt-express",
+    "title": "Colt Express",
+    "minPlayers": 2,
+    "maxPlayers": 6,
+    "playDuration": "SHORT",
+    "categories": [
+      "Ambiance",
+      "Affrontement",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "colt-express-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "la-crique-des-pirates",
+    "title": "La crique des pirates",
+    "minPlayers": 2,
+    "maxPlayers": 4,
+    "playDuration": "MEDIUM",
+    "categories": [
+      "Gestion",
+      "Jeu de plateau",
+      "Jeu de dés"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "la-crique-des-pirates-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "bazar-bizarre",
+    "title": "Bazar Bizarre",
+    "minPlayers": 2,
+    "maxPlayers": 8,
+    "playDuration": "SHORT",
+    "categories": [
+      "Rapidité",
+      "Observation",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "bazar-bizarre-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "onitama",
+    "title": "Onitama",
+    "minPlayers": 2,
+    "maxPlayers": 2,
+    "playDuration": "SHORT",
+    "categories": [
+      "Affrontement",
+      "Jeu de plateau"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "onitama-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "sleeping-queens",
+    "title": "Sleeping Queens",
+    "minPlayers": 2,
+    "maxPlayers": 5,
+    "playDuration": "SHORT",
+    "categories": [
+      "Mémoire",
+      "Chance",
+      "Affrontement",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "sleeping-queens-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "blokus",
+    "title": "Blokus",
+    "minPlayers": 2,
+    "maxPlayers": 4,
+    "playDuration": "SHORT",
+    "categories": [
+      "Stratégie",
+      "Jeu de plateau"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "blokus-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "dixit",
+    "title": "Dixit",
+    "minPlayers": 3,
+    "maxPlayers": 6,
+    "playDuration": "SHORT",
+    "categories": [
+      "Devinette",
+      "Observation",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "dixit-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "fugi-fugi-la-crypte-de-la-creature",
+    "title": "Fugi Fugi: La Crypte de la Créature",
+    "minPlayers": 2,
+    "maxPlayers": 7,
+    "playDuration": "MEDIUM",
+    "categories": [
+      "Ambiance",
+      "Stratégie",
+      "Jeu de plateau"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "fugi-fugi-la-crypte-de-la-creature-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "les-echecs",
+    "title": "Les Échecs",
+    "minPlayers": 2,
+    "maxPlayers": 2,
+    "playDuration": "MEDIUM",
+    "categories": [
+      "Affrontement",
+      "Jeu de plateau"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "les-echecs-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "go",
+    "title": "Go",
+    "minPlayers": 2,
+    "maxPlayers": 2,
+    "playDuration": "MEDIUM",
+    "categories": [
+      "Stratégie",
+      "Affrontement",
+      "Jeu de plateau"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "go-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "himalaya",
+    "title": "Himalaya",
+    "minPlayers": 3,
+    "maxPlayers": 4,
+    "playDuration": "LONG",
+    "categories": [
+      "Gestion",
+      "Jeu de plateau",
+      "Jeu de dés"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "himalaya-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "shabadabada",
+    "title": "Shabadabada",
+    "minPlayers": 3,
+    "maxPlayers": 12,
+    "playDuration": "SHORT",
+    "categories": [
+      "Ambiance",
+      "Mémoire",
+      "Devinette",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "shabadabada-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "the-moose-in-the-house",
+    "title": "The Moose in the House",
+    "minPlayers": 2,
+    "maxPlayers": 5,
+    "playDuration": "SHORT",
+    "categories": [
+      "Chance",
+      "Affrontement",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "the-moose-in-the-house-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "coloretto",
+    "title": "Coloretto",
+    "minPlayers": 2,
+    "maxPlayers": 5,
+    "playDuration": "SHORT",
+    "categories": [
+      "Chance",
+      "Stratégie",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "coloretto-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "yams",
+    "title": "Yams",
+    "minPlayers": 2,
+    "maxPlayers": 10,
+    "playDuration": "SHORT",
+    "categories": [
+      "Chance",
+      "Jeu de dés"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "yams-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "larche-de-noe",
+    "title": "L'arche de Noé",
+    "minPlayers": 2,
+    "maxPlayers": 5,
+    "playDuration": "SHORT",
+    "categories": [
+      "Stratégie",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "larche-de-noe-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "sky-my-husband",
+    "title": "Sky my husband",
+    "minPlayers": 2,
+    "maxPlayers": 8,
+    "playDuration": "SHORT",
+    "categories": [
+      "Ambiance",
+      "Devinette",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "sky-my-husband-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "hanabi",
+    "title": "Hanabi",
+    "minPlayers": 2,
+    "maxPlayers": 5,
+    "playDuration": "SHORT",
+    "categories": [
+      "Stratégie",
+      "Mémoire",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "hanabi-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "saboteur",
+    "title": "Saboteur",
+    "minPlayers": 3,
+    "maxPlayers": 10,
+    "playDuration": "SHORT",
+    "categories": [
+      "Bluff",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "saboteur-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "speedy-words",
+    "title": "Speedy Words",
+    "minPlayers": 2,
+    "maxPlayers": 6,
+    "playDuration": "SHORT",
+    "categories": [
+      "Devinette",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "speedy-words-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "time-bomb",
+    "title": "Time Bomb",
+    "minPlayers": 4,
+    "maxPlayers": 6,
+    "playDuration": "SHORT",
+    "categories": [
+      "Bluff",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "time-bomb-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "sushi-go",
+    "title": "Sushi Go!",
+    "minPlayers": 2,
+    "maxPlayers": 5,
+    "playDuration": "SHORT",
+    "categories": [
+      "Stratégie",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "sushi-go-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "twinz",
+    "title": "Twinz",
+    "minPlayers": 4,
+    "maxPlayers": 10,
+    "playDuration": "SHORT",
+    "categories": [
+      "Devinette",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "twinz-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "panic-lab",
+    "title": "Panic Lab",
+    "minPlayers": 2,
+    "maxPlayers": 8,
+    "playDuration": "SHORT",
+    "categories": [
+      "Rapidité",
+      "Observation",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "panic-lab-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "tropico",
+    "title": "Tropico",
+    "minPlayers": 2,
+    "maxPlayers": 8,
+    "playDuration": "SHORT",
+    "categories": [
+      "Mémoire",
+      "Observation",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "tropico-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "timeline-science-et-exploration",
+    "title": "Timeline Science et Exploration",
+    "minPlayers": 2,
+    "maxPlayers": 8,
+    "playDuration": "SHORT",
+    "categories": [
+      "Devinette",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "timeline-science-et-exploration-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "le-roi-des-nains",
+    "title": "Le Roi des Nains",
+    "minPlayers": 2,
+    "maxPlayers": 5,
+    "playDuration": "MEDIUM",
+    "categories": [
+      "Stratégie",
+      "Chance",
+      "Plis",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "le-roi-des-nains-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "oriflamme",
+    "title": "Oriflamme",
+    "minPlayers": 3,
+    "maxPlayers": 5,
+    "playDuration": "SHORT",
+    "categories": [
+      "Bluff",
+      "Affrontement",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "oriflamme-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "niet",
+    "title": "Niet !",
+    "minPlayers": 3,
+    "maxPlayers": 8,
+    "playDuration": "MEDIUM",
+    "categories": [
+      "Plis",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "niet-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "canardage",
+    "title": "Canardage",
+    "minPlayers": 3,
+    "maxPlayers": 6,
+    "playDuration": "SHORT",
+    "categories": [
+      "Chance",
+      "Ambiance",
+      "Affrontement",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "canardage-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "declic",
+    "title": "Déclic",
+    "minPlayers": 3,
+    "maxPlayers": 8,
+    "playDuration": "SHORT",
+    "categories": [
+      "Ambiance",
+      "Rapidité",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "declic-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "tchin-tchin",
+    "title": "Tchin-tchin",
+    "minPlayers": 4,
+    "maxPlayers": 8,
+    "playDuration": "SHORT",
+    "categories": [
+      "Ambiance",
+      "Rapidité",
+      "Jeu de cartes"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "tchin-tchin-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "carcassonne-mers-du-sud",
+    "title": "Carcassonne : Mers du Sud",
+    "minPlayers": 2,
+    "maxPlayers": 5,
+    "playDuration": "MEDIUM",
+    "categories": [
+      "Gestion",
+      "Jeu de plateau"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "carcassonne-mers-du-sud-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  },
+  {
+    "id": "les-aventures-de-robin-des-bois",
+    "title": "Les aventures de Robin des Bois",
+    "minPlayers": 2,
+    "maxPlayers": 4,
+    "playDuration": "LONG",
+    "categories": [
+      "Aventure",
+      "Stratégie",
+      "Jeu de plateau",
+      "Coopératif"
+    ],
+    "favorite": false,
+    "archived": false,
+    "hasAwards": false,
+    "images": [
+      {
+        "id": "les-aventures-de-robin-des-bois-main",
+        "source": "import",
+        "attribution": ""
+      }
+    ]
+  }
+]
