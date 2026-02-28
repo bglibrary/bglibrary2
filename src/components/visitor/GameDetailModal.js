@@ -102,7 +102,7 @@ export default function GameDetailModal({ game, onClose }) {
               <span>{DURATION_LABELS[game.playDuration]}</span>
             </div>
             <div className="flex items-center gap-2">
-              <span>📊</span>
+              <span>🧠</span>
               <span>Complexité: {COMPLEXITY_LABELS[game.firstPlayComplexity]}</span>
             </div>
             <div className="flex items-center gap-2">

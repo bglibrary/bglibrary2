@@ -314,5 +314,12 @@ describe('GameDetailModal', () => {
       
       expect(screen.getByText('Complexité: Complexe')).toBeInTheDocument();
     });
+
+    it('should use brain icon (🧠) for complexity as per UI guidelines', () => {
+      render(<GameDetailModal game={mockGame} onClose={mockOnClose} />);
+      
+      // The brain icon should be present for complexity display
+      expect(screen.getByText('🧠')).toBeInTheDocument();
+    });
   });
 });
