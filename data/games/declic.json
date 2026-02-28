@@ -1,0 +1,26 @@
+{
+  "id": "declic",
+  "title": "Déclic",
+  "description": "Tapez au centre avec votre main vrai ou faux pour répondre aux questions le plus vite possible. Gare aux erreurs !",
+  "minPlayers": 3,
+  "maxPlayers": 8,
+  "playDuration": "SHORT",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "LOW",
+  "categories": [
+    "Ambiance",
+    "Rapidité",
+    "Jeu de cartes"
+  ],
+  "mechanics": [],
+  "awards": [],
+  "favorite": false,
+  "archived": false,
+  "images": [
+    {
+      "id": "declic-main",
+      "source": "import",
+      "attribution": ""
+    }
+  ]
+}
