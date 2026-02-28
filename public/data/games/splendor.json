@@ -1,0 +1,25 @@
+{
+  "id": "splendor",
+  "title": "Splendor",
+  "description": "Un jeu de stratégie où les joueurs doivent acquérir des pierres précieuses pour les échanger contre des cartes de développement qui leur rapporteront des points de prestige.",
+  "minPlayers": 2,
+  "maxPlayers": 4,
+  "playDuration": "SHORT",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "MEDIUM",
+  "categories": [
+    "Gestion",
+    "Jeu de plateau"
+  ],
+  "mechanics": [],
+  "awards": [],
+  "favorite": false,
+  "archived": false,
+  "images": [
+    {
+      "id": "splendor-main",
+      "source": "import",
+      "attribution": ""
+    }
+  ]
+}
