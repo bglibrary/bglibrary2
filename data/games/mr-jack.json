@@ -1,0 +1,26 @@
+{
+  "id": "mr-jack",
+  "title": "Mr Jack",
+  "description": "Un jeu de déduction où un joueur incarne le criminel Mr Jack et l'autre joueur incarne l'inspecteur qui doit le démasquer.",
+  "minPlayers": 2,
+  "maxPlayers": 2,
+  "playDuration": "MEDIUM",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "MEDIUM",
+  "categories": [
+    "Stratégie",
+    "Affrontement",
+    "Jeu de plateau"
+  ],
+  "mechanics": [],
+  "awards": [],
+  "favorite": false,
+  "archived": false,
+  "images": [
+    {
+      "id": "mr-jack-main",
+      "source": "import",
+      "attribution": ""
+    }
+  ]
+}
