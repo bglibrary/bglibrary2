@@ -23,7 +23,7 @@ This screen displays detailed information for a single game.
   - **Shared Component**: Uses `GameImage` from `src/components/common/GameCard.js`
 - Player count range
 - Play duration
-- First play complexity
+- First play complexity (displayed with 🧠 brain icon as per UI guidelines)
 - Categories
 - Mechanics
 - Description
