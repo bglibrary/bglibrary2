@@ -1,0 +1,26 @@
+{
+  "id": "go",
+  "title": "Go",
+  "description": "Capturer plus de territoires que son adversaire en plaçant judicieusement ses pions sur un plateau de jeu de 19x19 intersections.",
+  "minPlayers": 2,
+  "maxPlayers": 2,
+  "playDuration": "MEDIUM",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "MEDIUM",
+  "categories": [
+    "Stratégie",
+    "Affrontement",
+    "Jeu de plateau"
+  ],
+  "mechanics": [],
+  "awards": [],
+  "favorite": false,
+  "archived": false,
+  "images": [
+    {
+      "id": "go-main",
+      "source": "import",
+      "attribution": ""
+    }
+  ]
+}
