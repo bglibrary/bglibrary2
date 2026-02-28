@@ -1,0 +1,26 @@
+{
+  "id": "dobble",
+  "title": "Dobble",
+  "description": "Être le premier à identifier le symbole commun entre deux cartes. Les cartes ont une image en commun, mais il faut être rapide pour la trouver avant les autres joueurs.",
+  "minPlayers": 2,
+  "maxPlayers": 8,
+  "playDuration": "SHORT",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "LOW",
+  "categories": [
+    "Rapidité",
+    "Observation",
+    "Jeu de cartes"
+  ],
+  "mechanics": [],
+  "awards": [],
+  "favorite": false,
+  "archived": false,
+  "images": [
+    {
+      "id": "dobble-main",
+      "source": "import",
+      "attribution": ""
+    }
+  ]
+}
