@@ -1,0 +1,26 @@
+{
+  "id": "dobble-star-wars",
+  "title": "Dobble Star Wars",
+  "description": "Une adaptation du jeu de rapidité Dobble avec des images de l'univers Star Wars.",
+  "minPlayers": 2,
+  "maxPlayers": 8,
+  "playDuration": "SHORT",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "LOW",
+  "categories": [
+    "Rapidité",
+    "Observation",
+    "Jeu de cartes"
+  ],
+  "mechanics": [],
+  "awards": [],
+  "favorite": false,
+  "archived": false,
+  "images": [
+    {
+      "id": "dobble-star-wars-main",
+      "source": "import",
+      "attribution": ""
+    }
+  ]
+}
