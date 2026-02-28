@@ -1,0 +1,25 @@
+{
+  "id": "speedy-words",
+  "title": "Speedy Words",
+  "description": "Être le plus rapide à trouver un mot en fonction de la première lettre et de la catégorie.",
+  "minPlayers": 2,
+  "maxPlayers": 6,
+  "playDuration": "SHORT",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "LOW",
+  "categories": [
+    "Devinette",
+    "Jeu de cartes"
+  ],
+  "mechanics": [],
+  "awards": [],
+  "favorite": false,
+  "archived": false,
+  "images": [
+    {
+      "id": "speedy-words-main",
+      "source": "import",
+      "attribution": ""
+    }
+  ]
+}
