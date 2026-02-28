@@ -7,6 +7,23 @@ This screen displays detailed information for a single game.
 
 ---
 
+## Responsive Layout
+
+The modal adapts its layout based on screen size:
+
+### Mobile (default)
+- **Vertical layout**: Image on top, content below
+- Full-width modal
+- Scrollable content area
+
+### Tablet/Desktop (md breakpoint and above)
+- **Landscape layout**: Image on left (40% width), content on right (60% width)
+- Wider modal (`max-w-4xl`)
+- Only the content section scrolls (image remains fixed)
+- Reduces need for scrolling on larger screens
+
+---
+
 ## Data Sources
 
 - GameRepository

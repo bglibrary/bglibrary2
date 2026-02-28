@@ -209,6 +209,50 @@ describe('GameDetailModal', () => {
       expect(modalContainer).toBeInTheDocument();
       expect(modalContainer).toHaveClass('rounded-modal');
     });
+  });
+
+  describe('Responsive layout', () => {
+    it('should have flex-col class for mobile vertical layout', () => {
+      render(<GameDetailModal game={mockGame} onClose={mockOnClose} />);
+      
+      const modalContainer = document.querySelector('.flex-col');
+      expect(modalContainer).toBeInTheDocument();
+    });
+
+    it('should have md:flex-row class for tablet/desktop landscape layout', () => {
+      render(<GameDetailModal game={mockGame} onClose={mockOnClose} />);
+      
+      const modalContainer = document.querySelector('.md\\:flex-row');
+      expect(modalContainer).toBeInTheDocument();
+    });
+
+    it('should have image section with responsive width (md:w-2/5)', () => {
+      render(<GameDetailModal game={mockGame} onClose={mockOnClose} />);
+      
+      const imageSection = document.querySelector('.md\\:w-2\\/5');
+      expect(imageSection).toBeInTheDocument();
+    });
+
+    it('should have content section with flex-1 for remaining space', () => {
+      render(<GameDetailModal game={mockGame} onClose={mockOnClose} />);
+      
+      const contentSection = document.querySelector('.flex-1');
+      expect(contentSection).toBeInTheDocument();
+    });
+
+    it('should have overflow-y-auto on content section for scrolling', () => {
+      render(<GameDetailModal game={mockGame} onClose={mockOnClose} />);
+      
+      const contentSection = document.querySelector('.overflow-y-auto');
+      expect(contentSection).toBeInTheDocument();
+    });
+
+    it('should have md:max-w-4xl for wider modal on tablet/desktop', () => {
+      render(<GameDetailModal game={mockGame} onClose={mockOnClose} />);
+      
+      const modalContainer = document.querySelector('.md\\:max-w-4xl');
+      expect(modalContainer).toBeInTheDocument();
+    });
 
     it('should use bg-card class for close button (supports dark mode)', () => {
       render(<GameDetailModal game={mockGame} onClose={mockOnClose} />);
