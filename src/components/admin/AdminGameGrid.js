@@ -9,9 +9,28 @@
 import { useState } from 'react';
 import { AdminGameCard } from '@/components/common/GameCard';
 
+// SVG Icon components for consistent styling
+// Archive: inbox tray emoji (putting in)
+const ArchiveIcon = ({ className = '' }) => <span className={className}>📥</span>;
+
+// Restore: outbox tray emoji (taking out)
+const RestoreIcon = ({ className = '' }) => <span className={className}>📤</span>;
+
+const EditIcon = ({ className = '' }) => (
+  <svg className={`w-4 h-4 ${className}`} viewBox="0 0 20 20" fill="currentColor">
+    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+  </svg>
+);
+
+const HeartIcon = ({ filled = false, className = '' }) => (
+  <svg className={`w-4 h-4 ${className}`} viewBox="0 0 20 20" fill={filled ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={filled ? 0 : 1.5}>
+    <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+  </svg>
+);
+
 // Icon button for action band overlay
 function ActionButton({ icon, title, onClick, href, className = '' }) {
-  const baseClasses = 'p-1 rounded hover:bg-white/20 transition-colors text-white text-sm';
+  const baseClasses = 'p-1.5 rounded hover:bg-white/20 transition-colors text-white';
   
   if (href) {
     return (
@@ -45,25 +64,25 @@ function GridCard({ game, onToggleFavorite, onArchive, onRestore }) {
   return (
     <AdminGameCard game={game}>
       <ActionButton
-        icon="✏️"
+        icon={<EditIcon />}
         title="Modifier"
         href={`/admin/edit-game/${game.id}`}
       />
       {game.isArchived ? (
         <ActionButton
-          icon="📤"
+          icon={<RestoreIcon />}
           title="Restaurer"
           onClick={() => onRestore(game.id)}
         />
       ) : (
         <ActionButton
-          icon="📦"
+          icon={<ArchiveIcon />}
           title="Archiver"
           onClick={() => onArchive(game.id)}
         />
       )}
       <ActionButton
-        icon={game.isFavorite ? '❤️' : '🤍'}
+        icon={<HeartIcon filled={game.isFavorite} className={game.isFavorite ? 'text-red-400' : ''} />}
         title={game.isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'}
         onClick={() => onToggleFavorite(game.id)}
       />
@@ -92,7 +111,7 @@ function ListRow({ game, onToggleFavorite, onArchive, onRestore }) {
           className="p-2 rounded-button hover:bg-cream transition-colors text-action"
           title="Modifier"
         >
-          ✏️
+          <EditIcon className="w-5 h-5" />
         </a>
         {game.isArchived ? (
           <button
@@ -100,7 +119,7 @@ function ListRow({ game, onToggleFavorite, onArchive, onRestore }) {
             className="p-2 rounded-button hover:bg-cream transition-colors text-secondary"
             title="Restaurer"
           >
-            📤
+            <RestoreIcon className="w-5 h-5" />
           </button>
         ) : (
           <button
@@ -108,7 +127,7 @@ function ListRow({ game, onToggleFavorite, onArchive, onRestore }) {
             className="p-2 rounded-button hover:bg-cream transition-colors text-action"
             title="Archiver"
           >
-            📦
+            <ArchiveIcon className="w-5 h-5" />
           </button>
         )}
         <button
@@ -118,7 +137,7 @@ function ListRow({ game, onToggleFavorite, onArchive, onRestore }) {
           }`}
           title={game.isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'}
         >
-          {game.isFavorite ? '❤️' : '🤍'}
+          <HeartIcon filled={game.isFavorite} className="w-5 h-5" />
         </button>
       </div>
     </div>

@@ -145,15 +145,23 @@ describe('AdminGameGrid', () => {
     it('shows chevron icon when collapsible', () => {
       const { container } = render(<AdminGameGrid games={mockGames} {...defaultProps} title="Jeux archivés" collapsible={true} />);
       
-      const chevron = container.querySelector('svg');
+      // Chevron has specific path for "M19 9l-7 7-7-7"
+      const svgs = container.querySelectorAll('svg');
+      const chevron = Array.from(svgs).find(svg => 
+        svg.innerHTML.includes('M19 9l-7 7-7-7')
+      );
       expect(chevron).toBeInTheDocument();
     });
 
     it('does not show chevron icon when not collapsible', () => {
       const { container } = render(<AdminGameGrid games={mockGames} {...defaultProps} title="Jeux actifs" collapsible={false} />);
       
-      const chevron = container.querySelector('svg');
-      expect(chevron).not.toBeInTheDocument();
+      // Chevron has specific path for "M19 9l-7 7-7-7"
+      const svgs = container.querySelectorAll('svg');
+      const chevron = Array.from(svgs).find(svg => 
+        svg.innerHTML.includes('M19 9l-7 7-7-7')
+      );
+      expect(chevron).toBeUndefined();
     });
 
     it('shows game count when collapsible', () => {
