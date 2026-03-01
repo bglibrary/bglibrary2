@@ -8,7 +8,7 @@
 import Head from 'next/head';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { PlayDuration, FirstPlayComplexity, createGame } from '@/domain/Game';
+import { PlayDuration, FirstPlayComplexity, createGame, generateGameId } from '@/domain/Game';
 import { getSessionHistory } from '@/admin/SessionHistory';
 import { getAdminGameService } from '@/admin/AdminGameService';
 import AdminHeader from '@/components/admin/AdminHeader';
@@ -64,6 +64,7 @@ export default function AddGamePage() {
     setLoading(true);
     try {
       const gameData = {
+        id: generateGameId(formData.title),
         title: formData.title,
         description: formData.description || '',
         minPlayers: parseInt(formData.minPlayers),
@@ -76,7 +77,7 @@ export default function AddGamePage() {
         awards: formData.awards,
         favorite: formData.favorite,
         archived: false,
-        images: [],
+        images: [{ id: `${generateGameId(formData.title)}-main` }],
       };
 
       await adminService.addGame(gameData);

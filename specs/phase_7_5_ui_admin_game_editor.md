@@ -199,13 +199,34 @@ The visual diff helps users quickly identify which fields have been modified bef
 
 ## ID Generation (Add Mode)
 
-- Auto-generate game ID from title
+The game ID is automatically generated from the title using the `generateGameId()` function from the Game domain module.
+
+### Generation Rules
 - Convert to lowercase
-- Replace spaces with hyphens
-- Remove special characters
-- Example: "Catan (Updated)" → "catan-updated"
-- Check for duplicates in existing games
-- Append number if duplicate: "catan-updated-2"
+- Normalize Unicode (NFD) to separate diacritics
+- Remove diacritics (accents, etc.)
+- Replace non-alphanumeric characters with hyphens
+- Remove leading/trailing hyphens
+- Example: "Les Échecs" → "les-echecs"
+- Example: "7 Wonders" → "7-wonders"
+- Example: "Catane" → "catane"
+
+### Duplicate Handling
+- Check for duplicates in existing games (repository + pending ADD actions)
+- Append number if duplicate: "catan-2"
+
+### Default Image
+When adding a new game, a default image descriptor is automatically created:
+- Image ID format: `{gameId}-main`
+- Example: For game "Catan", the default image ID is "catan-main"
+
+### Implementation Note
+The `handleSubmit` function in `add-game.js` must:
+1. Generate the game ID using `generateGameId(formData.title)`
+2. Create a default image descriptor with the generated ID
+3. Pass both to `adminService.addGame()`
+
+**Non-regression test**: `tests/pages/add-game.test.js` ensures the ID is always generated before validation.
 
 ---
 
