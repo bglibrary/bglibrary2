@@ -406,15 +406,18 @@ if __name__ == "__main__":
   3. Inject into template
   4. Return complete script as string
 
-### 8.3.1 — Boolean Conversion (JSON to Python)
-- **Issue**: JSON uses `true`/`false` (lowercase), but Python requires `True`/`False` (capitalized).
-- **Solution**: After `JSON.stringify()`, replace JSON booleans with Python booleans:
+### 8.3.1 — JSON to Python Value Conversion
+- **Issue**: JSON and Python have different syntax for booleans and null:
+  - JSON: `true`, `false`, `null`
+  - Python: `True`, `False`, `None`
+- **Solution**: After `JSON.stringify()`, replace JSON values with Python equivalents:
   ```javascript
   const pythonStr = jsonStr
     .replace(/:true/g, ':True')
-    .replace(/:false/g, ':False');
+    .replace(/:false/g, ':False')
+    .replace(/:null/g, ':None');
   ```
-- **Note**: This regex targets only boolean values (after colon), not strings containing "true" or "false".
+- **Note**: The regex targets only values (after colon), not strings containing these words.
 - **Non-regression test**: `tests/admin/SessionHistory.test.js` verifies the conversion.
 
 ### 8.4 — Script Execution Workflow

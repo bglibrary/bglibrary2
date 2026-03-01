@@ -326,6 +326,16 @@ describe('SessionHistory', () => {
       expect(script).toContain('"This is false information"');
     });
 
+    it('should convert JSON null to Python None', () => {
+      history.addAction(ActionType.ARCHIVE_GAME, 'azul', 'Azul', null);
+      
+      const script = history.generatePythonScript();
+      
+      // Should use Python None, not JSON null
+      expect(script).toContain('"payload":None');
+      expect(script).not.toContain('"payload":null');
+    });
+
     it('should generate syntactically valid Python for actions with booleans', () => {
       history.addAction(ActionType.UPDATE_GAME, 'catan', 'Catan', {
         id: 'catan',
@@ -342,12 +352,14 @@ describe('SessionHistory', () => {
       const actionsMatch = script.match(/actions = \[\s*([\s\S]*?)\s*\]/);
       expect(actionsMatch).not.toBeNull();
       
-      // The actions string should be valid Python (no JSON booleans)
+      // The actions string should be valid Python (no JSON booleans or null)
       const actionsStr = actionsMatch[1];
       expect(actionsStr).not.toMatch(/:true/);
       expect(actionsStr).not.toMatch(/:false/);
+      expect(actionsStr).not.toMatch(/:null/);
       expect(actionsStr).toMatch(/:True/);
       expect(actionsStr).toMatch(/:False/);
+      expect(actionsStr).toMatch(/:None/);
     });
   });
 

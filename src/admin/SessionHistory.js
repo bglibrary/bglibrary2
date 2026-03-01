@@ -392,10 +392,11 @@ export class SessionHistory {
         gameId: a.gameId,
         payload: a.payload,
       });
-      // Convert JSON booleans to Python booleans (true -> True, false -> False)
+      // Convert JSON values to Python equivalents (true->True, false->False, null->None)
       const pythonStr = jsonStr
         .replace(/:true/g, ':True')
-        .replace(/:false/g, ':False');
+        .replace(/:false/g, ':False')
+        .replace(/:null/g, ':None');
       return `    ${pythonStr},`;
     }).join('\n');
 
