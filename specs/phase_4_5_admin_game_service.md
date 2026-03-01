@@ -201,6 +201,53 @@ All tests must be executable without UI, file system, or Git dependencies.
 
 ---
 
+## Python Script Generation
+
+The SessionHistory component can generate a Python script that applies all pending changes. The script follows a safe workflow:
+
+### Script Workflow
+
+1. **Branch Creation**: Creates a new branch named `admin-session-YYYYMMDD-HHMMSS` before making any changes
+2. **Action Application**: Applies each action individually with one commit per action
+3. **User Validation**: Asks for confirmation before rebasing on main
+4. **Merge**: Merges the session branch on main with `--no-ff`
+5. **Cleanup**: Deletes the session branch after successful merge
+6. **Push**: Asks for confirmation before pushing to remote
+
+### Script Features
+
+- **Dry-run mode**: `--dry-run` flag to preview changes without applying
+- **No-commit mode**: `--no-commit` flag to apply changes without Git operations
+- **Index management**: Automatically updates `public/data/games/index.json`
+- **Error handling**: Validates context and handles missing games gracefully
+
+### User Confirmations
+
+The script includes interactive prompts at critical steps:
+
+```
+Rebase on main? [y/N]: 
+Push to remote? [y/N]: 
+```
+
+If the user declines the rebase, the script stops and leaves them on the session branch for manual intervention.
+
+### Generated Script Structure
+
+```python
+# Configuration
+GAMES_DIR = Path("public/data/games")
+INDEX_FILE = GAMES_DIR / "index.json"
+BRANCH_PREFIX = "admin-session"
+
+# Key functions
+def create_session_branch()  # Creates timestamped branch
+def ask_confirmation(prompt, default)  # Interactive user input
+def apply_actions(dry_run, no_commit)  # Main workflow
+```
+
+---
+
 ## Key Changes from Previous Architecture
 
 | Aspect | Previous | New (Session-Based) |
@@ -210,3 +257,5 @@ All tests must be executable without UI, file system, or Git dependencies.
 | Reversibility | Not supported | Delete from history |
 | Backend | Required | None |
 | Quick Actions | Not supported | TOGGLE_FAVORITE |
+| Git Workflow | Direct push | Branch → Validate → Merge |
+| Commits | Single commit | One commit per action |

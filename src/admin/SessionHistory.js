@@ -405,6 +405,12 @@ Run this script at the root of the repository.
 
 Usage:
     python3 update_library.py [--dry-run] [--no-commit]
+
+Workflow:
+    1. Creates a new branch for the changes
+    2. Applies all pending actions (one commit per action)
+    3. Asks for validation before rebasing on main
+    4. Asks for validation before merging on main
 """
 
 import json
@@ -418,11 +424,12 @@ from pathlib import Path
 GAMES_DIR = Path("public/data/games")
 IMAGES_DIR = Path("public/images")
 INDEX_FILE = GAMES_DIR / "index.json"
+BRANCH_PREFIX = "admin-session"
 
 def validate_context():
     """Ensure script is run at repo root."""
     if not GAMES_DIR.exists():
-        print("ERROR: Must be run at repository root (data/games/ not found)")
+        print("ERROR: Must be run at repository root (public/data/games/ not found)")
         sys.exit(1)
 
 def load_game(game_id):
@@ -484,6 +491,31 @@ def git_add_commit(message):
     subprocess.run(['git', 'add', '.'], check=True)
     subprocess.run(['git', 'commit', '-m', message], check=True)
 
+def get_current_branch():
+    """Get the current git branch name."""
+    result = subprocess.run(['git', 'branch', '--show-current'], capture_output=True, text=True)
+    return result.stdout.strip()
+
+def create_session_branch():
+    """Create a new branch for the session changes."""
+    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    branch_name = f"{BRANCH_PREFIX}-{timestamp}"
+    subprocess.run(['git', 'checkout', '-b', branch_name], check=True)
+    return branch_name
+
+def ask_confirmation(prompt, default='n'):
+    """Ask for user confirmation."""
+    default_hint = "[Y/n]" if default.lower() == 'y' else "[y/N]"
+    while True:
+        response = input(f"\\n{prompt} {default_hint}: ").strip().lower()
+        if not response:
+            return default.lower() == 'y'
+        if response in ['y', 'yes', 'o', 'oui']:
+            return True
+        if response in ['n', 'no', 'non']:
+            return False
+        print("Please answer with 'y' or 'n'.")
+
 def apply_actions(dry_run=False, no_commit=False):
     """Apply all pending actions."""
     validate_context()
@@ -493,6 +525,33 @@ ${actionsArray}
     ]
     
     print(f"Applying {len(actions)} action(s)...")
+    
+    if dry_run:
+        print("\\n=== DRY RUN MODE ===")
+        for i, action in enumerate(actions, 1):
+            print(f"\\n[{i}/{len(actions)}] {action['type']}: {action['gameId']}")
+            if action['type'] == 'ADD_GAME':
+                print(f"  Would create: {action['gameId']}.json")
+            elif action['type'] == 'UPDATE_GAME':
+                print(f"  Would update: {action['gameId']}.json")
+            elif action['type'] == 'DELETE_GAME':
+                print(f"  Would delete: {action['gameId']}.json")
+            elif action['type'] == 'TOGGLE_FAVORITE':
+                status = "favori" if action['payload']['favorite'] else "non favori"
+                print(f"  Would toggle favorite: {action['gameId']} -> {status}")
+            elif action['type'] in ['ARCHIVE_GAME', 'RESTORE_GAME']:
+                print(f"  Would {action['type'].lower().replace('_', ' ')}: {action['gameId']}")
+        print("\\nDry run complete. No changes made.")
+        return
+    
+    # Save current branch to restore later if needed
+    original_branch = get_current_branch()
+    print(f"\\nCurrent branch: {original_branch}")
+    
+    if not no_commit:
+        # Create a new branch for this session
+        session_branch = create_session_branch()
+        print(f"Created branch: {session_branch}")
     
     for i, action in enumerate(actions, 1):
         print(f"\\n[{i}/{len(actions)}] {action['type']}: {action['gameId']}")
@@ -538,19 +597,56 @@ ${actionsArray}
             delete_game(action['gameId'])
             remove_game_from_index(action['gameId'])
             print(f"  Deleted: {action['gameId']}.json")
-    
-    if not dry_run and not no_commit:
-        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
-        git_add_commit(f"Admin session update ({timestamp})")
-        print("\\nChanges committed to Git.")
         
-        # Ask before pushing
-        response = input("\\nPush to remote? (y/N): ")
-        if response.lower() == 'y':
-            subprocess.run(['git', 'push'], check=True)
-            print("Pushed to remote.")
+        # Commit each action individually
+        if not no_commit:
+            action_label = {
+                'ADD_GAME': 'Add game',
+                'UPDATE_GAME': 'Update game',
+                'DELETE_GAME': 'Delete game',
+                'TOGGLE_FAVORITE': 'Toggle favorite',
+                'ARCHIVE_GAME': 'Archive game',
+                'RESTORE_GAME': 'Restore game',
+            }.get(action['type'], action['type'])
+            commit_msg = f"{action_label}: {action['gameId']}"
+            git_add_commit(commit_msg)
+            print(f"  Committed: {commit_msg}")
+    
+    if no_commit:
+        print("\\nChanges applied without Git commits.")
+        return
+    
+    print(f"\\n{'='*50}")
+    print(f"Session branch: {session_branch}")
+    print(f"Total commits: {len(actions)}")
+    print(f"{'='*50}")
+    
+    # Ask before rebasing on main
+    print(f"\\nYou are on branch: {session_branch}")
+    print("Next step: rebase on main and merge.")
+    
+    if not ask_confirmation("Rebase on main?"):
+        print(f"\\nAborted. You are still on branch: {session_branch}")
+        print("You can manually rebase and merge later with:")
+        print(f"  git checkout main && git merge {session_branch}")
+        return
+    
+    # Rebase on main
+    print("\\nRebasing on main...")
+    subprocess.run(['git', 'checkout', 'main'], check=True)
+    subprocess.run(['git', 'merge', session_branch, '--no-ff', '-m', f"Merge branch '{session_branch}' - Admin session update"], check=True)
+    print("Merged on main.")
+    
+    # Delete the session branch
+    subprocess.run(['git', 'branch', '-d', session_branch], check=True)
+    print(f"Deleted branch: {session_branch}")
+    
+    # Ask before pushing
+    if ask_confirmation("Push to remote?"):
+        subprocess.run(['git', 'push'], check=True)
+        print("Pushed to remote.")
     else:
-        print("\\nDry run complete. No changes made.")
+        print("\\nChanges are local only. Push later with: git push")
 
 if __name__ == "__main__":
     import argparse

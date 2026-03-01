@@ -216,6 +216,66 @@ describe('SessionHistory', () => {
       
       expect(script).toContain('Total Actions: 2');
     });
+
+    it('should include branch creation functions', () => {
+      history.addAction(ActionType.ADD_GAME, 'g1', 'Game 1', {});
+      
+      const script = history.generatePythonScript();
+      
+      expect(script).toContain('def create_session_branch()');
+      expect(script).toContain('def get_current_branch()');
+      expect(script).toContain('BRANCH_PREFIX = "admin-session"');
+    });
+
+    it('should include user confirmation functions', () => {
+      history.addAction(ActionType.ADD_GAME, 'g1', 'Game 1', {});
+      
+      const script = history.generatePythonScript();
+      
+      expect(script).toContain('def ask_confirmation(prompt, default=');
+      expect(script).toContain("if response in ['y', 'yes', 'o', 'oui']:");
+    });
+
+    it('should include workflow steps in docstring', () => {
+      history.addAction(ActionType.ADD_GAME, 'g1', 'Game 1', {});
+      
+      const script = history.generatePythonScript();
+      
+      expect(script).toContain('1. Creates a new branch for the changes');
+      expect(script).toContain('2. Applies all pending actions (one commit per action)');
+      expect(script).toContain('3. Asks for validation before rebasing on main');
+      expect(script).toContain('4. Asks for validation before merging on main');
+    });
+
+    it('should include rebase and merge logic with confirmations', () => {
+      history.addAction(ActionType.ADD_GAME, 'g1', 'Game 1', {});
+      
+      const script = history.generatePythonScript();
+      
+      expect(script).toContain('ask_confirmation("Rebase on main?")');
+      expect(script).toContain('ask_confirmation("Push to remote?")');
+      expect(script).toContain("git merge {session_branch}");
+    });
+
+    it('should use correct games directory path', () => {
+      history.addAction(ActionType.ADD_GAME, 'g1', 'Game 1', {});
+      
+      const script = history.generatePythonScript();
+      
+      expect(script).toContain('GAMES_DIR = Path("public/data/games")');
+      expect(script).toContain('INDEX_FILE = GAMES_DIR / "index.json"');
+    });
+
+    it('should include index management functions', () => {
+      history.addAction(ActionType.ADD_GAME, 'g1', 'Game 1', {});
+      
+      const script = history.generatePythonScript();
+      
+      expect(script).toContain('def add_game_to_index(game_id, game_data)');
+      expect(script).toContain('def remove_game_from_index(game_id)');
+      expect(script).toContain('def load_index()');
+      expect(script).toContain('def save_index(index_data)');
+    });
   });
 
   describe('getAction', () => {
