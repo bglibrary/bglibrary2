@@ -99,6 +99,118 @@ export function Section({ title, children }) {
   );
 }
 
+/**
+ * PlayerCountInput - Common component for min/max player inputs with validation
+ * 
+ * Validates:
+ * - minPlayers >= 1
+ * - maxPlayers >= 1
+ * - maxPlayers >= minPlayers
+ */
+export function PlayerCountInput({ 
+  minPlayers, 
+  maxPlayers, 
+  onMinChange, 
+  onMaxChange,
+  isModified = { min: false, max: false }
+}) {
+  // Compute validation errors
+  const getErrors = () => {
+    const errors = {};
+    const min = parseInt(minPlayers);
+    const max = parseInt(maxPlayers);
+    
+    // Validate minPlayers
+    if (minPlayers !== '' && minPlayers !== undefined) {
+      if (isNaN(min) || min < 1) {
+        errors.min = 'Le minimum doit être au moins 1';
+      }
+    }
+    
+    // Validate maxPlayers
+    if (maxPlayers !== '' && maxPlayers !== undefined) {
+      if (isNaN(max) || max < 1) {
+        errors.max = 'Le maximum doit être au moins 1';
+      }
+    }
+    
+    // Validate max >= min (only if both are valid numbers)
+    if (!errors.min && !errors.max && 
+        minPlayers !== '' && maxPlayers !== '' &&
+        !isNaN(min) && !isNaN(max) &&
+        max < min) {
+      errors.max = 'Le maximum doit être supérieur ou égal au minimum';
+    }
+    
+    return errors;
+  };
+
+  const errors = getErrors();
+
+  return (
+    <div className="grid grid-cols-2 gap-4">
+      <Input
+        label="Min joueurs"
+        type="number"
+        value={minPlayers}
+        onChange={onMinChange}
+        placeholder="1"
+        min="1"
+        required
+        isModified={isModified.min}
+        error={errors.min}
+      />
+      <Input
+        label="Max joueurs"
+        type="number"
+        value={maxPlayers}
+        onChange={onMaxChange}
+        placeholder="6"
+        min="1"
+        required
+        isModified={isModified.max}
+        error={errors.max}
+      />
+    </div>
+  );
+}
+
+/**
+ * Validate player count values
+ * Returns { valid: boolean, errors: { min?: string, max?: string } }
+ */
+export function validatePlayerCount(minPlayersStr, maxPlayersStr) {
+  const errors = {};
+  const minPlayers = parseInt(minPlayersStr);
+  const maxPlayers = parseInt(maxPlayersStr);
+  
+  // Validate minPlayers
+  if (!minPlayersStr || minPlayersStr === '') {
+    errors.min = 'Le nombre minimum de joueurs est requis';
+  } else if (isNaN(minPlayers) || minPlayers < 1) {
+    errors.min = 'Le minimum doit être au moins 1';
+  }
+  
+  // Validate maxPlayers
+  if (!maxPlayersStr || maxPlayersStr === '') {
+    errors.max = 'Le nombre maximum de joueurs est requis';
+  } else if (isNaN(maxPlayers) || maxPlayers < 1) {
+    errors.max = 'Le maximum doit être au moins 1';
+  }
+  
+  // Validate max >= min (only if both are valid numbers)
+  if (!errors.min && !errors.max && maxPlayers < minPlayers) {
+    errors.max = 'Le maximum doit être supérieur ou égal au minimum';
+  }
+  
+  return {
+    valid: Object.keys(errors).length === 0,
+    errors,
+    minPlayers: isNaN(minPlayers) ? null : minPlayers,
+    maxPlayers: isNaN(maxPlayers) ? null : maxPlayers,
+  };
+}
+
 // Award list component
 export function AwardList({ awards, onChange, isModified = false, awardOptions }) {
   const [selectedAward, setSelectedAward] = useState('');

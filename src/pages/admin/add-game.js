@@ -20,6 +20,8 @@ import {
   AwardList,
   CategoriesSelect,
   MechanicsSelect,
+  PlayerCountInput,
+  validatePlayerCount,
   DURATION_OPTIONS,
   COMPLEXITY_OPTIONS,
   AGE_OPTIONS,
@@ -48,16 +50,29 @@ export default function AddGamePage() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [playerErrors, setPlayerErrors] = useState({});
 
   const updateField = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+    // Clear player errors when values change
+    if (field === 'minPlayers' || field === 'maxPlayers') {
+      setPlayerErrors(prev => ({ ...prev, [field === 'minPlayers' ? 'min' : 'max']: null }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!formData.title || !formData.minPlayers || !formData.maxPlayers) {
-      alert('Veuillez remplir les champs obligatoires');
+    if (!formData.title) {
+      alert('Veuillez remplir le titre');
+      return;
+    }
+
+    // Validate player counts
+    const validation = validatePlayerCount(formData.minPlayers, formData.maxPlayers);
+    if (!validation.valid) {
+      setPlayerErrors(validation.errors);
+      alert('Veuillez corriger les erreurs de validation');
       return;
     }
 
@@ -67,8 +82,8 @@ export default function AddGamePage() {
         id: generateGameId(formData.title),
         title: formData.title,
         description: formData.description || '',
-        minPlayers: parseInt(formData.minPlayers),
-        maxPlayers: parseInt(formData.maxPlayers),
+        minPlayers: validation.minPlayers,
+        maxPlayers: validation.maxPlayers,
         playDuration: formData.playDuration || PlayDuration.MEDIUM,
         firstPlayComplexity: formData.firstPlayComplexity || FirstPlayComplexity.MEDIUM,
         ageRecommendation: formData.ageRecommendation || '10+',
@@ -142,24 +157,12 @@ export default function AddGamePage() {
 
             {/* Players & Duration */}
             <Section title="Joueurs et durée">
-              <div className="grid grid-cols-2 gap-4">
-                <Input
-                  label="Min joueurs"
-                  type="number"
-                  value={formData.minPlayers}
-                  onChange={(v) => updateField('minPlayers', v)}
-                  placeholder="1"
-                  required
-                />
-                <Input
-                  label="Max joueurs"
-                  type="number"
-                  value={formData.maxPlayers}
-                  onChange={(v) => updateField('maxPlayers', v)}
-                  placeholder="6"
-                  required
-                />
-              </div>
+              <PlayerCountInput
+                minPlayers={formData.minPlayers}
+                maxPlayers={formData.maxPlayers}
+                onMinChange={(v) => updateField('minPlayers', v)}
+                onMaxChange={(v) => updateField('maxPlayers', v)}
+              />
 
               <div className="grid grid-cols-2 gap-4">
                 <Dropdown
