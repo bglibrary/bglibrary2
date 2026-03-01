@@ -21,6 +21,7 @@ import {
   CategoriesSelect,
   MechanicsSelect,
   PlayerCountInput,
+  ImageUpload,
   validatePlayerCount,
   DURATION_OPTIONS,
   COMPLEXITY_OPTIONS,
@@ -49,6 +50,7 @@ export default function AddGamePage() {
     favorite: false,
   });
 
+  const [imageData, setImageData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [playerErrors, setPlayerErrors] = useState({});
 
@@ -78,8 +80,9 @@ export default function AddGamePage() {
 
     setLoading(true);
     try {
+      const gameId = generateGameId(formData.title);
       const gameData = {
-        id: generateGameId(formData.title),
+        id: gameId,
         title: formData.title,
         description: formData.description || '',
         minPlayers: validation.minPlayers,
@@ -92,8 +95,13 @@ export default function AddGamePage() {
         awards: formData.awards,
         favorite: formData.favorite,
         archived: false,
-        images: [{ id: `${generateGameId(formData.title)}-main` }],
+        images: [{ id: `${gameId}-main` }],
       };
+
+      // Include image data if uploaded (for session storage and script processing)
+      if (imageData) {
+        gameData._imageData = imageData;
+      }
 
       await adminService.addGame(gameData);
       router.push('/admin');
@@ -152,6 +160,11 @@ export default function AddGamePage() {
                 onChange={(v) => updateField('description', v)}
                 placeholder="Description courte du jeu..."
                 rows={4}
+              />
+              
+              <ImageUpload
+                value={imageData}
+                onChange={setImageData}
               />
             </Section>
 

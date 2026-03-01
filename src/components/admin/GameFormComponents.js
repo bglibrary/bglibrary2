@@ -5,7 +5,7 @@
  * As specified in specs/phase_7_5_ui_admin_game_editor.md
  */
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 // Dropdown component
 export function Dropdown({ label, value, onChange, options, placeholder, isModified = false }) {
@@ -209,6 +209,198 @@ export function validatePlayerCount(minPlayersStr, maxPlayersStr) {
     minPlayers: isNaN(minPlayers) ? null : minPlayers,
     maxPlayers: isNaN(maxPlayers) ? null : maxPlayers,
   };
+}
+
+/**
+ * ImageUpload - Component for uploading game images
+ * 
+ * Features:
+ * - Drag and drop support
+ * - Preview of selected image
+ * - Base64 encoding for session storage
+ * - File validation (type, size)
+ * - Support for existing images (by ID)
+ */
+export function ImageUpload({ 
+  value, 
+  onChange, 
+  existingImage = null, // Image ID (e.g., "catan-main")
+  isModified = false 
+}) {
+  // Build existing image URL from ID
+  const existingImageUrl = existingImage ? `/images/${existingImage}.jpg` : null;
+  const [isDragging, setIsDragging] = useState(false);
+  const [preview, setPreview] = useState(null);
+  const [error, setError] = useState(null);
+  const fileInputRef = useRef(null);
+
+  // Handle file selection
+  const handleFile = useCallback((file) => {
+    setError(null);
+    
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      setError('Veuillez sélectionner une image');
+      return;
+    }
+    
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setError('L\'image doit faire moins de 5 Mo');
+      return;
+    }
+    
+    // Read file as base64
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const base64 = e.target.result;
+      setPreview(base64);
+      onChange({
+        file: file,
+        base64: base64,
+        filename: file.name,
+        type: file.type,
+      });
+    };
+    reader.onerror = () => {
+      setError('Erreur lors de la lecture du fichier');
+    };
+    reader.readAsDataURL(file);
+  }, [onChange]);
+
+  // Handle drag events
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      handleFile(file);
+    }
+  };
+
+  // Handle click to select file
+  const handleClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  // Handle file input change
+  const handleInputChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      handleFile(file);
+    }
+  };
+
+  // Handle remove image
+  const handleRemove = (e) => {
+    e.stopPropagation();
+    setPreview(null);
+    onChange(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  // Determine what to show
+  const showPreview = preview || (value?.base64);
+  const showExisting = !showPreview && existingImageUrl;
+
+  return (
+    <div className="space-y-1.5">
+      <label className="block text-meta text-text-secondary font-medium">
+        Image principale
+        {isModified && <span className="ml-2 text-primary text-xs">● modifié</span>}
+      </label>
+      
+      <div
+        onClick={handleClick}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        className={`
+          relative cursor-pointer rounded-lg border-2 border-dashed transition-colors
+          ${isDragging 
+            ? 'border-primary bg-primary/5' 
+            : showPreview || showExisting
+              ? 'border-primary/50 bg-primary/5'
+              : 'border-border hover:border-primary/50 hover:bg-cream/50'
+          }
+          ${isModified ? 'ring-1 ring-primary/20' : ''}
+        `}
+      >
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          onChange={handleInputChange}
+          className="hidden"
+        />
+        
+        {/* Preview or existing image */}
+        {(showPreview || showExisting) && (
+          <div className="p-3">
+            <div className="relative inline-block">
+              <img
+                src={showPreview || existingImageUrl}
+                alt="Preview"
+                className="h-32 w-auto rounded-lg object-cover shadow-sm"
+              />
+              <button
+                type="button"
+                onClick={handleRemove}
+                className="absolute -top-2 -right-2 p-1 bg-danger text-white rounded-full hover:bg-danger/80 transition-colors"
+                title="Supprimer l'image"
+              >
+                <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        )}
+        
+        {/* Upload prompt */}
+        {!showPreview && !showExisting && (
+          <div className="p-6 text-center">
+            <svg className="w-10 h-10 mx-auto text-text-muted mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <p className="text-body text-text-secondary">
+              Glissez une image ici ou cliquez pour sélectionner
+            </p>
+            <p className="text-meta text-text-muted mt-1">
+              JPG, PNG, WebP • Max 5 Mo
+            </p>
+          </div>
+        )}
+        
+        {/* Change prompt when image exists */}
+        {(showPreview || showExisting) && (
+          <div className="px-3 pb-3">
+            <p className="text-meta text-text-muted text-center">
+              Cliquez pour changer l'image
+            </p>
+          </div>
+        )}
+      </div>
+      
+      {/* Error message */}
+      {error && (
+        <p className="text-meta text-danger">{error}</p>
+      )}
+    </div>
+  );
 }
 
 // Award list component

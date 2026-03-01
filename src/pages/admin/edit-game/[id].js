@@ -21,6 +21,7 @@ import {
   AwardList,
   CategoriesSelect,
   MechanicsSelect,
+  ImageUpload,
   DURATION_OPTIONS,
   COMPLEXITY_OPTIONS,
   AGE_OPTIONS,
@@ -40,6 +41,7 @@ export default function EditGamePage() {
   const [game, setGame] = useState(null);
   const [originalFormData, setOriginalFormData] = useState(null);
   const [inlineButtonsVisible, setInlineButtonsVisible] = useState(false);
+  const [imageData, setImageData] = useState(null);
   const inlineButtonsRef = useRef(null);
 
   const [formData, setFormData] = useState({
@@ -144,9 +146,10 @@ export default function EditGamePage() {
       JSON.stringify(formData.categories.sort()) !== JSON.stringify(originalFormData.categories.sort()) ||
       JSON.stringify(formData.mechanics.sort()) !== JSON.stringify(originalFormData.mechanics.sort()) ||
       JSON.stringify(formData.awards) !== JSON.stringify(originalFormData.awards) ||
-      formData.favorite !== originalFormData.favorite
+      formData.favorite !== originalFormData.favorite ||
+      imageData !== null // New image counts as a change
     );
-  }, [formData, originalFormData]);
+  }, [formData, originalFormData, imageData]);
 
   // Track which individual fields have been modified
   const fieldChanges = useMemo(() => {
@@ -277,6 +280,12 @@ export default function EditGamePage() {
         favorite: formData.favorite,
       };
 
+      // Include image data if a new image was uploaded
+      if (imageData) {
+        gameData._imageData = imageData;
+        gameData.images = [{ id: `${id}-main` }];
+      }
+
       await adminService.updateGame(id, gameData);
       router.push('/admin');
     } catch (error) {
@@ -344,6 +353,12 @@ export default function EditGamePage() {
                 placeholder="Description courte du jeu..."
                 rows={4}
                 isModified={fieldChanges.description}
+              />
+              
+              <ImageUpload
+                value={imageData}
+                onChange={setImageData}
+                existingImage={game?.images?.[0]?.id}
               />
             </Section>
 
