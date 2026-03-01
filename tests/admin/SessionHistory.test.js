@@ -276,6 +276,79 @@ describe('SessionHistory', () => {
       expect(script).toContain('def load_index()');
       expect(script).toContain('def save_index(index_data)');
     });
+
+    it('should convert JSON booleans to Python booleans (true -> True)', () => {
+      history.addAction(ActionType.TOGGLE_FAVORITE, 'catan', 'Catan', { favorite: true });
+      
+      const script = history.generatePythonScript();
+      
+      // Should use Python True, not JSON true (JSON has no space after colon)
+      expect(script).toContain('"favorite":True');
+      expect(script).not.toContain('"favorite":true');
+    });
+
+    it('should convert JSON booleans to Python booleans (false -> False)', () => {
+      history.addAction(ActionType.TOGGLE_FAVORITE, 'catan', 'Catan', { favorite: false });
+      
+      const script = history.generatePythonScript();
+      
+      // Should use Python False, not JSON false (JSON has no space after colon)
+      expect(script).toContain('"favorite":False');
+      expect(script).not.toContain('"favorite":false');
+    });
+
+    it('should convert multiple booleans in payload', () => {
+      history.addAction(ActionType.UPDATE_GAME, 'catan', 'Catan', {
+        id: 'catan',
+        title: 'Catan',
+        favorite: true,
+        archived: false,
+      });
+      
+      const script = history.generatePythonScript();
+      
+      expect(script).toContain('"favorite":True');
+      expect(script).toContain('"archived":False');
+      expect(script).not.toContain('"favorite":true');
+      expect(script).not.toContain('"archived":false');
+    });
+
+    it('should not convert strings containing "true" or "false"', () => {
+      history.addAction(ActionType.ADD_GAME, 'g1', 'Game 1', {
+        title: 'A true story',
+        description: 'This is false information',
+      });
+      
+      const script = history.generatePythonScript();
+      
+      // String values should remain unchanged (JSON uses double quotes)
+      expect(script).toContain('"A true story"');
+      expect(script).toContain('"This is false information"');
+    });
+
+    it('should generate syntactically valid Python for actions with booleans', () => {
+      history.addAction(ActionType.UPDATE_GAME, 'catan', 'Catan', {
+        id: 'catan',
+        title: 'Catan',
+        favorite: true,
+        archived: false,
+      });
+      history.addAction(ActionType.TOGGLE_FAVORITE, 'azul', 'Azul', { favorite: false });
+      history.addAction(ActionType.ARCHIVE_GAME, 'codenames', 'Codenames', null);
+      
+      const script = history.generatePythonScript();
+      
+      // Extract the actions array from the script
+      const actionsMatch = script.match(/actions = \[\s*([\s\S]*?)\s*\]/);
+      expect(actionsMatch).not.toBeNull();
+      
+      // The actions string should be valid Python (no JSON booleans)
+      const actionsStr = actionsMatch[1];
+      expect(actionsStr).not.toMatch(/:true/);
+      expect(actionsStr).not.toMatch(/:false/);
+      expect(actionsStr).toMatch(/:True/);
+      expect(actionsStr).toMatch(/:False/);
+    });
   });
 
   describe('getAction', () => {

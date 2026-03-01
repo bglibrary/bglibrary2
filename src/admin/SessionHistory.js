@@ -387,11 +387,16 @@ export class SessionHistory {
 
     const timestamp = new Date().toISOString();
     const actionsArray = this.actions.map(a => {
-      return `    ${JSON.stringify({
+      const jsonStr = JSON.stringify({
         type: a.type,
         gameId: a.gameId,
         payload: a.payload,
-      })},`;
+      });
+      // Convert JSON booleans to Python booleans (true -> True, false -> False)
+      const pythonStr = jsonStr
+        .replace(/:true/g, ':True')
+        .replace(/:false/g, ':False');
+      return `    ${pythonStr},`;
     }).join('\n');
 
     return `#!/usr/bin/env python3
