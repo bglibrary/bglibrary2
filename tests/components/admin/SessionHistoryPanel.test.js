@@ -184,7 +184,7 @@ describe('SessionHistoryPanel', () => {
       const onExport = jest.fn();
       render(<SessionHistoryPanel {...defaultProps} onExport={onExport} />);
       
-      fireEvent.click(screen.getByText('Exporter le script'));
+      fireEvent.click(screen.getByText('Exporter les modifications'));
       
       expect(onExport).toHaveBeenCalledTimes(1);
     });

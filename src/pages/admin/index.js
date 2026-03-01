@@ -244,12 +244,22 @@ export default function AdminDashboard() {
   }, [historyVersion, sessionHistory]);
 
   const handleExportScript = useCallback(() => {
-    const script = sessionHistory.generatePythonScript();
-    const blob = new Blob([script], { type: 'text/plain' });
+    // Export actions as JSON for use with scripts/apply-changes.js
+    const actions = sessionHistory.getActions().map(action => ({
+      id: action.id,
+      type: action.type,
+      timestamp: action.timestamp,
+      gameId: action.gameId,
+      gameTitle: action.gameTitle,
+      payload: action.payload,
+    }));
+    
+    const json = JSON.stringify(actions, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'update_library.py';
+    a.download = 'session-changes.json';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
