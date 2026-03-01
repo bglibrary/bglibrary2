@@ -1,0 +1,27 @@
+{
+  "id": "mysterium",
+  "title": "Mysterium",
+  "description": "Résolvez le meurtre d'un fantôme en tant que médiums, en interprétant ses visions pour trouver le lieu, l'arme et le coupable.",
+  "minPlayers": 2,
+  "maxPlayers": 7,
+  "playDuration": "MEDIUM",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "MEDIUM",
+  "categories": [
+    "Devinette",
+    "Observation",
+    "Jeu de cartes",
+    "Coopératif"
+  ],
+  "mechanics": [],
+  "awards": [],
+  "favorite": false,
+  "archived": false,
+  "images": [
+    {
+      "id": "mysterium-main",
+      "source": "import",
+      "attribution": ""
+    }
+  ]
+}

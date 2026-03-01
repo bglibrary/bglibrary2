@@ -1,0 +1,27 @@
+{
+  "id": "andor-3-la-derniere-espoir",
+  "title": "Andor 3 : La Dernière Espoir",
+  "description": "Aider les héros à sauver le château de l'assaut des ennemis et à rassembler les dernières forces pour affronter la créature qui menace Andor.",
+  "minPlayers": 2,
+  "maxPlayers": 4,
+  "playDuration": "LONG",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "MEDIUM",
+  "categories": [
+    "Aventure",
+    "Stratégie",
+    "Jeu de plateau",
+    "Coopératif"
+  ],
+  "mechanics": [],
+  "awards": [],
+  "favorite": false,
+  "archived": false,
+  "images": [
+    {
+      "id": "andor-3-la-derniere-espoir-main",
+      "source": "import",
+      "attribution": ""
+    }
+  ]
+}

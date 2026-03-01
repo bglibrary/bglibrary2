@@ -62,6 +62,53 @@ Definition:
 
 ---
 
+## Categories vs Mechanics Philosophy
+
+### Design Principle
+
+The distinction between Categories and Mechanics is based on **accessibility for all audiences**:
+
+#### Categories = Terms everyone can understand
+Categories describe **what kind of game experience** the player can expect, using simple, everyday language that anyone can understand without prior board game knowledge.
+
+Examples:
+- "Bluff" - Everyone understands bluffing
+- "Coopératif" - Clear concept of working together
+- "Affrontement" - Direct conflict, easy to grasp
+- "Mémoire" - Memory games, universally understood
+- "Chance" - Luck-based, no explanation needed
+- "Rapidité" - Speed games, intuitive
+- "Jeu de cartes" / "Jeu de plateau" / "Jeu de dés" - Material type, obvious to all
+
+#### Mechanics = Terms for experienced players
+Mechanics describe **how the game works** at a technical level, using terminology that experienced board gamers will recognize but casual players may not know.
+
+Examples:
+- "Deck building" - Requires gaming knowledge
+- "Placement d'ouvriers" - Specific mechanic term
+- "Draft" - Gaming jargon
+- "Push your luck" - Experienced player concept
+- "Contrôle de zone" - Technical mechanic
+
+### Decision Guide
+
+When categorizing a new game, ask:
+1. **Would a non-gamer understand this term?** → Category
+2. **Does this describe the experience/feel?** → Category
+3. **Does this describe a technical game system?** → Mechanic
+4. **Would only gamers recognize this term?** → Mechanic
+
+### Examples
+
+| Game | Categories | Mechanics |
+|------|------------|-----------|
+| The Crew | Coopératif, Plis, Jeu de cartes | Coopération |
+| Splendor | Gestion, Stratégie, Jeu de cartes | Draft, Collection de sets |
+| Dobble | Rapidité, Observation, Ambiance | (none - simple game) |
+| Catan | Gestion, Stratégie, Jeu de plateau | Échange, Lancer de dés |
+
+---
+
 ## Controlled Vocabularies
 
 ### Awards
@@ -71,7 +118,7 @@ Definition:
 
 ### Categories
 - Categories must use predefined values from a controlled vocabulary.
-- Predefined categories: Stratégie, Négociation, Chance, Ambiance, Coopératif, Famille, Expert.
+- Predefined categories: Bluff, Coopératif, Affrontement, Mémoire, Chance, Rapidité, Devinette, Observation, Ambiance, Gestion, Aventure, Plis, Stratégie, Jeu de cartes, Jeu de plateau, Jeu de dés.
 - An "Other" option is allowed with free text input.
 - Custom values entered via "Other" are stored as-is but are not filterable individually.
 - In filters, "Other" can be selected to find all games with custom categories.

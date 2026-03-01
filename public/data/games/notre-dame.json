@@ -1,0 +1,25 @@
+{
+  "id": "notre-dame",
+  "title": "Notre Dame",
+  "description": "Gérer votre quartier de Paris et developpez vos bâtiments pour marquer des points de victoire.",
+  "minPlayers": 2,
+  "maxPlayers": 5,
+  "playDuration": "LONG",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "MEDIUM",
+  "categories": [
+    "Gestion",
+    "Jeu de plateau"
+  ],
+  "mechanics": [],
+  "awards": [],
+  "favorite": false,
+  "archived": false,
+  "images": [
+    {
+      "id": "notre-dame-main",
+      "source": "import",
+      "attribution": ""
+    }
+  ]
+}

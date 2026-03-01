@@ -415,8 +415,9 @@ from datetime import datetime
 from pathlib import Path
 
 # Configuration
-GAMES_DIR = Path("data/games")
+GAMES_DIR = Path("public/data/games")
 IMAGES_DIR = Path("public/images")
+INDEX_FILE = GAMES_DIR / "index.json"
 
 def validate_context():
     """Ensure script is run at repo root."""
@@ -444,6 +445,40 @@ def delete_game(game_id):
     if path.exists():
         path.unlink()
 
+def load_index():
+    """Load the games index file."""
+    if INDEX_FILE.exists():
+        with open(INDEX_FILE, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            # Handle both formats: { "games": [...] } or [...]
+            if isinstance(data, dict) and 'games' in data:
+                return data
+            elif isinstance(data, list):
+                return {"games": [g.get('id') if isinstance(g, dict) else g for g in data]}
+            return {"games": []}
+    return {"games": []}
+
+def save_index(index_data):
+    """Save the games index file."""
+    with open(INDEX_FILE, 'w', encoding='utf-8') as f:
+        json.dump(index_data, f, indent=2, ensure_ascii=False)
+
+def add_game_to_index(game_id, game_data):
+    """Add a game to the index."""
+    index = load_index()
+    if game_id not in index['games']:
+        index['games'].append(game_id)
+        save_index(index)
+        print(f"  Added to index: {game_id}")
+
+def remove_game_from_index(game_id):
+    """Remove a game from the index."""
+    index = load_index()
+    if game_id in index['games']:
+        index['games'].remove(game_id)
+        save_index(index)
+        print(f"  Removed from index: {game_id}")
+
 def git_add_commit(message):
     """Stage and commit changes."""
     subprocess.run(['git', 'add', '.'], check=True)
@@ -464,6 +499,7 @@ ${actionsArray}
         
         if action['type'] == 'ADD_GAME':
             save_game(action['gameId'], action['payload'])
+            add_game_to_index(action['gameId'], action['payload'])
             print(f"  Created: {action['gameId']}.json")
             
         elif action['type'] == 'UPDATE_GAME':
@@ -500,6 +536,7 @@ ${actionsArray}
                 
         elif action['type'] == 'DELETE_GAME':
             delete_game(action['gameId'])
+            remove_game_from_index(action['gameId'])
             print(f"  Deleted: {action['gameId']}.json")
     
     if not dry_run and not no_commit:

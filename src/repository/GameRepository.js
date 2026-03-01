@@ -58,10 +58,25 @@ async function loadAllGames() {
       return await loadGamesFromManifest();
     }
     
-    const index = await indexResponse.json();
+    const indexData = await indexResponse.json();
     const games = [];
     
-    for (const gameId of index.games) {
+    // Handle both index formats:
+    // - { "games": ["id1", "id2", ...] } (new format)
+    // - [{ id: "id1", ... }, ...] (old format - array of game summaries)
+    let gameIds;
+    if (Array.isArray(indexData)) {
+      // Old format: array of game objects
+      gameIds = indexData.map(g => g.id || g);
+    } else if (indexData.games && Array.isArray(indexData.games)) {
+      // New format: { games: [...] }
+      gameIds = indexData.games;
+    } else {
+      console.warn('[GameRepository]', 'loadAllGames', { status: 'Unknown index format' });
+      return await loadGamesFromManifest();
+    }
+    
+    for (const gameId of gameIds) {
       const game = await loadGameById(gameId);
       if (game) {
         games.push(game);

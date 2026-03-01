@@ -1,0 +1,27 @@
+{
+  "id": "mysterium-park",
+  "title": "Mysterium Park",
+  "description": "En tant que médiums, vous devez communiquer avec le fantôme et résoudre son meurtre pour libérer son âme de l'emprise du parc d'attractions hanté.",
+  "minPlayers": 2,
+  "maxPlayers": 6,
+  "playDuration": "MEDIUM",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "MEDIUM",
+  "categories": [
+    "Devinette",
+    "Observation",
+    "Jeu de cartes",
+    "Coopératif"
+  ],
+  "mechanics": [],
+  "awards": [],
+  "favorite": false,
+  "archived": false,
+  "images": [
+    {
+      "id": "mysterium-park-main",
+      "source": "import",
+      "attribution": ""
+    }
+  ]
+}

@@ -42,13 +42,22 @@ const SORT_LABELS = {
 
 // Predefined category options (same as in admin editor)
 const CATEGORY_OPTIONS = [
-  { value: 'Stratégie', label: 'Stratégie' },
-  { value: 'Négociation', label: 'Négociation' },
-  { value: 'Chance', label: 'Chance' },
-  { value: 'Ambiance', label: 'Ambiance' },
+  { value: 'Bluff', label: 'Bluff' },
   { value: 'Coopératif', label: 'Coopératif' },
-  { value: 'Famille', label: 'Famille' },
-  { value: 'Expert', label: 'Expert' },
+  { value: 'Affrontement', label: 'Affrontement' },
+  { value: 'Mémoire', label: 'Mémoire' },
+  { value: 'Chance', label: 'Chance' },
+  { value: 'Rapidité', label: 'Rapidité' },
+  { value: 'Devinette', label: 'Devinette' },
+  { value: 'Observation', label: 'Observation' },
+  { value: 'Ambiance', label: 'Ambiance' },
+  { value: 'Gestion', label: 'Gestion' },
+  { value: 'Aventure', label: 'Aventure' },
+  { value: 'Plis', label: 'Plis' },
+  { value: 'Stratégie', label: 'Stratégie' },
+  { value: 'Jeu de cartes', label: 'Jeu de cartes' },
+  { value: 'Jeu de plateau', label: 'Jeu de plateau' },
+  { value: 'Jeu de dés', label: 'Jeu de dés' },
   { value: 'Other', label: 'Autre' },
 ];
 

@@ -1,0 +1,25 @@
+{
+  "id": "jaipur",
+  "title": "Jaipur",
+  "description": "En tant que marchands, vous devez acheter les meilleurs ressources ou les trocker contre des chameaux. Un jeu de cartes rapide et stratégique.",
+  "minPlayers": 2,
+  "maxPlayers": 2,
+  "playDuration": "MEDIUM",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "MEDIUM",
+  "categories": [
+    "Gestion",
+    "Jeu de plateau"
+  ],
+  "mechanics": [],
+  "awards": [],
+  "favorite": false,
+  "archived": false,
+  "images": [
+    {
+      "id": "jaipur-main",
+      "source": "import",
+      "attribution": ""
+    }
+  ]
+}
