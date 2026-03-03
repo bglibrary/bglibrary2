@@ -218,7 +218,7 @@ export function createGame(gameData) {
   validateGame(gameData);
 
   // Return immutable game object
-  return {
+  const game = {
     id: gameData.id,
     title: gameData.title,
     description: gameData.description,
@@ -234,6 +234,14 @@ export function createGame(gameData) {
     favorite: gameData.favorite,
     archived: gameData.archived,
   };
+
+  // Preserve internal fields (like _imageData for session storage)
+  // These are used by the admin panel and apply-changes script
+  if (gameData._imageData) {
+    game._imageData = gameData._imageData;
+  }
+
+  return game;
 }
 
 /**
