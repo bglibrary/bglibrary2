@@ -8,10 +8,10 @@
   "ageRecommendation": "10+",
   "firstPlayComplexity": "MEDIUM",
   "categories": [
-    "Stratégie",
-    "Plis",
+    "Coopératif",
     "Jeu de cartes",
-    "Coopératif"
+    "Plis",
+    "Stratégie"
   ],
   "mechanics": [],
   "awards": [],
@@ -19,9 +19,7 @@
   "archived": false,
   "images": [
     {
-      "id": "the-crew-en-quete-de-la-neuvieme-planete-main",
-      "source": "import",
-      "attribution": ""
+      "id": "the-crew-en-quete-de-la-neuvieme-planete-main"
     }
   ]
 }
