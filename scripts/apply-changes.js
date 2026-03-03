@@ -272,6 +272,7 @@ function deleteGameImage(gameId) {
  * Update index.json
  * 
  * Maintains the original format: { "games": ["game-id-1", "game-id-2", ...] }
+ * @returns {boolean} True if index was updated, false if no changes
  */
 function updateIndex() {
   const indexPath = path.join(INDEX_PATH);
@@ -293,9 +294,23 @@ function updateIndex() {
   // Sort alphabetically
   gameIds.sort((a, b) => a.localeCompare(b, 'fr'));
   
+  // Build new index content
+  const newIndex = { games: gameIds };
+  const newContent = JSON.stringify(newIndex, null, 2) + '\n';
+  
+  // Check if index has changed
+  let existingContent = null;
+  if (fs.existsSync(indexPath)) {
+    existingContent = fs.readFileSync(indexPath, 'utf-8');
+  }
+  
+  if (existingContent === newContent) {
+    return false; // No changes
+  }
+  
   // Write index in original format
-  const index = { games: gameIds };
-  fs.writeFileSync(indexPath, JSON.stringify(index, null, 2) + '\n');
+  fs.writeFileSync(indexPath, newContent);
+  return true;
 }
 
 // ============================================================================
@@ -717,13 +732,18 @@ Examples:
   console.log('\n' + '─'.repeat(60));
   console.log('Updating index.json...');
   if (!dryRun) {
-    updateIndex();
-    console.log('  ✓ Updated index.json');
+    const indexUpdated = updateIndex();
     
-    // Commit index update
-    if (!noCommit) {
-      commitFiles([INDEX_PATH], 'Update games index');
-      console.log('  ✓ Committed: Update games index');
+    if (indexUpdated) {
+      console.log('  ✓ Updated index.json');
+      
+      // Commit index update
+      if (!noCommit) {
+        commitFiles([INDEX_PATH], 'Update games index');
+        console.log('  ✓ Committed: Update games index');
+      }
+    } else {
+      console.log('  ✓ Index unchanged (no update needed)');
     }
   } else {
     console.log('  Would update index.json');
