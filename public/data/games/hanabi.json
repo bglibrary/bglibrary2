@@ -8,9 +8,9 @@
   "ageRecommendation": "10+",
   "firstPlayComplexity": "MEDIUM",
   "categories": [
-    "Stratégie",
+    "Jeu de cartes",
     "Mémoire",
-    "Jeu de cartes"
+    "Stratégie"
   ],
   "mechanics": [],
   "awards": [],
@@ -18,9 +18,7 @@
   "archived": false,
   "images": [
     {
-      "id": "hanabi-main",
-      "source": "import",
-      "attribution": ""
+      "id": "hanabi-main"
     }
   ]
 }
