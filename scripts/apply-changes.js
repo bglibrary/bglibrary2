@@ -198,7 +198,7 @@ function deleteGameFile(gameId) {
 }
 
 /**
- * Save image from base64 data
+ * Save image from base64 data - always saves as JPG
  * @param {string} gameId 
  * @param {object} imageData - { base64, type, filename }
  * @returns {string|null} Image filename or null
@@ -216,12 +216,10 @@ function saveImage(gameId, imageData) {
       return null;
     }
 
-    const ext = matches[1]; // jpeg, png, webp, etc.
     const base64Data = matches[2];
     
-    // Determine file extension
-    const extension = ext === 'jpeg' ? 'jpg' : ext;
-    const filename = `${gameId}-main.${extension}`;
+    // Always save as .jpg (images are converted to JPG in the browser)
+    const filename = `${gameId}-main.jpg`;
     const filePath = path.join(PUBLIC_IMAGES_PATH, filename);
     
     // Convert base64 to buffer and write
@@ -237,22 +235,37 @@ function saveImage(gameId, imageData) {
 }
 
 /**
- * Delete game image
+ * Find existing image file for a game
  * @param {string} gameId 
- * @returns {boolean}
+ * @returns {string|null} Full path to existing image or null
  */
-function deleteGameImage(gameId) {
+function findExistingImage(gameId) {
   const extensions = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
   
   for (const ext of extensions) {
     const filePath = path.join(PUBLIC_IMAGES_PATH, `${gameId}-main.${ext}`);
     if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
-      console.log(`  ✓ Deleted image: ${gameId}-main.${ext}`);
-      return true;
+      return filePath;
     }
   }
-  return false;
+  return null;
+}
+
+/**
+ * Delete game image
+ * @param {string} gameId 
+ * @returns {string|null} Path to deleted image or null
+ */
+function deleteGameImage(gameId) {
+  const existingImage = findExistingImage(gameId);
+  
+  if (existingImage) {
+    fs.unlinkSync(existingImage);
+    const filename = path.basename(existingImage);
+    console.log(`  ✓ Deleted image: ${filename}`);
+    return existingImage;
+  }
+  return null;
 }
 
 /**
@@ -411,8 +424,12 @@ function applyUpdateGame(action, dryRun) {
   
   // Save new image if present
   if (payload._imageData) {
-    // Delete old image first
-    deleteGameImage(gameId);
+    // Find and delete old image first, track it for commit
+    const oldImagePath = findExistingImage(gameId);
+    if (oldImagePath) {
+      deleteGameImage(gameId);
+      files.push(oldImagePath); // Track deleted file for commit
+    }
     
     const imageFilename = saveImage(gameId, payload._imageData);
     if (imageFilename) {
@@ -542,15 +559,10 @@ function applyDeleteGame(action, dryRun) {
     console.log(`  ⚠ Game not found: ${gameId}`);
   }
   
-  // Delete image
-  if (deleteGameImage(gameId)) {
-    // Find the actual image file that was deleted
-    const extensions = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
-    for (const ext of extensions) {
-      const imagePath = path.join(PUBLIC_IMAGES_PATH, `${gameId}-main.${ext}`);
-      files.push(imagePath);
-      break;
-    }
+  // Delete image and track the deleted file path
+  const deletedImagePath = deleteGameImage(gameId);
+  if (deletedImagePath) {
+    files.push(deletedImagePath);
   }
   
   return files;

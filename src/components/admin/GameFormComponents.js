@@ -234,7 +234,7 @@ export function ImageUpload({
   const [error, setError] = useState(null);
   const fileInputRef = useRef(null);
 
-  // Handle file selection
+  // Handle file selection - converts all images to JPG
   const handleFile = useCallback((file) => {
     setError(null);
     
@@ -250,17 +250,40 @@ export function ImageUpload({
       return;
     }
     
-    // Read file as base64
+    // Read file and convert to JPG
     const reader = new FileReader();
     reader.onload = (e) => {
-      const base64 = e.target.result;
-      setPreview(base64);
-      onChange({
-        file: file,
-        base64: base64,
-        filename: file.name,
-        type: file.type,
-      });
+      const img = new Image();
+      img.onload = () => {
+        // Create canvas and draw image
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        
+        // Fill with white background (for PNG transparency)
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0);
+        
+        // Convert to JPEG (quality 0.9)
+        const jpgBase64 = canvas.toDataURL('image/jpeg', 0.9);
+        
+        setPreview(jpgBase64);
+        onChange({
+          file: file,
+          base64: jpgBase64,
+          filename: file.name.replace(/\.[^.]+$/, '.jpg'),
+          type: 'image/jpeg',
+        });
+        
+        // Clean up
+        URL.revokeObjectURL(img.src);
+      };
+      img.onerror = () => {
+        setError('Erreur lors du chargement de l\'image');
+      };
+      img.src = e.target.result;
     };
     reader.onerror = () => {
       setError('Erreur lors de la lecture du fichier');
