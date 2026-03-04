@@ -93,7 +93,7 @@ function GridCard({ game, onToggleFavorite, onArchive, onRestore }) {
 // List row with inline actions (simplified: title + actions only)
 function ListRow({ game, onToggleFavorite, onArchive, onRestore }) {
   return (
-    <div className={`flex items-center gap-4 p-3 bg-white rounded-lg border border-border ${game.isArchived ? 'opacity-60' : ''}`}>
+    <div className={`flex items-center gap-4 p-3 bg-card rounded-lg border border-border ${game.isArchived ? 'opacity-60' : ''}`}>
       {/* Title */}
       <div className="flex-1 min-w-0">
         <h3 className="text-body text-text-primary font-medium truncate">
@@ -108,7 +108,7 @@ function ListRow({ game, onToggleFavorite, onArchive, onRestore }) {
       <div className="flex items-center gap-1">
         <a
           href={`/admin/edit-game/${game.id}`}
-          className="p-2 rounded-button hover:bg-cream transition-colors text-action"
+          className="p-2 rounded-button hover:bg-cream dark:hover:bg-cream/10 transition-colors text-action"
           title="Modifier"
         >
           <EditIcon className="w-5 h-5" />
@@ -116,7 +116,7 @@ function ListRow({ game, onToggleFavorite, onArchive, onRestore }) {
         {game.isArchived ? (
           <button
             onClick={() => onRestore(game.id)}
-            className="p-2 rounded-button hover:bg-cream transition-colors text-secondary"
+            className="p-2 rounded-button hover:bg-cream dark:hover:bg-cream/10 transition-colors text-secondary"
             title="Restaurer"
           >
             <RestoreIcon className="w-5 h-5" />
@@ -124,7 +124,7 @@ function ListRow({ game, onToggleFavorite, onArchive, onRestore }) {
         ) : (
           <button
             onClick={() => onArchive(game.id)}
-            className="p-2 rounded-button hover:bg-cream transition-colors text-action"
+            className="p-2 rounded-button hover:bg-cream dark:hover:bg-cream/10 transition-colors text-action"
             title="Archiver"
           >
             <ArchiveIcon className="w-5 h-5" />
@@ -132,7 +132,7 @@ function ListRow({ game, onToggleFavorite, onArchive, onRestore }) {
         )}
         <button
           onClick={() => onToggleFavorite(game.id)}
-          className={`p-2 rounded-button hover:bg-cream transition-colors ${
+          className={`p-2 rounded-button hover:bg-cream dark:hover:bg-cream/10 transition-colors ${
             game.isFavorite ? 'text-favorite' : 'text-action'
           }`}
           title={game.isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'}
