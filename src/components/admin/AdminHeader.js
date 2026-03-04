@@ -7,6 +7,7 @@
 
 import Link from 'next/link';
 import { useTheme } from '@/context/ThemeContext';
+import SearchBar from '@/components/common/SearchBar';
 
 // Theme toggle button component with colored SVG icons
 function ThemeToggle() {
@@ -74,18 +75,11 @@ export default function AdminHeader({
 
         {/* Search bar */}
         <div className="flex-1 max-w-md">
-          <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted">
-              🔍
-            </span>
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => onSearchChange(e.target.value)}
-              placeholder="Rechercher un jeu..."
-              className="w-full pl-10 pr-4 py-2 rounded-button border border-border bg-card text-body focus:outline-none focus:border-primary"
-            />
-          </div>
+          <SearchBar
+            value={searchQuery}
+            onChange={onSearchChange}
+            placeholder="Rechercher un jeu..."
+          />
         </div>
 
         {/* Actions */}
