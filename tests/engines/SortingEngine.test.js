@@ -153,19 +153,54 @@ describe('SortingEngine', () => {
   });
 
   describe('getDefaultSortMode', () => {
-    it('should return TITLE_ASC as default', () => {
-      expect(getDefaultSortMode()).toBe(SortMode.TITLE_ASC);
+    it('should return RANDOM as default', () => {
+      expect(getDefaultSortMode()).toBe(SortMode.RANDOM);
     });
   });
 
   describe('SortMode enum', () => {
     it('should have all required sort modes', () => {
+      expect(SortMode.RANDOM).toBe('RANDOM');
       expect(SortMode.PLAY_DURATION_ASC).toBe('PLAY_DURATION_ASC');
       expect(SortMode.PLAY_DURATION_DESC).toBe('PLAY_DURATION_DESC');
       expect(SortMode.FIRST_PLAY_COMPLEXITY_ASC).toBe('FIRST_PLAY_COMPLEXITY_ASC');
       expect(SortMode.FIRST_PLAY_COMPLEXITY_DESC).toBe('FIRST_PLAY_COMPLEXITY_DESC');
       expect(SortMode.TITLE_ASC).toBe('TITLE_ASC');
       expect(SortMode.TITLE_DESC).toBe('TITLE_DESC');
+    });
+  });
+
+  describe('by random', () => {
+    it('should shuffle games in random order', () => {
+      const result = applySorting(games, SortMode.RANDOM);
+      
+      // Result should contain all games
+      expect(result).toHaveLength(games.length);
+      
+      // All original games should be present
+      const originalIds = games.map(g => g.id).sort();
+      const resultIds = result.map(g => g.id).sort();
+      expect(resultIds).toEqual(originalIds);
+    });
+
+    it('should not mutate input array', () => {
+      const original = [...games];
+      applySorting(games, SortMode.RANDOM);
+      expect(games).toEqual(original);
+    });
+
+    it('should produce different orders on multiple calls (probabilistic)', () => {
+      // Run multiple sorts and check that at least some differ
+      // This test may rarely fail due to randomness, but probability is very low
+      const results = new Set();
+      for (let i = 0; i < 10; i++) {
+        const result = applySorting(games, SortMode.RANDOM);
+        results.add(result.map(g => g.id).join(','));
+      }
+      
+      // With 10 shuffles of 4 items, we should get at least 2 different orders
+      // (probability of all same is extremely low: (1/24)^9)
+      expect(results.size).toBeGreaterThan(1);
     });
   });
 });
