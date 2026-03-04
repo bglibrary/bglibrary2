@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { useState, useEffect, useMemo } from 'react';
 import { getAllGames, Context } from '@/repository/GameRepository';
 import { applyFilters } from '@/engines/FilteringEngine';
-import { applySorting, SortMode } from '@/engines/SortingEngine';
+import { applySorting, SortMode, getDefaultSortMode } from '@/engines/SortingEngine';
 import { mapToGameCards } from '@/domain/GameCard';
 import { createEmptyFilterSet } from '@/domain/Filters';
 import Header from '@/components/layout/Header';
@@ -14,7 +14,8 @@ export default function Home() {
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState(createEmptyFilterSet());
-  const [sortMode, setSortMode] = useState(SortMode.TITLE_ASC);
+  const [sortMode, setSortMode] = useState(getDefaultSortMode());
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectedGameId, setSelectedGameId] = useState(null);
 
   // Load games on mount
@@ -32,11 +33,20 @@ export default function Home() {
     loadGames();
   }, []);
 
-  // Apply filters and sorting
+  // Apply filters, search, and sorting
   const displayedGames = useMemo(() => {
-    const filtered = applyFilters(games, filters);
-    return applySorting(filtered, sortMode);
-  }, [games, filters, sortMode]);
+    let result = applyFilters(games, filters);
+    
+    // Apply search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      result = result.filter(game => 
+        game.title.toLowerCase().includes(query)
+      );
+    }
+    
+    return applySorting(result, sortMode);
+  }, [games, filters, sortMode, searchQuery]);
 
   // Map to card view models
   const gameCards = useMemo(() => mapToGameCards(displayedGames), [displayedGames]);
@@ -75,6 +85,8 @@ export default function Home() {
             onFiltersChange={setFilters}
             sortMode={sortMode}
             onSortModeChange={setSortMode}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
             games={games}
           />
           

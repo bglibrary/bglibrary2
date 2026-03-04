@@ -11,6 +11,7 @@ import { PlayDuration, FirstPlayComplexity } from '../domain/Game';
  * Sort mode enum
  */
 export const SortMode = {
+  RANDOM: 'RANDOM',
   PLAY_DURATION_ASC: 'PLAY_DURATION_ASC',
   PLAY_DURATION_DESC: 'PLAY_DURATION_DESC',
   FIRST_PLAY_COMPLEXITY_ASC: 'FIRST_PLAY_COMPLEXITY_ASC',
@@ -222,6 +223,43 @@ function sortByTitleDesc(games) {
 }
 
 /**
+ * Seeded random number generator for reproducible randomness
+ * Uses a simple mulberry32 algorithm
+ * @param {number} seed 
+ * @returns {Function} Function that returns random number between 0 and 1
+ */
+function createSeededRandom(seed) {
+  return function() {
+    let t = seed += 0x6D2B79F5;
+    t = Math.imul(t ^ t >>> 15, t | 1);
+    t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+
+/**
+ * Sorts games randomly using a seed based on current timestamp
+ * This ensures true randomness that changes on each page load
+ * @param {object[]} games 
+ * @returns {object[]}
+ */
+function sortByRandom(games) {
+  const sorted = [...games];
+  
+  // Use current timestamp as seed for true randomness on each page load
+  const seed = Date.now();
+  const random = createSeededRandom(seed);
+  
+  // Fisher-Yates shuffle with seeded random
+  for (let i = sorted.length - 1; i > 0; i--) {
+    const j = Math.floor(random() * (i + 1));
+    [sorted[i], sorted[j]] = [sorted[j], sorted[i]];
+  }
+  
+  return sorted;
+}
+
+/**
  * Applies sorting to a list of games
  * @param {object[]} games - List of visible, already filtered games
  * @param {string} sortMode - One of SortMode values
@@ -250,6 +288,9 @@ export function applySorting(games, sortMode) {
   // Apply appropriate sorting
   let sorted;
   switch (sortMode) {
+    case SortMode.RANDOM:
+      sorted = sortByRandom(games);
+      break;
     case SortMode.PLAY_DURATION_ASC:
       sorted = sortByPlayDurationAsc(games);
       break;
@@ -286,5 +327,5 @@ export function applySorting(games, sortMode) {
  * @returns {string}
  */
 export function getDefaultSortMode() {
-  return SortMode.TITLE_ASC;
+  return SortMode.RANDOM;
 }

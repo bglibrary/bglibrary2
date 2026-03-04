@@ -167,8 +167,9 @@ export default function EditGamePage() {
       mechanics: JSON.stringify(formData.mechanics.sort()) !== JSON.stringify(originalFormData.mechanics.sort()),
       awards: JSON.stringify(formData.awards) !== JSON.stringify(originalFormData.awards),
       favorite: formData.favorite !== originalFormData.favorite,
+      image: imageData !== null, // Track image changes
     };
-  }, [formData, originalFormData]);
+  }, [formData, originalFormData, imageData]);
 
   // Validation errors for player count
   const playerErrors = useMemo(() => {
@@ -359,6 +360,7 @@ export default function EditGamePage() {
                 value={imageData}
                 onChange={setImageData}
                 existingImage={game?.images?.[0]?.id}
+                isModified={fieldChanges.image}
               />
             </Section>
 

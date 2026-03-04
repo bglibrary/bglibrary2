@@ -9,6 +9,7 @@ import { useState, useRef, useEffect, useMemo } from 'react';
 import { PlayDuration, FirstPlayComplexity } from '@/domain/Game';
 import { SortMode } from '@/engines/SortingEngine';
 import { hasActiveFilters } from '@/domain/Filters';
+import SearchBar from '@/components/common/SearchBar';
 
 // Player count buckets as defined in specs
 const PLAYER_COUNT_BUCKETS = [
@@ -32,6 +33,7 @@ const COMPLEXITY_LABELS = {
 };
 
 const SORT_LABELS = {
+  [SortMode.RANDOM]: 'Aléatoire',
   [SortMode.TITLE_ASC]: 'Titre A-Z',
   [SortMode.TITLE_DESC]: 'Titre Z-A',
   [SortMode.PLAY_DURATION_ASC]: 'Durée ↑',
@@ -181,7 +183,15 @@ function BooleanChip({ label, icon, isActive, onToggle }) {
   );
 }
 
-export default function FilterPanel({ filters, onFiltersChange, sortMode, onSortModeChange, games = [] }) {
+export default function FilterPanel({ 
+  filters, 
+  onFiltersChange, 
+  sortMode, 
+  onSortModeChange, 
+  searchQuery = '',
+  onSearchChange,
+  games = [] 
+}) {
   const playerCountOptions = PLAYER_COUNT_BUCKETS.map(b => ({ value: b.label, label: b.label, ...b }));
   const durationOptions = Object.entries(DURATION_LABELS).map(([value, label]) => ({ value, label }));
   const complexityOptions = Object.entries(COMPLEXITY_LABELS).map(([value, label]) => ({ value, label }));
@@ -272,7 +282,18 @@ export default function FilterPanel({ filters, onFiltersChange, sortMode, onSort
   };
 
   return (
-    <div className="mb-6">
+    <div className="mb-6 space-y-3">
+      {/* Search bar */}
+      {onSearchChange && (
+        <div className="w-full max-w-md">
+          <SearchBar
+            value={searchQuery}
+            onChange={onSearchChange}
+            placeholder="Rechercher un jeu par titre..."
+          />
+        </div>
+      )}
+      
       <div className="flex flex-wrap items-center gap-2">
         {/* Player count filter */}
         <FilterDropdown
