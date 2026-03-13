@@ -118,7 +118,7 @@ When categorizing a new game, ask:
 
 ### Categories
 - Categories must use predefined values from a controlled vocabulary.
-- Predefined categories: Bluff, Coopératif, Affrontement, Mémoire, Chance, Rapidité, Devinette, Observation, Ambiance, Gestion, Aventure, Plis, Stratégie, Jeu de cartes, Jeu de plateau, Jeu de dés.
+- Predefined categories: Affrontement, Ambiance, Association d'idées, Aventure, Bluff, Chance, Connaissances, Coopératif, Dés, Guess, Jeu de cartes, Jeu de plateau, Jeu de plis, Mémoire, Observation, Par équipe, Rapidité, Stratégie / Planification.
 - An "Other" option is allowed with free text input.
 - Custom values entered via "Other" are stored as-is but are not filterable individually.
 - In filters, "Other" can be selected to find all games with custom categories.
@@ -126,7 +126,7 @@ When categorizing a new game, ask:
 
 ### Mechanics
 - Mechanics must use predefined values from a controlled vocabulary.
-- Predefined mechanics: Deck building, Placement d'ouvriers, Gestion de main, Lancer de dés, Pioche de tuiles, Enchères, Draft, Contrôle de zone, Course, Coopération, Bluff, Déduction, Push your luck, Majorité, Collection de sets, Échange.
+- Predefined mechanics: Alliances (et trahisons), Collection, Communication limitée, Connection, Construction / Ressources, Contrôle de territoires, Course, Déduction (Logique), Développement / engine building, Draft, Exploration, Flip & Write, Gestion de crise, Gestion de main, Legacy / Campagne, Négociation, Objectifs, Pioche de tuiles, Placement (tuile/dés/ouvriers), Programmation, Stop ou encore, Temps limité.
 - An "Other" option is allowed with free text input.
 - Custom values entered via "Other" are stored as-is but are not filterable individually.
 - In filters, "Other" can be selected to find all games with custom mechanics.
