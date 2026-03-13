@@ -8,9 +8,10 @@
   "ageRecommendation": "10+",
   "firstPlayComplexity": "MEDIUM",
   "categories": [
-    "Ambiance",
-    "Stratégie",
-    "Jeu de plateau"
+    "Affrontement",
+    "Jeu de plateau",
+    "Mémoire",
+    "Par équipe"
   ],
   "mechanics": [],
   "awards": [],

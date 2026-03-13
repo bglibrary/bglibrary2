@@ -8,10 +8,12 @@
   "ageRecommendation": "10+",
   "firstPlayComplexity": "LOW",
   "categories": [
+    "Affrontement",
     "Ambiance",
-    "Mémoire",
-    "Devinette",
-    "Jeu de cartes"
+    "Association d'idées",
+    "Guess",
+    "Jeu de cartes",
+    "Rapidité"
   ],
   "mechanics": [],
   "awards": [],

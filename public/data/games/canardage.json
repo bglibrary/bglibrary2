@@ -8,9 +8,9 @@
   "ageRecommendation": "10+",
   "firstPlayComplexity": "LOW",
   "categories": [
-    "Chance",
-    "Ambiance",
     "Affrontement",
+    "Ambiance",
+    "Bluff",
     "Jeu de cartes"
   ],
   "mechanics": [],

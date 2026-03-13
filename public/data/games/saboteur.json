@@ -8,8 +8,11 @@
   "ageRecommendation": "10+",
   "firstPlayComplexity": "MEDIUM",
   "categories": [
+    "Affrontement",
     "Bluff",
-    "Jeu de cartes"
+    "Jeu de cartes",
+    "Par équipe",
+    "Rapidité"
   ],
   "mechanics": [],
   "awards": [],

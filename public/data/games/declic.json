@@ -8,9 +8,11 @@
   "ageRecommendation": "10+",
   "firstPlayComplexity": "LOW",
   "categories": [
+    "Affrontement",
     "Ambiance",
-    "Rapidité",
-    "Jeu de cartes"
+    "Jeu de cartes",
+    "Mémoire",
+    "Rapidité"
   ],
   "mechanics": [],
   "awards": [],

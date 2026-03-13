@@ -8,10 +8,11 @@
   "ageRecommendation": "10+",
   "firstPlayComplexity": "MEDIUM",
   "categories": [
+    "Affrontement",
     "Chance",
-    "Gestion",
+    "Dés",
     "Jeu de plateau",
-    "Jeu de dés"
+    "Stratégie / Planification"
   ],
   "mechanics": [],
   "awards": [],
