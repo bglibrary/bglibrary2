@@ -8,10 +8,10 @@
   "ageRecommendation": "10+",
   "firstPlayComplexity": "LOW",
   "categories": [
-    "Mémoire",
-    "Chance",
     "Affrontement",
-    "Jeu de cartes"
+    "Bluff",
+    "Jeu de cartes",
+    "Mémoire"
   ],
   "mechanics": [],
   "awards": [],

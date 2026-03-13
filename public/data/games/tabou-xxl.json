@@ -8,9 +8,12 @@
   "ageRecommendation": "10+",
   "firstPlayComplexity": "MEDIUM",
   "categories": [
-    "Devinette",
+    "Affrontement",
     "Ambiance",
-    "Jeu de cartes"
+    "Connaissances",
+    "Jeu de cartes",
+    "Par équipe",
+    "Rapidité"
   ],
   "mechanics": [],
   "awards": [],

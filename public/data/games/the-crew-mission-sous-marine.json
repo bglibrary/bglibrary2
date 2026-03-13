@@ -8,10 +8,12 @@
   "ageRecommendation": "10+",
   "firstPlayComplexity": "MEDIUM",
   "categories": [
-    "Stratégie",
-    "Plis",
+    "Aventure",
+    "Coopératif",
     "Jeu de cartes",
-    "Coopératif"
+    "Jeu de plis",
+    "Mémoire",
+    "Stratégie / Planification"
   ],
   "mechanics": [],
   "awards": [],

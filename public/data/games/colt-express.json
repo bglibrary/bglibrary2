@@ -8,9 +8,10 @@
   "ageRecommendation": "10+",
   "firstPlayComplexity": "MEDIUM",
   "categories": [
-    "Ambiance",
     "Affrontement",
-    "Jeu de cartes"
+    "Bluff",
+    "Jeu de cartes",
+    "Stratégie / Planification"
   ],
   "mechanics": [],
   "awards": [],
