@@ -10,10 +10,14 @@
   "categories": [
     "Association d'idées",
     "Coopératif",
+    "Guess",
     "Jeu de cartes",
-    "Mémoire"
+    "Observation"
   ],
-  "mechanics": [],
+  "mechanics": [
+    "Communication limitée",
+    "Déduction / Logique"
+  ],
   "awards": [],
   "favorite": false,
   "archived": false,

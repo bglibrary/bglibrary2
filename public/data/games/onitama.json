@@ -12,7 +12,10 @@
     "Jeu de cartes",
     "Stratégie / Planification"
   ],
-  "mechanics": [],
+  "mechanics": [
+    "Gestion de main",
+    "Placements"
+  ],
   "awards": [],
   "favorite": false,
   "archived": false,

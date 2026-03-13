@@ -13,7 +13,10 @@
     "Mémoire",
     "Stratégie / Planification"
   ],
-  "mechanics": [],
+  "mechanics": [
+    "Communication limitée",
+    "Déduction / Logique"
+  ],
   "awards": [],
   "favorite": false,
   "archived": false,

@@ -8,13 +8,15 @@
   "ageRecommendation": "10+",
   "firstPlayComplexity": "LOW",
   "categories": [
+    "Chance",
     "Coopératif",
     "Dés",
     "Jeu de cartes",
-    "Rapidité",
     "Stratégie / Planification"
   ],
-  "mechanics": [],
+  "mechanics": [
+    "Temps limité"
+  ],
   "awards": [],
   "favorite": false,
   "archived": false,

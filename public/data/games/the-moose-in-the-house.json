@@ -11,7 +11,9 @@
     "Affrontement",
     "Jeu de cartes"
   ],
-  "mechanics": [],
+  "mechanics": [
+    "Gestion de main"
+  ],
   "awards": [],
   "favorite": false,
   "archived": false,

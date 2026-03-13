@@ -12,7 +12,10 @@
     "Jeu de cartes",
     "Stratégie / Planification"
   ],
-  "mechanics": [],
+  "mechanics": [
+    "Collection",
+    "Construction / Ressources"
+  ],
   "awards": [],
   "favorite": false,
   "archived": false,

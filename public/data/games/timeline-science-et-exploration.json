@@ -10,10 +10,13 @@
   "categories": [
     "Affrontement",
     "Connaissances",
-    "Jeu de cartes",
-    "Mémoire"
+    "Guess",
+    "Jeu de cartes"
   ],
-  "mechanics": [],
+  "mechanics": [
+    "Course",
+    "Déduction / Logique"
+  ],
   "awards": [],
   "favorite": false,
   "archived": false,

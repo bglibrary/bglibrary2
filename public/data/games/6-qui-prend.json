@@ -12,9 +12,11 @@
     "Chance",
     "Jeu de cartes",
     "Mémoire",
-    "Rapidité"
+    "Stratégie / Planification"
   ],
-  "mechanics": [],
+  "mechanics": [
+    "Gestion de main"
+  ],
   "awards": [],
   "favorite": false,
   "archived": false,

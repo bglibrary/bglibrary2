@@ -10,11 +10,12 @@
   "categories": [
     "Affrontement",
     "Jeu de cartes",
-    "Mémoire",
-    "Par équipe",
-    "Rapidité"
+    "Jeu de plis",
+    "Par équipe"
   ],
-  "mechanics": [],
+  "mechanics": [
+    "Gestion de main"
+  ],
   "awards": [],
   "favorite": false,
   "archived": false,

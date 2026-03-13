@@ -12,7 +12,11 @@
     "Jeu de plateau",
     "Stratégie / Planification"
   ],
-  "mechanics": [],
+  "mechanics": [
+    "Développement / Engine building",
+    "Draft",
+    "Placements"
+  ],
   "awards": [],
   "favorite": false,
   "archived": false,

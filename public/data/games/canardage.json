@@ -10,10 +10,13 @@
   "categories": [
     "Affrontement",
     "Ambiance",
-    "Bluff",
+    "Chance",
     "Jeu de cartes"
   ],
-  "mechanics": [],
+  "mechanics": [
+    "Alliances",
+    "Gestion de main"
+  ],
   "awards": [],
   "favorite": false,
   "archived": false,

@@ -15,7 +15,12 @@
     "Mémoire",
     "Stratégie / Planification"
   ],
-  "mechanics": [],
+  "mechanics": [
+    "Communication limitée",
+    "Gestion de main",
+    "Legacy / Campagne",
+    "Objectifs"
+  ],
   "awards": [],
   "favorite": false,
   "archived": false,

@@ -13,7 +13,11 @@
     "Jeu de plateau",
     "Stratégie / Planification"
   ],
-  "mechanics": [],
+  "mechanics": [
+    "Gestion de crise",
+    "Legacy / Campagne",
+    "Objectifs"
+  ],
   "awards": [],
   "favorite": false,
   "archived": false,

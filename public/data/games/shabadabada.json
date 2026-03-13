@@ -11,11 +11,14 @@
     "Affrontement",
     "Ambiance",
     "Association d'idées",
+    "Connaissances",
     "Guess",
     "Jeu de cartes",
-    "Rapidité"
+    "Par équipe"
   ],
-  "mechanics": [],
+  "mechanics": [
+    "Temps limité"
+  ],
   "awards": [],
   "favorite": false,
   "archived": false,

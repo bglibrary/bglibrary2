@@ -10,11 +10,13 @@
   "categories": [
     "Affrontement",
     "Bluff",
-    "Coopératif",
-    "Jeu de cartes",
+    "Guess",
     "Par équipe"
   ],
-  "mechanics": [],
+  "mechanics": [
+    "Alliances",
+    "Déduction / Logique"
+  ],
   "awards": [],
   "favorite": false,
   "archived": false,

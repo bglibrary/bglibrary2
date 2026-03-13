@@ -12,7 +12,9 @@
     "Chance",
     "Dés"
   ],
-  "mechanics": [],
+  "mechanics": [
+    "Stop ou encore"
+  ],
   "awards": [],
   "favorite": false,
   "archived": false,

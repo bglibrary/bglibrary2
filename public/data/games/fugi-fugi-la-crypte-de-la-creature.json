@@ -10,10 +10,11 @@
   "categories": [
     "Affrontement",
     "Jeu de plateau",
-    "Mémoire",
-    "Par équipe"
+    "Stratégie / Planification"
   ],
-  "mechanics": [],
+  "mechanics": [
+    "Gestion de crise"
+  ],
   "awards": [],
   "favorite": false,
   "archived": false,

@@ -12,7 +12,9 @@
     "Jeu de plateau",
     "Stratégie / Planification"
   ],
-  "mechanics": [],
+  "mechanics": [
+    "Placements"
+  ],
   "awards": [],
   "favorite": false,
   "archived": false,

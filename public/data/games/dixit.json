@@ -10,10 +10,13 @@
   "categories": [
     "Affrontement",
     "Association d'idées",
+    "Guess",
     "Jeu de cartes",
-    "Mémoire"
+    "Observation"
   ],
-  "mechanics": [],
+  "mechanics": [
+    "Déduction / Logique"
+  ],
   "awards": [],
   "favorite": false,
   "archived": false,

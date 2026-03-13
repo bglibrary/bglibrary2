@@ -10,11 +10,14 @@
   "categories": [
     "Affrontement",
     "Association d'idées",
+    "Connaissances",
     "Guess",
     "Jeu de cartes",
-    "Mémoire"
+    "Rapidité"
   ],
-  "mechanics": [],
+  "mechanics": [
+    "Déduction / Logique"
+  ],
   "awards": [],
   "favorite": false,
   "archived": false,
