@@ -12,7 +12,13 @@
     "Jeu de plateau",
     "Stratégie / Planification"
   ],
-  "mechanics": [],
+  "mechanics": [
+    "Connection",
+    "Construction / Ressources",
+    "Contrôle de territoires",
+    "Pioche de tuiles",
+    "Placements"
+  ],
   "awards": [],
   "favorite": false,
   "archived": false,

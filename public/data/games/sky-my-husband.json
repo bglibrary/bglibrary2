@@ -11,11 +11,13 @@
     "Affrontement",
     "Ambiance",
     "Association d'idées",
-    "Guess",
+    "Connaissances",
     "Jeu de cartes",
-    "Stratégie / Planification"
+    "Rapidité"
   ],
-  "mechanics": [],
+  "mechanics": [
+    "Déduction / Logique"
+  ],
   "awards": [],
   "favorite": false,
   "archived": false,

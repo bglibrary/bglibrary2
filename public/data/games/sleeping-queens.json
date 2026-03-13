@@ -9,11 +9,13 @@
   "firstPlayComplexity": "LOW",
   "categories": [
     "Affrontement",
-    "Bluff",
+    "Chance",
     "Jeu de cartes",
     "Mémoire"
   ],
-  "mechanics": [],
+  "mechanics": [
+    "Gestion de main"
+  ],
   "awards": [],
   "favorite": false,
   "archived": false,

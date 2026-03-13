@@ -10,10 +10,14 @@
   "categories": [
     "Coopératif",
     "Jeu de plateau",
-    "Rapidité",
     "Stratégie / Planification"
   ],
-  "mechanics": [],
+  "mechanics": [
+    "Communication limitée",
+    "Exploration",
+    "Gestion de crise",
+    "Temps limité"
+  ],
   "awards": [],
   "favorite": false,
   "archived": false,

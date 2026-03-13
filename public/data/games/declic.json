@@ -10,11 +10,13 @@
   "categories": [
     "Affrontement",
     "Ambiance",
-    "Jeu de cartes",
-    "Mémoire",
+    "Guess",
+    "Observation",
     "Rapidité"
   ],
-  "mechanics": [],
+  "mechanics": [
+    "Déduction / Logique"
+  ],
   "awards": [],
   "favorite": false,
   "archived": false,

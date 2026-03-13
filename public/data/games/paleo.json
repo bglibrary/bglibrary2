@@ -13,7 +13,11 @@
     "Jeu de cartes",
     "Stratégie / Planification"
   ],
-  "mechanics": [],
+  "mechanics": [
+    "Construction / Ressources",
+    "Gestion de crise",
+    "Objectifs"
+  ],
   "awards": [],
   "favorite": false,
   "archived": false,

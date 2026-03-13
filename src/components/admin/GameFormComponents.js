@@ -811,7 +811,7 @@ export const AWARD_OPTIONS = [
 
 // Mechanics options
 export const MECHANICS_OPTIONS = [
-  { value: 'Alliances (et trahisons)', label: 'Alliances (et trahisons)' },
+  { value: 'Alliances', label: 'Alliances' },
   { value: 'Collection', label: 'Collection' },
   { value: 'Communication limitée', label: 'Communication limitée' },
   { value: 'Connection', label: 'Connection' },
@@ -829,7 +829,7 @@ export const MECHANICS_OPTIONS = [
   { value: 'Négociation', label: 'Négociation' },
   { value: 'Objectifs', label: 'Objectifs' },
   { value: 'Pioche de tuiles', label: 'Pioche de tuiles' },
-  { value: 'Placement (tuile/dés/ouvriers)', label: 'Placement (tuile/dés/ouvriers)' },
+  { value: 'Placements', label: 'Placements' },
   { value: 'Programmation', label: 'Programmation' },
   { value: 'Stop ou encore', label: 'Stop ou encore' },
   { value: 'Temps limité', label: 'Temps limité' },

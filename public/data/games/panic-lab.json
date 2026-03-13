@@ -9,11 +9,12 @@
   "firstPlayComplexity": "LOW",
   "categories": [
     "Affrontement",
-    "Jeu de cartes",
     "Observation",
     "Rapidité"
   ],
-  "mechanics": [],
+  "mechanics": [
+    "Déduction / Logique"
+  ],
   "awards": [],
   "favorite": false,
   "archived": false,

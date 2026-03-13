@@ -11,10 +11,12 @@
     "Affrontement",
     "Ambiance",
     "Jeu de cartes",
-    "Mémoire",
+    "Observation",
     "Rapidité"
   ],
-  "mechanics": [],
+  "mechanics": [
+    "Déduction / Logique"
+  ],
   "awards": [],
   "favorite": false,
   "archived": false,

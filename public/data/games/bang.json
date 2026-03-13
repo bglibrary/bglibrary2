@@ -13,7 +13,11 @@
     "Jeu de cartes",
     "Par équipe"
   ],
-  "mechanics": [],
+  "mechanics": [
+    "Alliances",
+    "Déduction / Logique",
+    "Gestion de main"
+  ],
   "awards": [],
   "favorite": false,
   "archived": false,

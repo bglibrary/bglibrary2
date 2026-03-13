@@ -9,10 +9,12 @@
   "firstPlayComplexity": "MEDIUM",
   "categories": [
     "Affrontement",
-    "Bluff",
+    "Chance",
     "Jeu de cartes"
   ],
-  "mechanics": [],
+  "mechanics": [
+    "Collection"
+  ],
   "awards": [],
   "favorite": false,
   "archived": false,

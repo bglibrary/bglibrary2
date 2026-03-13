@@ -12,9 +12,13 @@
     "Bluff",
     "Jeu de cartes",
     "Par équipe",
-    "Rapidité"
+    "Stratégie / Planification"
   ],
-  "mechanics": [],
+  "mechanics": [
+    "Alliances",
+    "Connection",
+    "Placements"
+  ],
   "awards": [],
   "favorite": false,
   "archived": false,

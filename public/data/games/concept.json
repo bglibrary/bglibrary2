@@ -10,12 +10,16 @@
   "categories": [
     "Affrontement",
     "Association d'idées",
+    "Connaissances",
     "Guess",
     "Jeu de plateau",
-    "Par équipe",
-    "Rapidité"
+    "Observation",
+    "Par équipe"
   ],
-  "mechanics": [],
+  "mechanics": [
+    "Communication limitée",
+    "Temps limité"
+  ],
   "awards": [],
   "favorite": false,
   "archived": false,
