@@ -65,8 +65,19 @@ const CATEGORY_OPTIONS = [
 
 // Predefined mechanic options (same as in admin editor)
 const MECHANIC_OPTIONS = [
-  { value: 'Deck building', label: 'Deck building' },
-  { value: 'Placement d\'ouvriers', label: 'Placement d\'ouvriers' },
+  { value: 'Alliances', label: 'Alliances' },
+  { value: 'Collection', label: 'Collection' },
+  { value: 'Communication limitée', label: 'Communication limitée' },
+  { value: 'Connection', label: 'Connection' },
+  { value: 'Construction / Ressources', label: 'Construction / Ressources' },
+  { value: 'Contrôle de territoires', label: 'Contrôle de territoires' },
+  { value: 'Course', label: 'Course' },
+  { value: 'Déduction / Logique', label: 'Déduction / Logique' },
+  { value: 'Développement / Engine building', label: 'Développement / Engine building' },
+  { value: 'Draft', label: 'Draft' },
+  { value: 'Exploration', label: 'Exploration' },
+  { value: 'Flip & Write', label: 'Flip & Write' },
+  { value: 'Gestion de crise', label: 'Gestion de crise' },
   { value: 'Gestion de main', label: 'Gestion de main' },
   { value: 'Lancer de dés', label: 'Lancer de dés' },
   { value: 'Pioche de tuiles', label: 'Pioche de tuiles' },
