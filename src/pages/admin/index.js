@@ -167,6 +167,30 @@ export default function AdminDashboard() {
     });
   }, [games, adminService]);
 
+  const handleDelete = useCallback(async (gameId) => {
+    const game = games.find(g => g.id === gameId);
+    if (!game) return;
+
+    setConfirmDialog({
+      title: 'Supprimer le jeu',
+      message: `Supprimer définitivement "${game.title}" ? Cette action est irréversible.`,
+      confirmLabel: 'Supprimer',
+      onConfirm: async () => {
+        try {
+          await adminService.deleteGame(gameId);
+          // Remove the game from local state
+          setGames(prev => prev.filter(g => g.id !== gameId));
+          // Force history panel to update
+          setHistoryVersion(v => v + 1);
+        } catch (error) {
+          console.error('Failed to delete game:', error);
+        }
+        setConfirmDialog(null);
+      },
+      onCancel: () => setConfirmDialog(null),
+    });
+  }, [games, adminService]);
+
   // Handle game update from edit page
   const handleGameUpdated = useCallback((gameId, updatedData) => {
     setGames(prev => prev.map(g => 
@@ -310,6 +334,7 @@ export default function AdminDashboard() {
                   onToggleFavorite={handleToggleFavorite}
                   onArchive={handleArchive}
                   onRestore={handleRestore}
+                  onDelete={handleDelete}
                   viewMode={viewMode}
                   emptyMessage="Aucun jeu actif."
                 />
@@ -318,6 +343,7 @@ export default function AdminDashboard() {
                   onToggleFavorite={handleToggleFavorite}
                   onArchive={handleArchive}
                   onRestore={handleRestore}
+                  onDelete={handleDelete}
                   viewMode={viewMode}
                   title="Jeux archivés"
                   emptyMessage="Aucun jeu archivé."
