@@ -42,6 +42,7 @@ export default function EditGamePage() {
   const [originalFormData, setOriginalFormData] = useState(null);
   const [inlineButtonsVisible, setInlineButtonsVisible] = useState(false);
   const [imageData, setImageData] = useState(null);
+  const [hasPendingImageChange, setHasPendingImageChange] = useState(false);
   const inlineButtonsRef = useRef(null);
 
   const [formData, setFormData] = useState({
@@ -111,6 +112,11 @@ export default function EditGamePage() {
             awards: foundGame.awards || [],
             favorite: foundGame.favorite || false,
           });
+          // Check if there's a pending image change in the payload
+          if (foundGame._imageData) {
+            setImageData(foundGame._imageData);
+            setHasPendingImageChange(true);
+          }
         } else {
           // No pending update, use original data
           setGame(originalGame);
@@ -225,6 +231,27 @@ export default function EditGamePage() {
     return () => observer.disconnect();
   }, [hasChanges]);
 
+  // Get list of modified field names
+  const getModifiedFieldsList = useMemo(() => {
+    if (!originalFormData) return [];
+    
+    const modified = [];
+    if (formData.title !== originalFormData.title) modified.push('title');
+    if (formData.description !== originalFormData.description) modified.push('description');
+    if (formData.minPlayers !== originalFormData.minPlayers) modified.push('minPlayers');
+    if (formData.maxPlayers !== originalFormData.maxPlayers) modified.push('maxPlayers');
+    if (formData.playDuration !== originalFormData.playDuration) modified.push('playDuration');
+    if (formData.firstPlayComplexity !== originalFormData.firstPlayComplexity) modified.push('firstPlayComplexity');
+    if (formData.ageRecommendation !== originalFormData.ageRecommendation) modified.push('ageRecommendation');
+    if (JSON.stringify(formData.categories.sort()) !== JSON.stringify(originalFormData.categories.sort())) modified.push('categories');
+    if (JSON.stringify(formData.mechanics.sort()) !== JSON.stringify(originalFormData.mechanics.sort())) modified.push('mechanics');
+    if (JSON.stringify(formData.awards) !== JSON.stringify(originalFormData.awards)) modified.push('awards');
+    if (formData.favorite !== originalFormData.favorite) modified.push('favorite');
+    if (imageData !== null) modified.push('image');
+    
+    return modified;
+  }, [formData, originalFormData, imageData]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -287,7 +314,7 @@ export default function EditGamePage() {
         gameData.images = [{ id: `${id}-main` }];
       }
 
-      await adminService.updateGame(id, gameData);
+      await adminService.updateGame(id, gameData, getModifiedFieldsList);
       router.push('/admin');
     } catch (error) {
       console.error('Failed to update game:', error);
