@@ -172,11 +172,18 @@ describe('AdminGameGrid', () => {
   });
 
   describe('Action buttons', () => {
-    it('renders edit button for each game', () => {
+    it('renders edit button for active games only', () => {
       render(<AdminGameGrid games={mockGames} {...defaultProps} />);
       
+      // Only 1 edit button for the active game (not for archived)
       const editButtons = screen.getAllByTitle('Modifier');
-      expect(editButtons).toHaveLength(2);
+      expect(editButtons).toHaveLength(1);
+    });
+
+    it('does not render edit button for archived games', () => {
+      render(<AdminGameGrid games={[mockGames[1]]} {...defaultProps} />);
+      
+      expect(screen.queryByTitle('Modifier')).not.toBeInTheDocument();
     });
 
     it('renders archive button for active games', () => {
@@ -191,11 +198,28 @@ describe('AdminGameGrid', () => {
       expect(screen.getByTitle('Restaurer')).toBeInTheDocument();
     });
 
-    it('renders favorite button for each game', () => {
+    it('renders favorite button for active games only', () => {
       render(<AdminGameGrid games={mockGames} {...defaultProps} />);
       
+      // Only 1 favorite button for the active game (not for archived)
       const favoriteButtons = screen.getAllByTitle(/favoris/);
-      expect(favoriteButtons).toHaveLength(2);
+      expect(favoriteButtons).toHaveLength(1);
+    });
+
+    it('renders delete button for archived games instead of favorite', () => {
+      render(<AdminGameGrid games={[mockGames[1]]} {...defaultProps} />);
+      
+      expect(screen.getByTitle('Supprimer')).toBeInTheDocument();
+      expect(screen.queryByTitle(/favoris/)).not.toBeInTheDocument();
+    });
+
+    it('calls onDelete when delete button is clicked on archived game', () => {
+      const onDelete = jest.fn();
+      render(<AdminGameGrid games={[mockGames[1]]} {...defaultProps} onDelete={onDelete} />);
+      
+      fireEvent.click(screen.getByTitle('Supprimer'));
+      
+      expect(onDelete).toHaveBeenCalledWith('game-2');
     });
   });
 

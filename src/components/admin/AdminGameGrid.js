@@ -28,6 +28,12 @@ const HeartIcon = ({ filled = false, className = '' }) => (
   </svg>
 );
 
+const TrashIcon = ({ className = '' }) => (
+  <svg className={`w-4 h-4 ${className}`} viewBox="0 0 20 20" fill="currentColor">
+    <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+  </svg>
+);
+
 // Icon button for action band overlay
 function ActionButton({ icon, title, onClick, href, className = '' }) {
   const baseClasses = 'p-1.5 rounded hover:bg-white/20 transition-colors text-white';
@@ -60,38 +66,51 @@ function ActionButton({ icon, title, onClick, href, className = '' }) {
 }
 
 // Grid card with overlay actions
-function GridCard({ game, onToggleFavorite, onArchive, onRestore }) {
+function GridCard({ game, onToggleFavorite, onArchive, onRestore, onDelete }) {
   return (
     <AdminGameCard game={game}>
-      <ActionButton
-        icon={<EditIcon />}
-        title="Modifier"
-        href={`/admin/edit-game/${game.id}`}
-      />
-      {game.isArchived ? (
+      {/* Edit button only for non-archived games */}
+      {!game.isArchived && (
         <ActionButton
-          icon={<RestoreIcon />}
-          title="Restaurer"
-          onClick={() => onRestore(game.id)}
-        />
-      ) : (
-        <ActionButton
-          icon={<ArchiveIcon />}
-          title="Archiver"
-          onClick={() => onArchive(game.id)}
+          icon={<EditIcon />}
+          title="Modifier"
+          href={`/admin/edit-game/${game.id}`}
         />
       )}
-      <ActionButton
-        icon={<HeartIcon filled={game.isFavorite} className={game.isFavorite ? 'text-red-400' : ''} />}
-        title={game.isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'}
-        onClick={() => onToggleFavorite(game.id)}
-      />
+      {game.isArchived ? (
+        <>
+          <ActionButton
+            icon={<RestoreIcon />}
+            title="Restaurer"
+            onClick={() => onRestore(game.id)}
+          />
+          {/* Delete button for archived games instead of favorite toggle */}
+          <ActionButton
+            icon={<TrashIcon />}
+            title="Supprimer"
+            onClick={() => onDelete(game.id)}
+          />
+        </>
+      ) : (
+        <>
+          <ActionButton
+            icon={<ArchiveIcon />}
+            title="Archiver"
+            onClick={() => onArchive(game.id)}
+          />
+          <ActionButton
+            icon={<HeartIcon filled={game.isFavorite} className={game.isFavorite ? 'text-red-400' : ''} />}
+            title={game.isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'}
+            onClick={() => onToggleFavorite(game.id)}
+          />
+        </>
+      )}
     </AdminGameCard>
   );
 }
 
 // List row with inline actions (simplified: title + actions only)
-function ListRow({ game, onToggleFavorite, onArchive, onRestore }) {
+function ListRow({ game, onToggleFavorite, onArchive, onRestore, onDelete }) {
   return (
     <div className={`flex items-center gap-4 p-3 bg-card rounded-lg border border-border ${game.isArchived ? 'opacity-60' : ''}`}>
       {/* Title */}
@@ -106,39 +125,54 @@ function ListRow({ game, onToggleFavorite, onArchive, onRestore }) {
 
       {/* Actions */}
       <div className="flex items-center gap-1">
-        <a
-          href={`/admin/edit-game/${game.id}`}
-          className="p-2 rounded-button hover:bg-cream dark:hover:bg-cream/10 transition-colors text-action"
-          title="Modifier"
-        >
-          <EditIcon className="w-5 h-5" />
-        </a>
-        {game.isArchived ? (
-          <button
-            onClick={() => onRestore(game.id)}
-            className="p-2 rounded-button hover:bg-cream dark:hover:bg-cream/10 transition-colors text-secondary"
-            title="Restaurer"
-          >
-            <RestoreIcon className="w-5 h-5" />
-          </button>
-        ) : (
-          <button
-            onClick={() => onArchive(game.id)}
+        {/* Edit button only for non-archived games */}
+        {!game.isArchived && (
+          <a
+            href={`/admin/edit-game/${game.id}`}
             className="p-2 rounded-button hover:bg-cream dark:hover:bg-cream/10 transition-colors text-action"
-            title="Archiver"
+            title="Modifier"
           >
-            <ArchiveIcon className="w-5 h-5" />
-          </button>
+            <EditIcon className="w-5 h-5" />
+          </a>
         )}
-        <button
-          onClick={() => onToggleFavorite(game.id)}
-          className={`p-2 rounded-button hover:bg-cream dark:hover:bg-cream/10 transition-colors ${
-            game.isFavorite ? 'text-favorite' : 'text-action'
-          }`}
-          title={game.isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'}
-        >
-          <HeartIcon filled={game.isFavorite} className="w-5 h-5" />
-        </button>
+        {game.isArchived ? (
+          <>
+            <button
+              onClick={() => onRestore(game.id)}
+              className="p-2 rounded-button hover:bg-cream dark:hover:bg-cream/10 transition-colors text-secondary"
+              title="Restaurer"
+            >
+              <RestoreIcon className="w-5 h-5" />
+            </button>
+            {/* Delete button for archived games instead of favorite toggle */}
+            <button
+              onClick={() => onDelete(game.id)}
+              className="p-2 rounded-button hover:bg-cream dark:hover:bg-cream/10 transition-colors text-danger"
+              title="Supprimer"
+            >
+              <TrashIcon className="w-5 h-5" />
+            </button>
+          </>
+        ) : (
+          <>
+            <button
+              onClick={() => onArchive(game.id)}
+              className="p-2 rounded-button hover:bg-cream dark:hover:bg-cream/10 transition-colors text-action"
+              title="Archiver"
+            >
+              <ArchiveIcon className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() => onToggleFavorite(game.id)}
+              className={`p-2 rounded-button hover:bg-cream dark:hover:bg-cream/10 transition-colors ${
+                game.isFavorite ? 'text-favorite' : 'text-action'
+              }`}
+              title={game.isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'}
+            >
+              <HeartIcon filled={game.isFavorite} className="w-5 h-5" />
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
@@ -149,6 +183,7 @@ export default function AdminGameGrid({
   onToggleFavorite, 
   onArchive, 
   onRestore,
+  onDelete,
   viewMode = 'grid',
   title = null,
   emptyMessage = 'Aucun jeu trouvé.',
@@ -186,6 +221,7 @@ export default function AdminGameGrid({
               onToggleFavorite={onToggleFavorite}
               onArchive={onArchive}
               onRestore={onRestore}
+              onDelete={onDelete}
             />
           ))}
         </div>
@@ -201,6 +237,7 @@ export default function AdminGameGrid({
             onToggleFavorite={onToggleFavorite}
             onArchive={onArchive}
             onRestore={onRestore}
+            onDelete={onDelete}
           />
         ))}
       </div>
