@@ -429,7 +429,7 @@ export default function EditGamePage() {
                   isModified={fieldChanges.playDuration}
                 />
                 <Dropdown
-                  label="Complexité"
+                  label="Découverte"
                   value={formData.firstPlayComplexity}
                   onChange={(v) => updateField('firstPlayComplexity', v)}
                   options={COMPLEXITY_OPTIONS}

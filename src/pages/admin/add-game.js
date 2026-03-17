@@ -186,7 +186,7 @@ export default function AddGamePage() {
                   placeholder="Sélectionner..."
                 />
                 <Dropdown
-                  label="Complexité"
+                  label="Découverte"
                   value={formData.firstPlayComplexity}
                   onChange={(v) => updateField('firstPlayComplexity', v)}
                   options={COMPLEXITY_OPTIONS}

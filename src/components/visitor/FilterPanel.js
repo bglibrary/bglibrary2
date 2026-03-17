@@ -38,8 +38,8 @@ const SORT_LABELS = {
   [SortMode.TITLE_DESC]: 'Titre Z-A',
   [SortMode.PLAY_DURATION_ASC]: 'Durée ↑',
   [SortMode.PLAY_DURATION_DESC]: 'Durée ↓',
-  [SortMode.FIRST_PLAY_COMPLEXITY_ASC]: 'Complexité ↑',
-  [SortMode.FIRST_PLAY_COMPLEXITY_DESC]: 'Complexité ↓',
+  [SortMode.FIRST_PLAY_COMPLEXITY_ASC]: 'Découverte ↑',
+  [SortMode.FIRST_PLAY_COMPLEXITY_DESC]: 'Découverte ↓',
 };
 
 // Predefined category options (same as in admin editor)
@@ -339,7 +339,7 @@ export default function FilterPanel({
 
         {/* Complexity filter */}
         <FilterDropdown
-          label="Complexité"
+          label="Découverte"
           icon="🧠"
           options={complexityOptions}
           onSelect={handleComplexitySelect}

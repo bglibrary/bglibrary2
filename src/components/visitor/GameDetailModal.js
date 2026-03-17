@@ -109,7 +109,7 @@ export default function GameDetailModal({ game, onClose }) {
             </div>
             <div className="flex items-center gap-2">
               <span>🧠</span>
-              <span>Complexité: {COMPLEXITY_LABELS[game.firstPlayComplexity]}</span>
+              <span>Découverte: {COMPLEXITY_LABELS[game.firstPlayComplexity]}</span>
             </div>
             <div className="flex items-center gap-2">
               <span>🎂</span>

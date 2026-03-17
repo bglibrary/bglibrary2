@@ -80,7 +80,7 @@ describe('GameDetailModal', () => {
     it('should render complexity label', () => {
       render(<GameDetailModal game={mockGame} onClose={mockOnClose} />);
       
-      expect(screen.getByText('Complexité: Simple')).toBeInTheDocument();
+      expect(screen.getByText('Découverte: Simple')).toBeInTheDocument();
     });
 
     it('should render age recommendation', () => {
@@ -349,14 +349,14 @@ describe('GameDetailModal', () => {
       const mediumComplexityGame = { ...mockGame, firstPlayComplexity: FirstPlayComplexity.MEDIUM };
       render(<GameDetailModal game={mediumComplexityGame} onClose={mockOnClose} />);
       
-      expect(screen.getByText('Complexité: Moyenne')).toBeInTheDocument();
+      expect(screen.getByText('Découverte: Moyenne')).toBeInTheDocument();
     });
 
     it('should display HIGH complexity label', () => {
       const highComplexityGame = { ...mockGame, firstPlayComplexity: FirstPlayComplexity.HIGH };
       render(<GameDetailModal game={highComplexityGame} onClose={mockOnClose} />);
       
-      expect(screen.getByText('Complexité: Complexe')).toBeInTheDocument();
+      expect(screen.getByText('Découverte: Complexe')).toBeInTheDocument();
     });
 
     it('should use brain icon (🧠) for complexity as per UI guidelines', () => {

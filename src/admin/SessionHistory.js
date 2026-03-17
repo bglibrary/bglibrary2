@@ -46,7 +46,7 @@ export const FieldLabels = {
   minPlayers: 'joueurs min',
   maxPlayers: 'joueurs max',
   playDuration: 'durée',
-  firstPlayComplexity: 'complexité',
+  firstPlayComplexity: 'découverte',
   ageRecommendation: 'âge',
   categories: 'catégories',
   mechanics: 'mécaniques',

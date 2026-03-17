@@ -435,7 +435,7 @@ describe('SessionHistory', () => {
       expect(formatModifiedFields(['minPlayers'])).toBe('joueurs min');
       expect(formatModifiedFields(['maxPlayers'])).toBe('joueurs max');
       expect(formatModifiedFields(['playDuration'])).toBe('durée');
-      expect(formatModifiedFields(['firstPlayComplexity'])).toBe('complexité');
+      expect(formatModifiedFields(['firstPlayComplexity'])).toBe('découverte');
       expect(formatModifiedFields(['ageRecommendation'])).toBe('âge');
       expect(formatModifiedFields(['categories'])).toBe('catégories');
       expect(formatModifiedFields(['mechanics'])).toBe('mécaniques');
