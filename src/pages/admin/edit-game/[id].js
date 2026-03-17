@@ -388,6 +388,7 @@ export default function EditGamePage() {
                 onChange={setImageData}
                 existingImage={game?.images?.[0]?.id}
                 isModified={fieldChanges.image}
+                allowRemove={false}
               />
             </Section>
 

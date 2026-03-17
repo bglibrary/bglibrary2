@@ -225,7 +225,8 @@ export function ImageUpload({
   value, 
   onChange, 
   existingImage = null, // Image ID (e.g., "catan-main")
-  isModified = false 
+  isModified = false,
+  allowRemove = true // Whether to show the remove button
 }) {
   // Build existing image URL from ID
   const existingImageUrl = existingImage ? `/images/${existingImage}.jpg` : null;
@@ -379,16 +380,18 @@ export function ImageUpload({
                 alt="Preview"
                 className="h-32 w-auto rounded-lg object-cover shadow-sm"
               />
-              <button
-                type="button"
-                onClick={handleRemove}
-                className="absolute -top-2 -right-2 p-1 bg-danger text-white rounded-full hover:bg-danger/80 transition-colors"
-                title="Supprimer l'image"
-              >
-                <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                </svg>
-              </button>
+              {allowRemove && (
+                <button
+                  type="button"
+                  onClick={handleRemove}
+                  className="absolute -top-2 -right-2 p-1 bg-danger text-white rounded-full hover:bg-danger/80 transition-colors"
+                  title="Supprimer l'image"
+                >
+                  <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </button>
+              )}
             </div>
           </div>
         )}
