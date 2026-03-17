@@ -5,7 +5,7 @@
  * As specified in specs/phase_8_implementation_plan.md
  */
 
-import { ActionType } from '@/admin/SessionHistory';
+import { ActionType, formatModifiedFields } from '@/admin/SessionHistory';
 
 // SVG Icons that adapt to theme via text-primary color
 const ActionIcon = ({ type, className = '' }) => {
@@ -71,6 +71,11 @@ function formatTimestamp(isoString) {
 
 function ActionItem({ action, index, onEdit, onDelete }) {
   const canEdit = action.type === ActionType.ADD_GAME || action.type === ActionType.UPDATE_GAME;
+  
+  // Get formatted modified fields for UPDATE_GAME actions
+  const modifiedFieldsText = action.type === ActionType.UPDATE_GAME && action.modifiedFields?.length > 0
+    ? formatModifiedFields(action.modifiedFields)
+    : null;
 
   return (
     <div className="bg-cream dark:bg-card rounded-lg p-3 mb-2">
@@ -85,6 +90,12 @@ function ActionItem({ action, index, onEdit, onDelete }) {
           <p className="text-body text-text-primary font-medium truncate">
             {action.summary}
           </p>
+          {/* Show modified fields for UPDATE_GAME actions */}
+          {modifiedFieldsText && (
+            <p className="text-meta text-text-secondary italic">
+              {modifiedFieldsText}
+            </p>
+          )}
           <p className="text-meta text-text-muted">
             {formatTimestamp(action.timestamp)}
           </p>

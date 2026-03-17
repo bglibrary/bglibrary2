@@ -4,7 +4,7 @@
  * As specified in specs/phase_8_implementation_plan.md
  */
 
-import { SessionHistory, ActionType, getSessionHistory, resetSessionHistory } from '../../src/admin/SessionHistory';
+import { SessionHistory, ActionType, getSessionHistory, resetSessionHistory, formatModifiedFields, FieldLabels } from '../../src/admin/SessionHistory';
 
 describe('SessionHistory', () => {
   let history;
@@ -404,6 +404,92 @@ describe('SessionHistory', () => {
       const instance2 = getSessionHistory();
       expect(instance2.getCount()).toBe(0);
       expect(instance2).not.toBe(instance1);
+    });
+  });
+
+  describe('formatModifiedFields', () => {
+    it('should return empty string for empty array', () => {
+      expect(formatModifiedFields([])).toBe('');
+      expect(formatModifiedFields(null)).toBe('');
+      expect(formatModifiedFields(undefined)).toBe('');
+    });
+
+    it('should return single field name translated', () => {
+      expect(formatModifiedFields(['title'])).toBe('titre');
+      expect(formatModifiedFields(['image'])).toBe('image');
+    });
+
+    it('should format two fields with "et"', () => {
+      expect(formatModifiedFields(['title', 'image'])).toBe('titre et image');
+      expect(formatModifiedFields(['categories', 'mechanics'])).toBe('catégories et mécaniques');
+    });
+
+    it('should format three or more fields with commas and "et"', () => {
+      expect(formatModifiedFields(['title', 'image', 'categories'])).toBe('titre, image et catégories');
+      expect(formatModifiedFields(['title', 'description', 'image', 'categories'])).toBe('titre, description, image et catégories');
+    });
+
+    it('should translate known field names', () => {
+      expect(formatModifiedFields(['title'])).toBe('titre');
+      expect(formatModifiedFields(['description'])).toBe('description');
+      expect(formatModifiedFields(['minPlayers'])).toBe('joueurs min');
+      expect(formatModifiedFields(['maxPlayers'])).toBe('joueurs max');
+      expect(formatModifiedFields(['playDuration'])).toBe('durée');
+      expect(formatModifiedFields(['firstPlayComplexity'])).toBe('complexité');
+      expect(formatModifiedFields(['ageRecommendation'])).toBe('âge');
+      expect(formatModifiedFields(['categories'])).toBe('catégories');
+      expect(formatModifiedFields(['mechanics'])).toBe('mécaniques');
+      expect(formatModifiedFields(['awards'])).toBe('récompenses');
+      expect(formatModifiedFields(['favorite'])).toBe('favori');
+      expect(formatModifiedFields(['image'])).toBe('image');
+    });
+
+    it('should pass through unknown field names', () => {
+      expect(formatModifiedFields(['unknownField'])).toBe('unknownField');
+    });
+  });
+
+  describe('modifiedFields tracking', () => {
+    it('should store modifiedFields in UPDATE_GAME action', () => {
+      history.addAction(
+        ActionType.UPDATE_GAME,
+        'g1',
+        'Game 1',
+        { title: 'Updated Game 1' },
+        ['title', 'image']
+      );
+      
+      const actions = history.getActions();
+      expect(actions[0].modifiedFields).toEqual(['title', 'image']);
+    });
+
+    it('should replace modifiedFields when updating same game', () => {
+      history.addAction(
+        ActionType.UPDATE_GAME,
+        'g1',
+        'Game 1',
+        { title: 'Game 1' },
+        ['title']
+      );
+      
+      history.addAction(
+        ActionType.UPDATE_GAME,
+        'g1',
+        'Game 1 Updated',
+        { title: 'Game 1 Updated', description: 'New desc' },
+        ['title', 'description']
+      );
+      
+      const actions = history.getActions();
+      expect(actions).toHaveLength(1);
+      expect(actions[0].modifiedFields).toEqual(['title', 'description']);
+    });
+
+    it('should store empty modifiedFields array by default', () => {
+      history.addAction(ActionType.ADD_GAME, 'g1', 'Game 1', { title: 'Game 1' });
+      
+      const actions = history.getActions();
+      expect(actions[0].modifiedFields).toEqual([]);
     });
   });
 });

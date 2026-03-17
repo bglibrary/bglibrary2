@@ -159,10 +159,11 @@ export class AdminGameService {
    * Update an existing game
    * @param {string} gameId - Target game ID
    * @param {object} gameData - Full game definition
+   * @param {string[]} modifiedFields - List of modified field names
    * @returns {Promise<object>} Result with success status
    * @throws {AdminServiceError}
    */
-  async updateGame(gameId, gameData) {
+  async updateGame(gameId, gameData, modifiedFields = []) {
     console.log('[AdminGameService]', 'updateGame', { id: gameId });
 
     try {
@@ -227,15 +228,16 @@ export class AdminGameService {
       };
     }
 
-    // Add to session history
+    // Add to session history with modified fields
     this.sessionHistory.addAction(
       ActionType.UPDATE_GAME,
       game.id,
       game.title,
-      game
+      game,
+      modifiedFields
     );
 
-    console.log('[AdminGameService]', 'updateGame', { success: true, id: game.id });
+    console.log('[AdminGameService]', 'updateGame', { success: true, id: game.id, modifiedFields });
 
     return {
       success: true,

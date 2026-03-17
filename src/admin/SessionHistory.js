@@ -38,13 +38,32 @@ const ActionTypeLabels = {
 };
 
 /**
+ * French labels for game fields
+ */
+export const FieldLabels = {
+  title: 'titre',
+  description: 'description',
+  minPlayers: 'joueurs min',
+  maxPlayers: 'joueurs max',
+  playDuration: 'durée',
+  firstPlayComplexity: 'complexité',
+  ageRecommendation: 'âge',
+  categories: 'catégories',
+  mechanics: 'mécaniques',
+  awards: 'récompenses',
+  favorite: 'favori',
+  image: 'image',
+};
+
+/**
  * Generates a human-readable summary for an action
  * @param {string} type - Action type
  * @param {string} gameTitle - Game title
  * @param {object} payload - Action payload
+ * @param {string[]} modifiedFields - List of modified field names (for UPDATE_GAME)
  * @returns {string}
  */
-function generateSummary(type, gameTitle, payload) {
+function generateSummary(type, gameTitle, payload, modifiedFields = []) {
   switch (type) {
     case ActionType.ADD_GAME:
       return `Ajouter: ${gameTitle}`;
@@ -61,6 +80,27 @@ function generateSummary(type, gameTitle, payload) {
     default:
       return `${ActionTypeLabels[type] || type}: ${gameTitle}`;
   }
+}
+
+/**
+ * Formats modified fields as a French-readable list
+ * @param {string[]} fields - List of field names
+ * @returns {string}
+ */
+export function formatModifiedFields(fields) {
+  if (!fields || fields.length === 0) return '';
+  
+  const translatedFields = fields.map(f => FieldLabels[f] || f);
+  
+  if (translatedFields.length === 1) {
+    return translatedFields[0];
+  }
+  if (translatedFields.length === 2) {
+    return `${translatedFields[0]} et ${translatedFields[1]}`;
+  }
+  // For 3+ items: "a, b et c"
+  const last = translatedFields.pop();
+  return `${translatedFields.join(', ')} et ${last}`;
 }
 
 /**
@@ -102,9 +142,10 @@ export class SessionHistory {
    * @param {string} gameId - Target game ID
    * @param {string} gameTitle - Game title for display
    * @param {object|null} payload - Action-specific data
+   * @param {string[]} modifiedFields - List of modified field names (for UPDATE_GAME)
    * @returns {object} Result with index and info about what happened
    */
-  addAction(type, gameId, gameTitle, payload = null) {
+  addAction(type, gameId, gameTitle, payload = null, modifiedFields = []) {
     // For UPDATE_GAME actions, replace existing update for same game
     if (type === ActionType.UPDATE_GAME) {
       const existingIndex = this.actions.findIndex(
@@ -120,7 +161,8 @@ export class SessionHistory {
           gameId,
           gameTitle: gameTitle, // Update with new title
           payload: payload ? JSON.parse(JSON.stringify(payload)) : null,
-          summary: generateSummary(type, gameTitle, payload),
+          modifiedFields: modifiedFields || [],
+          summary: generateSummary(type, gameTitle, payload, modifiedFields),
         };
         this.actions[existingIndex] = action;
         console.log('[SessionHistory]', 'addAction', { 
@@ -194,7 +236,8 @@ export class SessionHistory {
       gameId,
       gameTitle,
       payload: payload ? JSON.parse(JSON.stringify(payload)) : null,
-      summary: generateSummary(type, gameTitle, payload),
+      modifiedFields: modifiedFields || [],
+      summary: generateSummary(type, gameTitle, payload, modifiedFields),
     };
 
     this.actions.push(action);
