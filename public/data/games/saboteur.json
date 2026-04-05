@@ -5,8 +5,8 @@
   "minPlayers": 3,
   "maxPlayers": 10,
   "playDuration": "SHORT",
-  "ageRecommendation": "10+",
-  "firstPlayComplexity": "MEDIUM",
+  "ageRecommendation": "8+",
+  "firstPlayComplexity": "LOW",
   "categories": [
     "Affrontement",
     "Bluff",

@@ -18,7 +18,9 @@
     "Communication limitée",
     "Déduction / Logique"
   ],
-  "awards": [],
+  "awards": [
+    { "name": "As d'Or", "year": 2016 }
+  ],
   "favorite": false,
   "archived": false,
   "images": [

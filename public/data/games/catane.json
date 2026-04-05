@@ -5,8 +5,8 @@
   "minPlayers": 3,
   "maxPlayers": 4,
   "playDuration": "LONG",
-  "ageRecommendation": "10+",
-  "firstPlayComplexity": "MEDIUM",
+  "ageRecommendation": "12+",
+  "firstPlayComplexity": "HIGH",
   "categories": [
     "Affrontement",
     "Jeu de plateau",
@@ -17,7 +17,9 @@
     "Négociation",
     "Placements"
   ],
-  "awards": [],
+  "awards": [
+    { "name": "Spiel des Jahres", "year": 1995 }
+  ],
   "favorite": false,
   "archived": false,
   "images": [

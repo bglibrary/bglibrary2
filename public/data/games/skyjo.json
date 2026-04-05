@@ -1,11 +1,11 @@
 {
   "id": "skyjo",
-  "title": "Skyjo",
+  "title": "Skyjo (action)",
   "description": "Collectez le moins de points possible en échangeant vos cartes pour avoir la plus petite somme possible dans ce jeu de cartes amusant et addictif.",
   "minPlayers": 2,
   "maxPlayers": 8,
   "playDuration": "SHORT",
-  "ageRecommendation": "10+",
+  "ageRecommendation": "8+",
   "firstPlayComplexity": "LOW",
   "categories": [
     "Affrontement",

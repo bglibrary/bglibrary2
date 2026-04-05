@@ -5,7 +5,7 @@
   "minPlayers": 3,
   "maxPlayers": 6,
   "playDuration": "SHORT",
-  "ageRecommendation": "10+",
+  "ageRecommendation": "8+",
   "firstPlayComplexity": "MEDIUM",
   "categories": [
     "Affrontement",
@@ -17,7 +17,10 @@
   "mechanics": [
     "Déduction / Logique"
   ],
-  "awards": [],
+  "awards": [
+    { "name": "As d'Or", "year": 2009 },
+    { "name": "Spiel des Jahres", "year": 2010 }
+  ],
   "favorite": false,
   "archived": false,
   "images": [

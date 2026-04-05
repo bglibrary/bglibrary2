@@ -6,7 +6,7 @@
   "maxPlayers": 4,
   "playDuration": "LONG",
   "ageRecommendation": "10+",
-  "firstPlayComplexity": "MEDIUM",
+  "firstPlayComplexity": "HIGH",
   "categories": [
     "Affrontement",
     "Jeu de plateau",

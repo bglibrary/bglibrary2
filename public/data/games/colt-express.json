@@ -17,7 +17,9 @@
     "Gestion de main",
     "Programmation"
   ],
-  "awards": [],
+  "awards": [
+    { "name": "As d'Or", "year": 2015 }
+  ],
   "favorite": false,
   "archived": false,
   "images": [

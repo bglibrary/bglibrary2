@@ -5,7 +5,7 @@
   "minPlayers": 2,
   "maxPlayers": 2,
   "playDuration": "SHORT",
-  "ageRecommendation": "10+",
+  "ageRecommendation": "14+",
   "firstPlayComplexity": "LOW",
   "categories": [
     "Affrontement",
@@ -16,7 +16,9 @@
     "Gestion de main",
     "Placements"
   ],
-  "awards": [],
+  "awards": [
+    { "name": "Origins Award Best Abstract Game", "year": 2018 }
+  ],
   "favorite": false,
   "archived": false,
   "images": [

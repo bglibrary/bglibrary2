@@ -5,8 +5,8 @@
   "minPlayers": 1,
   "maxPlayers": 4,
   "playDuration": "LONG",
-  "ageRecommendation": "10+",
-  "firstPlayComplexity": "MEDIUM",
+  "ageRecommendation": "12+",
+  "firstPlayComplexity": "HIGH",
   "categories": [
     "Affrontement",
     "Jeu de plateau",
@@ -18,7 +18,9 @@
     "Objectifs",
     "Placements"
   ],
-  "awards": [],
+  "awards": [
+    { "name": "Deutscher Spiele Preis", "year": 2008 }
+  ],
   "favorite": false,
   "archived": false,
   "images": [

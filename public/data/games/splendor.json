@@ -17,7 +17,9 @@
     "Construction / Ressources",
     "Développement / Engine building"
   ],
-  "awards": [],
+  "awards": [
+    { "name": "Golden Geek Best Family Board Game", "year": 2014 }
+  ],
   "favorite": false,
   "archived": false,
   "images": [

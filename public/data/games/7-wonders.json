@@ -18,7 +18,9 @@
     "Développement / Engine building",
     "Draft"
   ],
-  "awards": [],
+  "awards": [
+    { "name": "Kennerspiel des Jahres", "year": 2011 }
+  ],
   "favorite": false,
   "archived": false,
   "images": [

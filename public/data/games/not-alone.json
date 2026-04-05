@@ -6,7 +6,7 @@
   "maxPlayers": 7,
   "playDuration": "MEDIUM",
   "ageRecommendation": "10+",
-  "firstPlayComplexity": "MEDIUM",
+  "firstPlayComplexity": "HIGH",
   "categories": [
     "Bluff",
     "Coopératif",

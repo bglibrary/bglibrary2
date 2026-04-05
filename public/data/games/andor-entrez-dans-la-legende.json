@@ -6,7 +6,7 @@
   "maxPlayers": 4,
   "playDuration": "LONG",
   "ageRecommendation": "10+",
-  "firstPlayComplexity": "MEDIUM",
+  "firstPlayComplexity": "HIGH",
   "categories": [
     "Aventure",
     "Coopératif",
@@ -18,7 +18,9 @@
     "Legacy / Campagne",
     "Objectifs"
   ],
-  "awards": [],
+  "awards": [
+    { "name": "As d'Or", "year": 2013 }
+  ],
   "favorite": false,
   "archived": false,
   "images": [

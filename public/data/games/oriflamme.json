@@ -13,7 +13,9 @@
     "Jeu de cartes"
   ],
   "mechanics": [],
-  "awards": [],
+  "awards": [
+    { "name": "As d'Or", "year": 2020 }
+  ],
   "favorite": false,
   "archived": false,
   "images": [

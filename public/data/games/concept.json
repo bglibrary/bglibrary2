@@ -20,7 +20,9 @@
     "Communication limitée",
     "Temps limité"
   ],
-  "awards": [],
+  "awards": [
+    { "name": "As d'Or", "year": 2014 }
+  ],
   "favorite": false,
   "archived": false,
   "images": [

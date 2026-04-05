@@ -21,7 +21,9 @@
     "Legacy / Campagne",
     "Objectifs"
   ],
-  "awards": [],
+  "awards": [
+    { "name": "Spiel des Jahres", "year": 2020 }
+  ],
   "favorite": false,
   "archived": false,
   "images": [
