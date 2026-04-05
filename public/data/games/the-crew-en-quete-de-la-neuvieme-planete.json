@@ -22,9 +22,12 @@
     "Objectifs"
   ],
   "awards": [
-    { "name": "Spiel des Jahres", "year": 2020 }
+    {
+      "name": "Spiel des Jahres",
+      "year": 2020
+    }
   ],
-  "favorite": false,
+  "favorite": true,
   "archived": false,
   "images": [
     {
