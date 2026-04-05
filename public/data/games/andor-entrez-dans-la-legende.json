@@ -19,9 +19,12 @@
     "Objectifs"
   ],
   "awards": [
-    { "name": "As d'Or", "year": 2013 }
+    {
+      "name": "As d'Or",
+      "year": 2013
+    }
   ],
-  "favorite": false,
+  "favorite": true,
   "archived": false,
   "images": [
     {
