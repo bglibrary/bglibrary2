@@ -1,0 +1,26 @@
+{
+  "id": "bomb-busters",
+  "title": "Bomb busters",
+  "description": "Faites preuve de déduction pour venir désamorcer tous les fils sans que la bome explose. Un jeu coopératif avec 66 niveaux explosifs !",
+  "minPlayers": 2,
+  "maxPlayers": 5,
+  "playDuration": "MEDIUM",
+  "ageRecommendation": "12+",
+  "firstPlayComplexity": "MEDIUM",
+  "categories": [
+    "Coopératif",
+    "Mémoire"
+  ],
+  "mechanics": [
+    "Communication limitée",
+    "Déduction / Logique"
+  ],
+  "awards": [],
+  "images": [
+    {
+      "id": "bomb-busters-main"
+    }
+  ],
+  "favorite": true,
+  "archived": false
+}
