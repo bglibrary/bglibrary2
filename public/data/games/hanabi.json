@@ -18,9 +18,12 @@
     "Déduction / Logique"
   ],
   "awards": [
-    { "name": "Spiel des Jahres", "year": 2013 }
+    {
+      "name": "Spiel des Jahres",
+      "year": 2013
+    }
   ],
-  "favorite": false,
+  "favorite": true,
   "archived": false,
   "images": [
     {
