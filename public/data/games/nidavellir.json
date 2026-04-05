@@ -1,0 +1,34 @@
+{
+  "id": "nidavellir",
+  "title": "Nidavellir",
+  "description": "Parcourez les tavernes du royaume pour recruter la meilleure armée pour le roi des nains. ",
+  "minPlayers": 2,
+  "maxPlayers": 5,
+  "playDuration": "MEDIUM",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "HIGH",
+  "categories": [
+    "Affrontement",
+    "Jeu de cartes",
+    "Stratégie / Planification"
+  ],
+  "mechanics": [
+    "Collection",
+    "Développement / Engine building",
+    "Négociation",
+    "Programmation"
+  ],
+  "awards": [
+    {
+      "name": "Tric Trac d'Or",
+      "year": 2020
+    }
+  ],
+  "images": [
+    {
+      "id": "nidavellir-main"
+    }
+  ],
+  "favorite": false,
+  "archived": false
+}
