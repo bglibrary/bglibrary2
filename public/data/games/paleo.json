@@ -19,10 +19,16 @@
     "Objectifs"
   ],
   "awards": [
-    { "name": "As d'Or", "year": 2021 },
-    { "name": "Kennerspiel des Jahres", "year": 2021 }
+    {
+      "name": "As d'Or",
+      "year": 2021
+    },
+    {
+      "name": "Kennerspiel des Jahres",
+      "year": 2021
+    }
   ],
-  "favorite": false,
+  "favorite": true,
   "archived": false,
   "images": [
     {
