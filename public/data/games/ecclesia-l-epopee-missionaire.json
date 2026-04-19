@@ -1,0 +1,31 @@
+{
+  "id": "ecclesia-l-epopee-missionaire",
+  "title": "Ecclesia - L'épopée missionaire",
+  "description": "Mettez vous dans la peau des premiers disciples du christ et partez évangéliser le bassin méditerranéen. Mais attention aux hérésies qui se propagent comme la peste !",
+  "minPlayers": 2,
+  "maxPlayers": 4,
+  "playDuration": "LONG",
+  "ageRecommendation": "12+",
+  "firstPlayComplexity": "HIGH",
+  "categories": [
+    "Aventure",
+    "Coopératif",
+    "Jeu de plateau",
+    "Stratégie / Planification"
+  ],
+  "mechanics": [
+    "Contrôle de territoires",
+    "Développement / Engine building",
+    "Exploration",
+    "Gestion de crise",
+    "Objectifs"
+  ],
+  "awards": [],
+  "images": [
+    {
+      "id": "ecclesia-l-epopee-missionaire-main"
+    }
+  ],
+  "favorite": true,
+  "archived": false
+}
