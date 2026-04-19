@@ -1,0 +1,28 @@
+{
+  "id": "petite-mer",
+  "title": "Petite mer",
+  "description": "Construisez votre Golfe du Morbihan mais veuillez à bien entouré les boués et les phares pour gagner un maximum de points",
+  "minPlayers": 1,
+  "maxPlayers": 4,
+  "playDuration": "MEDIUM",
+  "ageRecommendation": "8+",
+  "firstPlayComplexity": "LOW",
+  "categories": [
+    "Coopératif",
+    "Stratégie / Planification"
+  ],
+  "mechanics": [
+    "Connection",
+    "Exploration",
+    "Placements",
+    "Pioche de tuiles"
+  ],
+  "awards": [],
+  "images": [
+    {
+      "id": "petite-mer-main"
+    }
+  ],
+  "favorite": true,
+  "archived": false
+}
