@@ -1,0 +1,27 @@
+{
+  "id": "difference-asterix",
+  "title": "Différence Astérix",
+  "description": "Un petit jeu de 7 différences revisité dans l'univers d'Astérix et Obélix",
+  "minPlayers": 2,
+  "maxPlayers": 6,
+  "playDuration": "SHORT",
+  "ageRecommendation": "8+",
+  "firstPlayComplexity": "LOW",
+  "categories": [
+    "Affrontement",
+    "Jeu de cartes",
+    "Observation",
+    "Rapidité"
+  ],
+  "mechanics": [
+    "Déduction / Logique"
+  ],
+  "awards": [],
+  "images": [
+    {
+      "id": "difference-asterix-main"
+    }
+  ],
+  "favorite": false,
+  "archived": false
+}
