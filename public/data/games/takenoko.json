@@ -1,0 +1,31 @@
+{
+  "id": "takenoko",
+  "title": "Takenoko",
+  "description": "Aménager la bambouseraie de l'empereur pour gagner ses faveurs et celle du panda qui l'occupe. ",
+  "minPlayers": 2,
+  "maxPlayers": 4,
+  "playDuration": "MEDIUM",
+  "ageRecommendation": "8+",
+  "firstPlayComplexity": "HIGH",
+  "categories": [
+    "Affrontement",
+    "Chance",
+    "Jeu de plateau",
+    "Stratégie / Planification"
+  ],
+  "mechanics": [
+    "Construction / Ressources",
+    "Course",
+    "Objectifs",
+    "Pioche de tuiles",
+    "Placements"
+  ],
+  "awards": [],
+  "images": [
+    {
+      "id": "takenoko-main"
+    }
+  ],
+  "favorite": false,
+  "archived": false
+}
