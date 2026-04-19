@@ -1,0 +1,29 @@
+{
+  "id": "50-missions",
+  "title": "50 missions",
+  "description": "4 piles, 4 couleurs et 50 missions à réussir tous ensemble. Un défi pas si simple et parfois frustrant ce qui vous donnera l'envie de relancer une partie immédiatement.",
+  "minPlayers": 1,
+  "maxPlayers": 4,
+  "playDuration": "SHORT",
+  "ageRecommendation": "8+",
+  "firstPlayComplexity": "LOW",
+  "categories": [
+    "Chance",
+    "Coopératif",
+    "Jeu de cartes",
+    "Stratégie / Planification"
+  ],
+  "mechanics": [
+    "Communication limitée",
+    "Gestion de main",
+    "Objectifs"
+  ],
+  "awards": [],
+  "images": [
+    {
+      "id": "50-missions-main"
+    }
+  ],
+  "favorite": false,
+  "archived": false
+}

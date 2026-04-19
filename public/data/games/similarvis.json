@@ -1,0 +1,30 @@
+{
+  "id": "similarvis",
+  "title": "SimilArvis",
+  "description": "Un jeu rapide qui revisite le qui-est-ce ? avec les personnages de la famille d'Alix Arvis",
+  "minPlayers": 2,
+  "maxPlayers": 8,
+  "playDuration": "SHORT",
+  "ageRecommendation": "8+",
+  "firstPlayComplexity": "LOW",
+  "categories": [
+    "Ambiance",
+    "Association d'idées",
+    "Connaissances",
+    "Coopératif",
+    "Guess",
+    "Jeu de cartes"
+  ],
+  "mechanics": [
+    "Communication limitée",
+    "Déduction / Logique"
+  ],
+  "awards": [],
+  "images": [
+    {
+      "id": "similarvis-main"
+    }
+  ],
+  "favorite": false,
+  "archived": false
+}

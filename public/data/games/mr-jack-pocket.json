@@ -1,0 +1,25 @@
+{
+  "id": "mr-jack-pocket",
+  "title": "Mr Jack pocket",
+  "description": "Une version plus rapide et essentiel du classique jeu d'affrontement Mr Jack. Ca reste cependant très tactique !",
+  "minPlayers": 2,
+  "maxPlayers": 2,
+  "playDuration": "SHORT",
+  "ageRecommendation": "14+",
+  "firstPlayComplexity": "MEDIUM",
+  "categories": [
+    "Affrontement",
+    "Stratégie / Planification"
+  ],
+  "mechanics": [
+    "Déduction / Logique"
+  ],
+  "awards": [],
+  "images": [
+    {
+      "id": "mr-jack-pocket-main"
+    }
+  ],
+  "favorite": true,
+  "archived": false
+}

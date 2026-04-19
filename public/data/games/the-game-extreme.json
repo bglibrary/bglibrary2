@@ -1,0 +1,30 @@
+{
+  "id": "the-game-extreme",
+  "title": "The game extreme",
+  "description": "Essayez tous ensemble de placer toutes les cartes de 1 à 100 dans les quatre piles en respectant les pièges. Un brin de frustration qui vous donnera envie de relancer une partie.",
+  "minPlayers": 1,
+  "maxPlayers": 5,
+  "playDuration": "SHORT",
+  "ageRecommendation": "8+",
+  "firstPlayComplexity": "LOW",
+  "categories": [
+    "Chance",
+    "Coopératif",
+    "Jeu de cartes",
+    "Mémoire",
+    "Stratégie / Planification"
+  ],
+  "mechanics": [
+    "Communication limitée",
+    "Gestion de main",
+    "Placements"
+  ],
+  "awards": [],
+  "images": [
+    {
+      "id": "the-game-extreme-main"
+    }
+  ],
+  "favorite": false,
+  "archived": false
+}

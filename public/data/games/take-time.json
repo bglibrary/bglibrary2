@@ -1,0 +1,31 @@
+{
+  "id": "take-time",
+  "title": "Take time",
+  "description": "Relevez le défi et tentez de programmer correctement les 40 horloges à l'aide de vos cartes.",
+  "minPlayers": 2,
+  "maxPlayers": 4,
+  "playDuration": "SHORT",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "LOW",
+  "categories": [
+    "Chance",
+    "Coopératif",
+    "Jeu de cartes",
+    "Mémoire",
+    "Stratégie / Planification"
+  ],
+  "mechanics": [
+    "Communication limitée",
+    "Gestion de main",
+    "Placements",
+    "Programmation"
+  ],
+  "awards": [],
+  "images": [
+    {
+      "id": "take-time-main"
+    }
+  ],
+  "favorite": false,
+  "archived": false
+}

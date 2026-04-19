@@ -1,0 +1,29 @@
+{
+  "id": "similo-histoire",
+  "title": "Similo Histoire",
+  "description": "Un jeu rapide qui reviste le qui-est-ce ? avec des personnages historiques",
+  "minPlayers": 2,
+  "maxPlayers": 8,
+  "playDuration": "SHORT",
+  "ageRecommendation": "8+",
+  "firstPlayComplexity": "LOW",
+  "categories": [
+    "Association d'idées",
+    "Ambiance",
+    "Connaissances",
+    "Jeu de cartes",
+    "Coopératif"
+  ],
+  "mechanics": [
+    "Communication limitée",
+    "Déduction / Logique"
+  ],
+  "awards": [],
+  "images": [
+    {
+      "id": "similo-histoire-main"
+    }
+  ],
+  "favorite": false,
+  "archived": false
+}

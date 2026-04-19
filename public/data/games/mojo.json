@@ -1,0 +1,27 @@
+{
+  "id": "mojo",
+  "title": "Mojo",
+  "description": "Un petit jeu de cartes colorés où il faut être le premier à se débarrasser de toutes ses cartes. Mais attention de ne pas se faire doubler au dernier moment au risque de perdre le mojo.",
+  "minPlayers": 3,
+  "maxPlayers": 8,
+  "playDuration": "SHORT",
+  "ageRecommendation": "8+",
+  "firstPlayComplexity": "LOW",
+  "categories": [
+    "Affrontement",
+    "Chance",
+    "Jeu de cartes"
+  ],
+  "mechanics": [
+    "Course",
+    "Gestion de main"
+  ],
+  "awards": [],
+  "images": [
+    {
+      "id": "mojo-main"
+    }
+  ],
+  "favorite": false,
+  "archived": false
+}

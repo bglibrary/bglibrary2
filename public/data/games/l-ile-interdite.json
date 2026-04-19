@@ -1,0 +1,26 @@
+{
+  "id": "l-ile-interdite",
+  "title": "L'île interdite",
+  "description": "Utilisez les talents des membres de votre expédition pour rapporter les trésor avant que l'île ne sombre définitivement.",
+  "minPlayers": 2,
+  "maxPlayers": 4,
+  "playDuration": "MEDIUM",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "MEDIUM",
+  "categories": [
+    "Coopératif",
+    "Stratégie / Planification"
+  ],
+  "mechanics": [
+    "Gestion de crise",
+    "Pioche de tuiles"
+  ],
+  "awards": [],
+  "images": [
+    {
+      "id": "l-ile-interdite-main"
+    }
+  ],
+  "favorite": false,
+  "archived": false
+}
