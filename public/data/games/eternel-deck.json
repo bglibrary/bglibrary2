@@ -1,0 +1,31 @@
+{
+  "id": "eternel-deck",
+  "title": "Eternel deck",
+  "description": "L’humanité glisse doucement dans un long sommeil, seule une excursion dans les profondeurs du monde des Eternels pourrait vous apporter une solution ! Pouvez-vous résoudre chaque niveau avant que votre deck ne s'épuise ?",
+  "minPlayers": 1,
+  "maxPlayers": 4,
+  "playDuration": "MEDIUM",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "HIGH",
+  "categories": [
+    "Coopératif",
+    "Jeu de cartes",
+    "Stratégie / Planification"
+  ],
+  "mechanics": [
+    "Communication limitée",
+    "Déduction / Logique",
+    "Gestion de main",
+    "Legacy / Campagne",
+    "Objectifs",
+    "Placements"
+  ],
+  "awards": [],
+  "images": [
+    {
+      "id": "eternel-deck-main"
+    }
+  ],
+  "favorite": false,
+  "archived": false
+}
