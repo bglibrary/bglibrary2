@@ -1,0 +1,30 @@
+{
+  "id": "similo-mythes",
+  "title": "Similo Mythes",
+  "description": "Un jeu rapide qui revisite le qui-est-ce ? avec des personnages issues de la mythologie.",
+  "minPlayers": 2,
+  "maxPlayers": 8,
+  "playDuration": "SHORT",
+  "ageRecommendation": "8+",
+  "firstPlayComplexity": "LOW",
+  "categories": [
+    "Ambiance",
+    "Association d'idées",
+    "Connaissances",
+    "Coopératif",
+    "Jeu de cartes",
+    "Guess"
+  ],
+  "mechanics": [
+    "Communication limitée",
+    "Déduction / Logique"
+  ],
+  "awards": [],
+  "images": [
+    {
+      "id": "similo-mythes-main"
+    }
+  ],
+  "favorite": false,
+  "archived": false
+}
