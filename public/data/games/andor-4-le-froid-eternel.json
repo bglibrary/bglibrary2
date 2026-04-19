@@ -2,7 +2,7 @@
   "id": "andor-4-le-froid-eternel",
   "title": "Andor 4 - Le froid éternel",
   "description": "Dans les quatre légendes épiques des Légendes d'Andor - Le Froid Éternel, une équipe de 2 à 4 héros entreprend un voyage passionnant vers une terre étrange au-delà des montagnes. Sur un nouveau plateau de jeu à double face, vous trouverez des alliés loyaux et affronterez des dangers inattendus. Ensemble, vous découvrirez qui se cache derrière la menace magique du froid éternel !\n\nJeu autonome dans l'univers d'Andor.",
-  "minPlayers": 1,
+  "minPlayers": 2,
   "maxPlayers": 4,
   "playDuration": "LONG",
   "ageRecommendation": "10+",

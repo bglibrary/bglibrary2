@@ -3,7 +3,7 @@
   "title": "Niet !",
   "description": "Un jeu de plis classique dans lequel les règles et les équipes changent à chaque manche.",
   "minPlayers": 3,
-  "maxPlayers": 8,
+  "maxPlayers": 5,
   "playDuration": "MEDIUM",
   "ageRecommendation": "10+",
   "firstPlayComplexity": "MEDIUM",
