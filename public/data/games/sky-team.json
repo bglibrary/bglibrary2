@@ -19,7 +19,12 @@
     "Gestion de crise",
     "Placements"
   ],
-  "awards": [],
+  "awards": [
+    {
+      "name": "Spiel des Jahres",
+      "year": 2024
+    }
+  ],
   "images": [
     {
       "id": "sky-team-main"

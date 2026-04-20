@@ -15,7 +15,12 @@
     "Communication limitée",
     "Déduction / Logique"
   ],
-  "awards": [],
+  "awards": [
+    {
+      "name": "Spiel des Jahres",
+      "year": 2025
+    }
+  ],
   "images": [
     {
       "id": "bomb-busters-main"

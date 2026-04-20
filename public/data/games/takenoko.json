@@ -20,7 +20,12 @@
     "Pioche de tuiles",
     "Placements"
   ],
-  "awards": [],
+  "awards": [
+    {
+      "name": "As d'Or",
+      "year": 2012
+    }
+  ],
   "images": [
     {
       "id": "takenoko-main"
