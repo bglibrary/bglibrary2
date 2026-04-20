@@ -436,10 +436,14 @@ export class SessionHistory {
         payload: a.payload,
       });
       // Convert JSON values to Python equivalents (true->True, false->False, null->None)
+      // We also need to handle these values inside arrays (e.g. [true, false])
       const pythonStr = jsonStr
-        .replace(/:true/g, ':True')
-        .replace(/:false/g, ':False')
-        .replace(/:null/g, ':None');
+        .replace(/:(true|false|null)/g, (match) => {
+          return ':' + match.charAt(1).toUpperCase() + match.substring(2);
+        })
+        .replace(/([\[,])(true|false|null)/g, (match, p1, p2) => {
+          return p1 + p2.charAt(0).toUpperCase() + p2.substring(1);
+        });
       return `    ${pythonStr},`;
     }).join('\n');
 
@@ -611,8 +615,18 @@ ${actionsArray}
             print(f"  Created: {action['gameId']}.json")
             
         elif action['type'] == 'UPDATE_GAME':
-            save_game(action['gameId'], action['payload'])
-            print(f"  Updated: {action['gameId']}.json")
+            game = load_game(action['gameId'])
+            if game:
+                # Deep merge payload into game
+                for key, value in action['payload'].items():
+                    game[key] = value
+                save_game(action['gameId'], game)
+                print(f"  Updated: {action['gameId']}.json")
+            else:
+                # If game doesn't exist, just save the payload
+                save_game(action['gameId'], action['payload'])
+                add_game_to_index(action['gameId'], action['payload'])
+                print(f"  Created (missing): {action['gameId']}.json")
             
         elif action['type'] == 'TOGGLE_FAVORITE':
             game = load_game(action['gameId'])

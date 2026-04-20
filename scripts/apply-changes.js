@@ -454,8 +454,11 @@ function applyUpdateGame(action, dryRun) {
   }
   
   // Merge with existing data
+  // Note: we use Object.assign or spread to merge top-level fields.
+  // For arrays like 'awards', 'categories', 'mechanics', they will be replaced by the new ones in payload.
   const updated = { ...existing, ...payload };
   writeGameFile(gameId, updated);
+
   files.push(path.join(PUBLIC_GAMES_PATH, `${gameId}.json`));
   console.log(`  ✓ Updated: ${gameId}.json`);
   
