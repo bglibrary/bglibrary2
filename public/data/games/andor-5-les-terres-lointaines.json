@@ -1,0 +1,32 @@
+{
+  "id": "andor-5-les-terres-lointaines",
+  "title": "Andor 5: les terres lointaines",
+  "description": "7 nouvelles aventures sur les traces d'une civilisation oubliée",
+  "minPlayers": 1,
+  "maxPlayers": 4,
+  "playDuration": "LONG",
+  "ageRecommendation": "10+",
+  "firstPlayComplexity": "HIGH",
+  "categories": [
+    "Aventure",
+    "Coopératif",
+    "Dés",
+    "Jeu de plateau",
+    "Stratégie / Planification"
+  ],
+  "mechanics": [
+    "Développement / Engine building",
+    "Exploration",
+    "Gestion de crise",
+    "Legacy / Campagne",
+    "Temps limité"
+  ],
+  "awards": [],
+  "images": [
+    {
+      "id": "andor-5-les-terres-lointaines-main"
+    }
+  ],
+  "favorite": false,
+  "archived": false
+}
