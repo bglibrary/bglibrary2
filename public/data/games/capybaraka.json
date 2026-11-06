@@ -1,0 +1,29 @@
+{
+  "id": "capybaraka",
+  "title": "Capybaraka",
+  "description": "Sachez quand miser pour ramassez les bonnes cartes et amasser le plus de points à la fin des 2 manches",
+  "minPlayers": 2,
+  "maxPlayers": 6,
+  "playDuration": "SHORT",
+  "ageRecommendation": "8+",
+  "firstPlayComplexity": "MEDIUM",
+  "categories": [
+    "Affrontement",
+    "Bluff",
+    "Chance",
+    "Jeu de cartes"
+  ],
+  "mechanics": [
+    "Collection",
+    "Construction / Ressources",
+    "Enchères"
+  ],
+  "awards": [],
+  "images": [
+    {
+      "id": "capybaraka-main"
+    }
+  ],
+  "favorite": false,
+  "archived": false
+}
