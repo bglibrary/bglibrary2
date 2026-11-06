@@ -1,0 +1,28 @@
+{
+  "id": "odin",
+  "title": "Odin",
+  "description": "Débarrassez-vous de toutes vos cartes en combinant les chiffres et les couleurs astucieusement",
+  "minPlayers": 2,
+  "maxPlayers": 6,
+  "playDuration": "SHORT",
+  "ageRecommendation": "8+",
+  "firstPlayComplexity": "LOW",
+  "categories": [
+    "Affrontement",
+    "Chance",
+    "Jeu de cartes",
+    "Stratégie / Planification"
+  ],
+  "mechanics": [
+    "Collection",
+    "Gestion de main"
+  ],
+  "awards": [],
+  "images": [
+    {
+      "id": "odin-main"
+    }
+  ],
+  "favorite": true,
+  "archived": false
+}
